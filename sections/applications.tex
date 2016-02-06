@@ -1,0 +1,211 @@
+\newpage
+
+\chapter{ Shape categorization and application to morphing}
+\label{sec:applications}
+
+The original use of the cage in the algorithm is to parametrize the image and to deform the
+contour during the evolution to minimize the energy. We want to emphasize the advantages of having the cage parametrization and its properties. This chapter provides some first results of the future research for Cage Active Contours.
+
+
+\section{Properties of the cage parametrization}
+\label{sec:properties_parametrization}
+
+As a motivation for this line of research, we propose applications of the cage parametrization in image morphing and warping and as shape descriptors. 
+
+To formalize these applications we need a way to compare similar contour shapes. If we fix an initial contour and a cage configuration, we will get that for every new cage, a deformation of the initial contour by equation~\eqref{eq:deform_points} defines a deformed contour shape. Through observation, we see that similar cages, provide similar contour images in certain initial conditions. We want to find a criteria which allows us to link an ordered configuration of points (i.e. a cage) with contour shapes so that we may use existing tools from polygon similarity\cite{Bykat:1979:PS}  and from point configuration similarity, like Procrustes analysis distance, to determine shape similarity between different contours.
+
+More formally, we present the following definitions which will lead up to the proposition and its proof.
+
+\begin{definition}[Contour Family]\label{def:contour_family}
+	Given an initial contour $C$ and an initial cage $V=(v_1,v_2,\dots,v_N)$, the family of contours $\mathcal{F}_C^V$ is the set of all the possible contours that can be produced with all cages of $N$ points by a deformation through \eqref{eq:deform_points} and it is expressed as:
+	$$\mathcal{F}_C^V=\{ C^W\vert W \in (\mathbb{R}^2)^N \} $$
+	where for any cage $W \in (\mathbb{R}^2)^N$ 
+	$$C^W=\{q\in \mathbb{R}^2\vert q=\sum\limits_i^N\varphi_i^V(p)w_i ,\  \forall p \in C, W=(w_1, w_2, \dots, w_N)\}$$  
+	and $\varphi_i^V(p)$ are the mean value coordinates of p with respect to cage V.
+\end{definition}
+
+\begin{definition}[Similarity]
+	We define a similarity on the plane as an affine transformation $f:\mathbb{R}^2 \to \mathbb{R}^2$ composed of rotations, translations and uniform changes in scale. 
+\end{definition}
+\begin{definition}[Contour similarity]
+	Two contours are similar if there exists a similarity which maps one to the other.
+\end{definition}
+\begin{definition}[Cage similarity]\label{def:cage_similarity}
+	Two cages $U=(u_1, u_2, \dots, u_N)$ and $W=(w_1,w_2, \dots, w_N)$ are similar if there exists a similarity function such that $f(u_i)=w_i$ for each $i \in \{1,2,\dots, N\}$.
+\end{definition}
+\begin{definition}[Shifted cage]
+	A shifted cage of another cage $W=(w_1,w_2, \dots, w_N)$ is a permutation conserving the order of $W$. There are N shifts (as many as number of points).
+	$$W=W^0=(w_1,w_2, \dots, w_N)$$
+	$$W^1=(w_2,w_3, \dots, w_N, w_1)$$
+	$$\dots$$
+	$$W^k=(w_{k+1},w_{k+2}, \dots, w_{k})$$
+	$$\dots$$
+	$$W^{N-1}=(w_N,w_1, \dots, w_{N-2}, w_{N-1})$$
+\end{definition} 
+
+In definition~\ref{def:contour_family} we have defined the contour Family of an initial configuration of a contour $C$ and a cage $V$. However, there are certain properties that we would like to impose on this Family. Namely, we are interested in those Families where similar cages or similar shifted cages define the same contour. 
+
+First we need a definition:
+\begin{definition}\label{def:initial_config}
+	A \textbf{regular initial cage-contour configuration with ratio r} is a set ($V$, $C$, $r$) consisting of an initial cage $V=(v_1,v_2, \dots, v_N)$ that defines an N-sided regular polygon and an initial contour $C$ that is a circumference concentric to the polygon such that the ratio of the radius of $C$ and the radius of the polygon is r:1. For simplicity we say the ratio is r.
+\end{definition}
+
+Now that we have these concepts formally and well defined, we are able to prove the desired property of the family:
+
+\begin{proposition}\label{prop:prop1}
+Given a regular initial cage-contour configuration ($V$,$C$,$r$), then for every contour $C^W$ and  $C^U$ in the contour family $F_V^C$, $C^W$ and $C^U$ are similar if
+\begin{enumerate}
+	\item $W$ and $U$ are similar cages, \\
+	or
+	\vspace{-0.25cm}
+	\item $U$ is a \textit{shifted} cage of a similar cage of $W$.
+\end{enumerate} 
+\end{proposition}
+
+\begin{proof}
+	The first point is trivial. We want to see if there exists a similarity function g that sends $C^W$ to $C^U$. So for every point of $q^W\in C^W$ there has to exist a point $q^U \in C^U$ such that $g(q^U)=q^W$. 
+	By construction of $C ^W$ and $C^U$, we know that there exists a point $p\in C$ such that $$q^W=\sum\limits_{i=1}^N\varphi_i^V(p)w_i$$
+	 and a point $p'\in C$ such that 
+	 $$q^U=\sum\limits_{i=1}^N\varphi_i^V(p')u_i$$
+	 Since we know that cages $W$ and $U$ are similar, we have that, by definition \ref{def:cage_similarity}, there exists a similarity $f$ that maps cage $U$ to $W$ (i.e $w_i=f(u_i)$ for all $i \in \{1,2, \dots, N\}$). It turns out that with $g=f$ and $p^U=p^W$ define the similarity between contours:
+	 $$q^W=\sum\limits_{i=1}^N\varphi_i^V(p)w_i=\sum\limits_{i=1}^N\varphi_i^V(p)f(u_i)=f\Big(\sum\limits_{i=1}^N\varphi_i^V(p)u_i\Big)=f(q^U)$$
+	 Therefore we have that the same similarity that maps $W$ to $U$, sends their contours to each other rendering them similar.
+	
+	To prove the second implication, a more elaborate solution is required. We only need to prove this in the case of if $U$ is the shifted cage of $W$ since if we have that, any similar cage would only imply a similarity function.
+	To see that a cage and its shifted cage produces a similar curves, let us take two cages $W^0=(w_1, w_2, \dots, w_3)$  and one of its shifted (we take the shift k=1 for simplicity) $W^1=(w_1^1,w_2^1,\dots, w_N^1)=(w_2,w_3, \dots, w_N, w_1)$.
+	
+	If we see that their images\footnote{In this context, image refers to the target set of a function.} of $C$, respectively $C^{W^0}$ and $C^{W^1}$ are congruent, that is $C^{W^0}=C^{W^1}$, then they would be similar because the identity function would be the similarity between them.
+	
+	To see this we have to see if every point $q$ in $C^{W^0}$ is in $C^{W^1}$.
+	We have that every point in $C^{W^0}$ can be expressed as 
+
+		$$q=\sum\limits_{j=1}^N\varphi_j^V(p)w_j$$
+
+	where $p \in C$ is in the initial contour. If we can find a point $p^1$ in $C$ such that
+	
+		$$q=\sum\limits_{j=1}^N\varphi_j^V(p^1)w_j^1$$
+	
+	it would do.
+ 
+  
+  The mean value coordinates of a point $p$ with respect to control point $v_i$ are calculated using the angles $\alpha_1$, $\alpha_2$ with its neighboring control points $v_{i-1}$ and $v_{i+1}$ respectively. In figure \ref{fig:proof1_mvc}, we have an example with the circumference contour $C$ and the cage $V=(v_1,v_2,..,v_N)$  (N=6 in the image). Point $p$ has the mean value coordinates $\varphi^V(p)=(\lambda_1,\lambda_2, \dots, \lambda_N)$. If we apply a rotation $R^1$ of $\alpha_{R^1}=-\frac{2\pi}{N}$ radians and center $p_c$. We have that $R^1(v_i)=v_{i+1}$ and the rotated point $p^1=R^1(p)$ would still be on the contour $C$. Furthermore, It would maintain the distance to the rotated control point $R^1(v_i)=v_{i+1}$, as well as the angles to their rotated points, because of the property of angle invariance through similarities.
+  
+  Therefore we can say that for every point, $p$, there exists a point $p^1=R^1(p)$ such that, the mean value coordinates are the same but shifted: this can be done for any $R^k(p)=-\frac{2\pi}{N}*k$ for $k\in {1,2, \dots, N}$;
+   
+  
+  $$\varphi^V(R^1(p))= (\lambda_2, \lambda_3, ..., \lambda_N, \lambda_{1}) $$
+  $$\varphi^V(R^2(p))= (\lambda_3, \lambda_2, ..., \lambda_{N-1}, \lambda_{2}) $$
+  $$\dots$$
+  $$\varphi^V(R^k(p))= (\lambda_{k+1}, \lambda_{k+2}, ..., \lambda_{N-k-1}, \lambda_{k}) $$
+  $$\dots$$
+  $$\varphi^V(R^{N-1}(p))= (\lambda_{N}, \lambda_{1}, ..., \lambda_{N-2}, \lambda_{N-1}) $$
+  
+    
+  So, now that we have these points, we know that given any point $q\in C^{W^0}$, there does exist a point
+  $p'^1\in C$ so that $q=\sum\limits_{j}^N\varphi_j^V(p)w_j^2$ and it is in particular $p'=R^1(p)$.
+  Since we have the following:
+  
+
+	  $$q=\sum\limits_{j}^N\varphi_j^V(p)w_j^1=w_1\lambda_1+ w_2\lambda_2+ \dots + w_N\lambda_N =
+	  w_2\lambda_2+ w_3\lambda_3+\dots+w_N\lambda_N+w_1\lambda_1= \sum\limits_{j}^N\varphi_j^V(p')w_j^1$$
+
+  Since we can generalize for any shift $k\in \{1,2,\dots,N\}$ with rotation $R^k$, the proposition is proven.
+  \end{proof}
+
+  Furthermore, it would be interesting to prove the opposite implication thereby creating a class of equivalence between shapes in the contour family $\mathcal{F}_C^V$ defined by the cage $V$ and initial contour $C$ from the initial configuration. This will be left for future work.
+  
+   
+   \begin{figure}[h!]
+   	\centering
+   	{\includegraphics[width=\textwidth]{images/fig_proof1_mvc.png}}
+   	\caption{Illustration of the existence of a point $p^1$ needed to prove the second implication in proposition \ref{prop:prop1}}
+   	\label{fig:proof1_mvc}
+   \end{figure}
+   
+ 
+
+\section{Shape description}
+\label{subsec:shape_description}
+
+One of the challenges seen especially in medical imaging is that it is often hard to find relevant points in a region that might help to determine structure or orientation of an object that apparently has none. These points are commonly called \textit{landmarks} and are used to build the shape models of an object. It is often the case in medical imaging that these points are unseen, latent or that they are simply characterized by their shape. 
+
+Shape description can also be applied to image retrieval. This application supposes huge databases of images which from we want to retrieve a certain subset or a specific image given specific characteristics. For example in medical imaging, if we want to withdraw all the cases of patients with a similarly shaped elements, such as \textit{caudates}, \textit{putamen}, or \textit{nucleous}, a fast search would be needed to compare with all patient files. This search would require two things: invariance in translation, rotation and scale, and that each element in this dataset could be indexed so that fast and effective retrieval and comparison may be applied. 
+
+The literature in shape comparison is a rich and vast field of research~\cite{Bartolini:2005:WAR:1032293.1032578, Abbasi:1999:CSS:323498.323506}. One of the best methods of shape description are Discrete Fourier Transforms (DFT). These provide a description of the curvature of a shape with respect to a variable $t$ which indicates the point in the curve it is in. These are invariant to translation and uniform change in scale, but the starting point of the shape is critical to know whether two shapes~\cite{Bartolini:2005:WAR:1032293.1032578} are similar through a rotation or not. 
+
+Another interesting method is the Curvature Scale-Space (CSS) shape descriptor. This descriptor provides a representation of a contour which represents the time of inflection or union of pairs of points of the shape as it is progressively smoothed~\cite{Abbasi:1999:CSS:323498.323506}. This descriptor also presents the same problem in rotation, where a shift must be applied to find the right starting point. Figure \ref{fig:css_descriptor_im} shows the example of how as the contour of a shark is smoothed, the less relevant points are joined.
+
+  \begin{figure}[h!]
+  	\centering
+  	{\includegraphics[width=0.7\textwidth]{images/css_descriptor_im.png}}
+  	\caption{CSS smoothing process of a shape and decreasing number of the points with curvature change (image from \cite{Abbasi:1999:CSS:323498.323506}).} 	
+  	\label{fig:css_descriptor_im}
+  \end{figure}
+
+Both of these methods, which are the most used in this field~\cite{5963789,Zhang200339} provide very good solutions to indexing, description and even rotation~\cite{Zhang200339}. Similarly, Through a segmentation with CAC, once we fix a regular initial cage-contour configuration with $N$ points (defined in \ref{def:initial_config}), we have an approximated shape of the curve which can be described exactly with the $N$ points in the segmented cage, making it a good index as well as a useful descriptor. Also, as we have proved in proposition \ref{prop:prop1}, that similar cages with similar shifted cages represent the same contour. This is useful for fast comparison since we only require at most $N$ comparisons to see the invariance through rotation.
+
+However, CAC offers an advantage over these methods in being a segmentation method, while the previous shape descriptors require a segmentation step which provides a simple connect region. We obtain both in a single process and thanks to the cage parametrization, the segmentation can be corrected by a user by moving the points in the cage.
+
+ 
+\section{Image Morphing and Warping}
+\label{subsec:morphing_warping}
+
+
+ Image morphing is the interpolation between two \textit{images} while warping is the deformation of the shape of an image. We are interested in morphing objects into each other. 
+ 
+ If we have a regular cage-contour configuration, $(C, V, r)$, and we segment two objects $O_1$  and $O_2$ in images $I^1$ and $I^2$ respectively, then 
+ 
+ \begin{enumerate}
+ 	\item By proposition \ref{prop:prop1}, if the resulting cages $V^1$ and $V^2$ are similar or similar to a shifted cage, the contours are similar.\label{point:point1}
+ 	\item By property \ref{property:mvc2}, if there exists a similarity f between cages, then by that similarity the mean value coordinates of $O_1$ with respect to $V^1$ are equal to the mean value coordinates of $f(O_2)$ with respect to $V^2$.
+ 	\item In the proof or proposition \ref{prop:prop1}, we show that we can always find a shift of a shifted cage so that we may find the similarity f.
+ \end{enumerate}
+ 
+ By these three statements, we have that if the segmentation of $O_1$ and $O_2$ gives two cages $V_1$ and $V_2$ respectively that are similar or shifted of similar cages, the same similarity sends $O_1$ to $O_2$. 
+ 
+ If we want to morph two objects $O_1\in I^1$ and $O_2\in I^2$ which respectively have segmentation $V^1$ and $V^2$, then we have that we can define an intermediate cage:
+ \begin{equation}
+ V^w=V^1*w + V^2*(1-w)
+ \end{equation} 
+  where $w\in [0,1]$ such that if two cages are similar, they are also similar to their intermediate. For any two cages in general this interpolation is depicted in figure \ref{fig:intermediate_cage}.
+  
+  \begin{figure}[h]
+  	\centering
+  	{\includegraphics[width=0.5\textwidth]{images/qualitative_tests/intermediate_cage.png}}
+  	\caption{Intermediate cage in morphing}
+  	\label{fig:intermediate_cage}
+  \end{figure}
+  
+ 
+ In the new interpolated image, we now want to find pixel by pixel its corresponding values in each image, and apply a weighted mean to obtain the interpolated value. since they are similar, we have 
+ 
+ \begin{equation}
+	 I^w(p^w) = w*I^1\Bigg(\sum\limits_{i=1}^N\varphi_i(p^w)v_i^1\Bigg)+ (1-w)*I^2\Bigg(\sum\limits_{i=1}^N\varphi_i(p^w)v_i^2\Bigg)
+ \end{equation}
+ 
+ Now the problem emerges in practice since it is practically impossible for two cages to be similar after a segmentation however they can be similar to a slight deformation of the cage. Thanks to the smooth properties of the deformation this allows for decent morphing through interpolation of the cages. Figures \ref{fig:car_morphing}  and \ref{fig:car_fruits} are examples we created by interpolation of cages. The former is done automatically by finding the shift of the cages that best corresponds to a similarity using a turning function we implemented, while in the fruit images, we assigned a correspondence in the cages that are not similar to show the smoothness this deformation provides regardless.
+
+  \begin{figure}[h!]
+  	\centering
+  	{\includegraphics[width=1\textwidth]{images/car_morphing.png}}
+  	\caption{Morphing a family car to a sports car automatically through mean value coordinates from a segmentation with CAC  (Initial image from \url{http://www.wellclean.com/wp-content/themes/artgallery_3.0/images/car1.png}, final image from \url{http://www.wellclean.com/wp-content/themes/artgallery_3.0/images/car3.png})}
+  	\label{fig:car_morphing}
+  \end{figure}
+  
+  
+  \begin{figure}[h!]
+  	\centering
+  	{\includegraphics[width=1\textwidth]{images/car_fruits.png}}
+  	\caption{Morphing from an apple to a pear with a CAC segmentation (Initial and final images from~\cite{Marko2013a})}
+  	\label{fig:car_fruits}
+  \end{figure}
+  
+%
+%\begin{figure}[h]
+%	\centering
+%	{\includegraphics[width=0.5\textwidth]{images/cage_morphing.png}}
+%	\caption{Different cylindric colors spaces (image from \cite{WinNT}) and the spherical color-space (image from \cite{grf2088}).}
+%	\label{fig:cage_morphing}
+%\end{figure}
+
+

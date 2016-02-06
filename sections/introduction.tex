@@ -1,0 +1,50 @@
+\chapter{Introduction}
+\label{sec:introduction}
+
+
+
+
+%2. What is the background, the context, in which the research took place? 
+Learning to count is an important educational/developmental milestone which constitutes the most fundamental idea of mathematics\cite{wikicounting}. In Computer Vision, the counting problem is the estimation of the number of objects in a still image or video frame. Learning to count visual objects is a new approach towards dealing with detecting objects in the images and video has been recently proffered in the literature. It arises in many real-world applications including cell counting in microscopic images, monitoring crowds in surveillance systems, and performing wildlife census or counting the number of trees in an aerial image of a forest\cite{NIPS2010_4043}. 
+%3. Why is this subject or issue important 
+
+
+%4. Who are the key participants and/or ‘actors’ in the area under investigation? 
+
+%5. Are there important trends or pivotal variables of which the reader needs to be made aware? 
+
+%6. A clear and succinct statement of the aims and objectives that the dissertation is going to address. 
+
+%7. Have you presented a clear and unambiguous exposition of your research aim, the objectives you will address to meet this aim and your research questions? 
+
+%8. The reasons why this study was carried out 
+
+%9. Was this study undertaken for example in order to test some aspect of  professional or business practice or theory or framework of analysis? 
+
+%10. Was the research carried out to fulfil the demands of a business  organisation? 
+%11. The way the Dissertation is to be organised 
+
+
+
+This thesis contains the following contributions:
+\begin{enumerate}
+	\item Enhance Cage Active Contours: This is the main goal of the thesis. We propose to improve the method by creating energy functions that can capture more complex properties of regions as well as extending them to the most used color spaces: RGB and the Hue component of HSI or HSV. In particular, we focus on three extensions of CAC:
+	\begin{itemize}
+		\item Creation of a Gaussian Mixture Model-based Energy inspired by the \textit{Gaussian Energy} in \cite{ipcac2015} (section \ref{subsubsec:mgme}). %and similar to the level set equivalent in~\cite{conf/icip/AlliliZ05}.
+		\item Extension of the Gaussian Mixture Energy to RGB~(section \ref{subsubsec:mgme}).
+		\item Creation of the analogous \textit{mean energy} in~\cite{ipcac2015}  for the Hue cyclic values (section ~\ref{subsec:hue_energy}).
+	\end{itemize}
+	
+	\item Experimental Validation: We evaluate the proposed CAC energies using three different datasets from a quantitative and a qualitative point of view (sections~\ref{subsec:quantitative_experiment}  and~\ref{subsec:qualitative_experiments} respectively).
+	
+	\item Formalize CAC Properties: Mathematically formalize the concept of a family of shapes defined by CAC and prove that a categorization of these can be made if some initial conditions are met (section ~\ref{sec:applications}).
+	
+	\item Highlight the properties of the resulting segmentation of CAC with different applications like automatic image morphing and warping, and shape description (sections~\ref{subsec:morphing_warping} and~\ref{subsec:shape_description}).
+	
+	\item Public Implementation: We provide our Python implementation (with some wrapped functions in C) of Cage Active Contours with a variety of Energies as well as tools for automatic morphing, warping and shape description. The code can be found in \url{https://github.com/Jeronics/cac-segmenter/}.
+	
+\end{enumerate}
+
+
+
+The rest of the document goes as follows: In section \ref{sec:related_work} we describe the related work in deformable models and set the preliminary concepts to explain our contribution. In section \ref{sec:cage_active_contours}, we introduce the different components of Cage Active Contours in detail and in a more formal language. In section \ref{sec:proposed_methods} we present the improvements we have carried out in order to enhance CAC and extended their applicability to two different color spaces. In section \ref{sec:experiments} we evaluate the proposed CAC improvements using three different datasets through qualitative and quantitative approaches. In section \ref{sec:applications}, we prove, in a formal manner, the advantages of the resulting segmentations of CAC in image morphing, warping and in shape description, as well as provide a couple of examples of the former. Finally, in section \ref{sec:conclusions} we discuss our conclusions and future work.

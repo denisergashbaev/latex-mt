@@ -1,0 +1,138 @@
+%Really good reference http://research.microsoft.com/en-us/um/people/ablake/contours/
+\newpage
+\chapter{Related Work}
+\label{sec:related_work}
+
+In this section, we go over the preliminary concepts that help understand the contributions of this thesis. We will start by looking at the family of methods to which CAC belongs to, followed by a more detailed look at the method in question and explain in which points we will make our contribution. From now on we will only consider the case of 2D images for the sake of simplicity and considering that our work is developed on this domain.
+
+\section{Deformable Models}
+
+Deformable models are curves or surfaces that can move under the influence of physically or pseudo-physically based energies~\cite{Gla02}. These can be partitioned into a combination of external energies, which take into account the position of the contour on the image with respect to the features of the latter such as contours, and internal energies, which take into consideration the shape of the curve usually to insure smoothness, continuity, elasticity among other~\cite{Andrew_Nealen,Han03atopology, 1397188}. In this way, by combining these two energies we impose constraints on the resulting segmentation thus ensuring robustness to image noise or poorly defined boundaries. Obviously the more specific the domain is, such as medical image, the more information we can define in these energies. In analogy with Physics, these forces are usually described in terms of associated energies that have to be minimized in order to fit the boundary.
+This way the mathematical formulation of the problem is simplified and general functional iterative optimization methods like gradient descent can be used. For example, using a basic gradient descent method, the evolution
+of the boundary is determined by:
+
+\begin{equation}
+	r_{t+1}=r_{t}-\alpha \nabla E(r_t)
+\end{equation}
+
+where $\alpha$ is the evolution rate parameter, $r$ is a vector describing the contour
+and $E(r_t)$ is the energy functional to be minimized. Furthermore, in the case of object segmentation, the internal energy can be decomposed into the energies in the interior and exterior parts of an interface:
+
+\begin{equation}
+	E(r_t)=E_{int}(r_t)+E_{ext}(r_t)+E_{c}(r_t)
+\end{equation}
+
+where $E_{ext}$, $E_{ext}$ and $E_c$ correspond to the interior, exterior and constraint
+energies. In the rest of this thesis we will use internal and interior internal energies interchangeably to mean the latter, and the term \textit{region energy} to mean the former.
+
+%In this case curves are represented in terms of parametric spline
+%curves, as is common in computer graphics. These are curves (x(s), y(s)) in which s is a
+%parameter that increases as the curve is traversed, and x and y are particular functions
+%of s, known as splines. A spline of order d is a piecewise polynomial function, consisting
+%of concatenated polynomial segments or spans, each of some polynomial order d,
+%joined together at breakpoints. Parametric spline curves are attractive because they
+%are capable of representing efficiently sets of boundary curves in an image (figure 3.1).
+%Simple shapes can be represented by a curve with just a few spans. More complex
+%shapes could be accommodated by raising the polynomial order d but it is preferable to
+%increase the number of spans used. Usually the polynomial order is fixed at quadratic
+%(d = 3) or cubic (d = 4)1. Maintaining a fixed, low polynomial degree, even in the
+%face of geometric complexity, makes for computational stability and simplicity \cite{Blake_1998}
+
+
+\section{Active contours}
+
+Active contours invented by~\cite{Kass1988} are a general method for delineating an object outline
+that can be fit to tackle the problem of single connected object and have indeed proven to be a very powerful 
+tool in doing so. Also known as snakes, they are deformable models that consist on evolving an interface 
+which is propagated in order to recover the shape of the object of interest.
+
+The description of the interface sub-categorizes these method into \textit{parametric} and \textit{geometric} approaches. The first approach requires, as the name implies a set of discrete parameters, such as points as seen in~\cite{Kass1988} or basis functions (a basis for a function space) such as B-splines~\cite{Jacob2004,Precioso2005}. The advantage of basis functions is their linear combinations have inherent regularity.
+
+Conversely, geometric active contours defined as the zero level set of a higher dimensional
+function have more topological flexibility, because contours can break apart or join
+without the need of re-parametrization. However, this property can prove to be a double edge-sword when the desired shape has to have a specific topology. Level sets are the most representative technique in this category.
+
+ The evolution of these interfaces is driven by the minimization of an energy function
+defined so as to express the properties of the object to be segmented in mathematical terms. 
+In this context, we have to differentiate two types of image features in which these 
+properties are expressed: edge-based, such as the image gradient on the 
+contour as in~\cite{Caselles1997}, or region-based terms, as introduced by 
+Chan and Vese in~\cite{ChanVese}. The advantage of region-based terms are known to
+be more robust to noise than edge-based contours and therefore do not require the initial boundary 
+to be so close to the solution~\cite{LlahiColor}. The work of Chan and Vese is based on
+evolving the interface according to the variance of the gray-level values of
+both interior and exterior regions allowing for segmentation of objects with boundaries
+not defined by gradient to be detected. This approach has been extended, since
+then, to other features such as the Bayesian model~\cite{Rousson2002} and
+histogram model~\cite{Michailovich2007}. These approaches define the
+whole inner region of the evolving contour as the interior region and its 
+complement as the exterior. Thus, they may fail if these features are not spatially
+invariant. In ~\cite{Mille2009} a solution is proposed by considering the features in a 
+band around the evolving contour. Another solution proposed by ~\cite{Lankton2008} is
+to consider the inner and outer regions as those points that are in the intersection of their respective
+regions and in the  ball centered on the contour. In ~\cite{LiTIP08} a more context-aware  solution
+is introduced where a kernel function is applied to each point to define a region-scalable
+fitting term. Finally, two fast algorithms are presented in~\cite{BernardTIP2009}) 
+and~\cite{ShiTIP2008}, where a B-Spline parametrization and a discrete approximation-based 
+representation are presented, respectively. 
+
+
+\section{Level Sets}
+\label{subsec:ActiveContours}
+ The level set method, introduced in ~\cite{Osher198812} consists on embedding an image in a higher dimensional space through a function $\phi$ so that the curve $C$ is defined as the intersection at 0 of its image. Therefore we have that $C = \{(x, y) : \phi(x, y) = 0\}$. If the curve is defined as $C(t):[0,1]\rightarrow \mathbb{R}^2$, we get a Euclidean parametrization where if $t$ is the evolution parameter then C(t) is the curve of level zero of $\phi(t,x,y)$. Through rigorous mathematical reasoning it can be demonstrated that evolving a curve in the normal direction is equivalent to solving for the differential equation:
+ \begin{equation}
+ 	\phi_t =\frac{\partial \phi}{\partial t}=\gamma \vert\nabla\phi\vert
+ \end{equation}
+ where t is the evolution parameter and the term $\phi_t$ is known as the \textit{gradient flow}.
+ This makes way for defining different energy functions with respect to the curve. In ~\cite{ChanVese}, the authors present a method to evolve a curve by minimizing the variance in the interior, $\Omega_1$, and exterior region, $\Omega_2$, defined by the curve. Formalized as:
+\begin{equation} \label{eq:level_set_mean}
+E(C)=\frac{1}{2}\iint_{\Omega_{1}}(I-\mu_{1})^{2}\, dx\, dy+\frac{1}{2}\iint_{\Omega_{2}}(I-\mu_{2})^{2}\, dx\, dy,
+\end{equation}
+where the terms based on the contour length and area enclosed by $\Omega_1$
+have been dropped for simplicity. In (\ref{eq:level_set_mean}), the image $I$
+corresponds to the observed data. The $\mu_{1}$ and $\mu_{2}$ refer to mean
+intensity values in the interior and exterior region, respectively.
+
+In~\cite{Rousson2002}, an approach that assumes a Gaussian model for $\Omega_1$
+and $\Omega_2$ was presented. For that issue the pixel intensities inside and outside the
+contour $\mathcal C$ are assumed to follow a Gaussian probability distribution.
+The energy to be minimized (considering only the region based terms) is given by
+\begin{equation}
+E(\mathcal{C})=\iint_{\Omega_{1}}e_{1}\, dx\, dy+\iint_{\Omega_{2}}e_{2}\, dx\, dy.
+\label{eq:level_set_gaussian}
+\end{equation}
+Here $e_1$ and $e_2$ correspond to the log-likelyhood function
+\begin{equation}
+\label{equ:log-likelyhood}
+e_{h}=\log \sigma_{h} + \frac{(I(p)-\mu_h)^2}{2\sigma_h ^2}
+\end{equation}
+where $h=\{1,2\}$, $\mu_h$ is the internal ($h=1$) or external ($h=2$) mean and
+$\sigma_h$ is the internal or external variance.
+
+In~\cite{Michailovich2007}, a level set method to segment images using
+histograms is presented. In this case, the objective is to segment an image by
+maximizing the distance between the two probability distributions.  The authors
+propose to use the \emph{Bhattacharyya} distance to maximize the difference
+between probability distributions $p_i$. Particularly, the distance is $-\log\,
+B$ where $B$ is the \emph{Bhattacharyya} coefficient defined as
+\begin{equation} \label{eq:level_set_histogram}
+B=E(\mathcal{C})=\int_{R}\sqrt{p_{1}(z)p_{2}(z)}dz,
+\end{equation}
+and $z\in R$. The functions $p_1(z)$ and $p_2(z)$ correspond to the gray-level
+histogram of regions $\Omega_1$ and $\Omega_2$ and are computed by means of
+Parzen windowing.  By minimizing the energy function $B$, we maximize the
+distance between the two probability distributions.
+
+
+\section{Discussion}
+\label{sec:discussion}
+
+In this thesis, we are going to work on Cage Active Contours (CAC), a type of parametric active contour which are fit to work with region energies similar to the ones defined in Level set methods\cite{ipcac2015}.
+
+ Because of the theoretical framework upon which level sets are built, very arduous steps are required in order to evolve the curve, including the application of Euler-Lagrange (EL) to solve for a stationary point~\cite{Caselles1993}. As it will be seen in section~\ref{sec:cage_active_contours}, Cage active contours allow for discretization of the energy and the calculation of the gradient through partial derivatives as opposed to using EL. In Figure~\ref{fig:flow_energies}, a diagram of the process of obtaining the gradient contrasts the steps taken by both CAC and level sets. 
+\begin{figure}[h!]
+	\centering
+	{\includegraphics[width=0.8\textwidth]{images/flow.png}}
+	\caption{Diagram of paths for calculating an energy's gradient for CAC and Level Sets.}
+	\label{fig:flow_energies}
+\end{figure}

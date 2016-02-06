@@ -1,0 +1,37 @@
+
+\section{Implementation}
+\label{subsec:implementation}
+\noindent
+
+In figure \ref{fig:cac_flow} we show the pipeline of our implementation of image segmentation using CAC. We begin by appliying a Gaussian filter on the image to smoothen the image. We choose this as a pre-processing step because we have observed that it enhancees the algorithm in three different points: when calculating the gradient in the image, as it is typically done, when extracting the model of each region, by smoothening out hard peaks and therefore expanding the covariance when it is too small thus reducing the number of points that present the numerical problem described in \ref{subsubsec:numerical_issue}, and finally by avoiding sharp edges and therfore contributing to the numeric problem described in \ref{subsubsec:descriptive_analysis}.
+
+Next we allow the user to interact twice. Once for choosing the initial contour and the initial cage, and the other to input the parameters of the Gaussian Mixture Models that model the inner and outer regions $\Omega_1$and $\Omega_2$. In the experiment section, for sake of simplicity, this last step can be done automatically through an erosion of the ground truth to model $\Omega_1$ and a dilation to model $\Omega_2$.
+
+When we have the image, the initial conditions and the model, we apply our selected CAC algorithm to obtain a segmentation. The only result will be a cage. Remember that with the initial conditions and the final cage we can obtain the final segmentation so in a way the amount of memory used is reduced. From this we will extract various applications in section \ref{sec:applications}.
+\begin{figure}[h]
+	\centering
+	{\includegraphics[width=1\textwidth]{images/cac_flow_2.png}}
+	\caption{Flow diagram of CAC with learning model.}
+	\label{fig:cac_flow}
+\end{figure}
+
+\subsection{Model Initialization}
+
+The initial statistics describing each region can either be inputed manually by introducing the parameters of a distribution or by automatically learning from a seed, a subsample of a region in the image from which it will extract the model which best fits de values of that region. The fitting of the model is done through Expectation Maximization (EM) with different number of Gaussian components by incrementing, fitting, and keeping the model with the lowest Schwarz or Bayesian Information criterion (BIC) .
+
+\begin{equation}
+	\mathrm{BIC} = {k \cdot \ln(n) -2 \cdot \ln{\hat L}}
+\end{equation}
+where $\hat L$ is the maximum likelihood of the Model found through EM, $n$ is the number of data points and $k$  ie the number of free parameters~\cite{STAN:STAN530}. The advantage of the BIC over other information criteria indexes such as Akaike's (AIT) is that they take into consideration the number of points in the data and thus over-fitting can be avoided in case of having a very small sample, which is the case of the seeds.
+
+The Expectation Maximization module from the Scikit-Learn package has been used in our code~\cite{scikit-learn}. 
+
+\subsection{Code}
+\label{subsec:code}
+
+The code, contains a  \verb|CAC| class which has the method segment represented in pseudo-code \ref{alg:cac_algorithm}, energy which returns the energy. This class is inherited by all the different implementation of 
+
+Our code which can be found in \url{https://github.com/Jeronics/cac-segmenter} we implements six different Energies. From the original the original CAC article\cite{ipcac2015} our implementation of the Mean Energy and the Gaussian Energies can be found in the respectively in the \verb|MeanCAC| and \verb|OriginalGaussianCAC| classes of in our code. Our Multivariate Mixture Gaussian energy can be found in \verb|MultiMixtureGaussianCAC|, and its particular cases, for gray-scale images, and with a single Gaussian component for color and gray-scale can be found respectively in \verb|MixtureGaussianCAC|,  \verb|MultiVariateGaussianCAC| and \verb|GaussianCAC|. 
+
+Furthermore, we have used two wrapped functions in C programming in order to calculate the Mean Value Coordinates and detect the inner and outer regions of a contour. These functions were written by by the authors in~\cite{ipcac2015}.
+

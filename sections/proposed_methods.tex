@@ -1,0 +1,321 @@
+\newpage
+\chapter{Energy enhancement and extensions to color spaces in CAC}
+\label{sec:proposed_methods}
+\noindent
+
+In order to improve Cage Active Contours and to extend their applicability to the most used color spaces in Computer vision: RGB, RGB-D and HSV or HSI, we have to consider different types of color coordinate systems. So far Cage Active Contours have only been applied to gray-scale images in both 2D~\cite{ipcac2015} and 3D~\cite{visapp2014} scenarios. In this case an image is a function defined as:
+\begin{equation} \label{eq1:grayscale_image}
+\begin{split}
+I \colon & \mathbb{R}^{D} \to \mathbb{R} \\
+& \phantomarrow{AA}{p} I(p) 
+\end{split}
+\end{equation}
+
+The advantage of this type of image lies in the simplicity of having the information in a single value which interestingly enough is also highly interpretable by humans. However, this has two negative consequences: first is that color information is lost and secondly, since image intensity is directly affected by illumination, methods that rely only on this model are prone to fail under different settings. In this thesis, we propose to both enhance the Gaussian energy model as well as extend it to work on the RGB color space, and the Mean energy model to work on the Hue component of HSV. The image functions of RGB and the HSV/HSI is expressed respectively in \eqref{eq:linear_energy} and \eqref{eq:curvilinear_energy} .
+
+\begin{equation} \label{eq:linear_energy}
+\begin{split}
+I \colon & \mathbb{R}^{D} \phantomarrow{AAA} {}  \mathbb{R}^3 \\
+& \phantomarrow{AAA}{p} I(p)=(r,g,b)
+\end{split}
+\end{equation}
+
+\begin{equation} \label{eq:curvilinear_energy}
+\begin{split}
+I \colon & \mathbb{R}^{D} \phantomarrow{AAAA} {}\mathbb{S}^1\times\mathbb{R}^2\\
+& \phantomarrow{AAA}{p} I(p) =(h,s,i)
+\end{split}
+\end{equation}
+
+
+ \subsection*{Properties of a good Energy}
+ Since we will be defining new energies we have to consider which features characterize a good energy function. We will reffer to these throughout the rest of the text: 
+
+ \begin{enumerate}[label=\textbf{E.\arabic*}]
+ 	\item \label{property:energy1} Differentiable
+ 	\item \label{property:energy2} Few local minima.
+ 	\item \label{property:energy3} Little dependence on the starting contour
+ 	  
+ \end{enumerate}
+ The first property \ref{property:energy1} ensures regularity and allows the use of mathematical tools to apply iterative optimization methods such as gradient descent. Some methods even require twice differentiable functions in order to use the second derivative for estimating the step direction and size.
+ 
+The second property \ref{property:energy2} refers to the number of points in which an energy function is locally stable, where the derivative is zero. If there are many, there is a higher risk of the gradient getting stuck and not converging to a better minimum. In order to converge to a global minimum, few local minima are prefferable.
+
+The third property \ref{property:energy3} ensures stability and requires less interaction. If the results vary greatly with respect to the initial curve, small variation leads to very different results, causing the method to be chaotic and unstable.
+
+ \section{Gaussian Energy in RGB}
+ \label{subsubsec:multivariate_mixture_energy}
+ \noindent
+
+ 
+In this section we present the Multivariate Mixture Gaussian Energy which enhances the Gaussian energy of \ref{subsubsec:gaussian} with three improvements:
+\begin{itemize}
+	\item Creating a Mixture Gaussian based Energy.
+	\item Generalizing this energy to higher dimensionality.
+	\item Introducing a seed in the inner and outer model. 
+\end{itemize}
+
+So far, the energies implemented in the CAC can only capture a region's model with a single component, being either the mean value of a region (mean Energy) or a normal distribution of the values (Gaussian Energy), or maximize the difference between distribution of values of each region (Histogram Energy), with no regard for the resulting object to detect. What these energies have in common is that their strategy is to polarize the values in each region. Although this proves to be useful in some cases, it is very limiting when trying to segment objects and background that have multiple components. Furthermore, by sampling the model of each region at every iteration, not only is it  computationally expensive but also the contour relies on a good initialization to capture the description of each region.
+
+The proposed energy attempts to solve these problems by introducing initial information about the object and background through \textit{seeds} enhancing \ref{property:energy3} and allowing for each region to capture various dominant values inside an image so that in each region different colors or shades can have a representation proportional to their presence.
+
+ In order to best capture a model, we need to define a density function which is differentiable in the Color Space so that we are able to minimize it using gradient descent (\ref{property:energy1}) and that allows us capture best the distribution of values. With these properties, the mixture Gaussian probability density is a candidate that satisfies both of these criteria since any other continuous (and therefore, all differentiable functions) distributions can be expressed as a Mixture of Gaussians given enough components~\cite{titterington_85,Carreira2000}. Moreover, the mixture Gaussian inherits good properties from its normal components as well as a number of good methods to estimate their parameters such as the expectation-maximization~\cite{Xu95onconvergence}. However, instead of using directly the Mixture Gaussian probability density function, we use its logarithm to smoothen the exponential effect. This trick, commonly used in the literature~\cite{conf/icip/AlliliZ05,xie_mle}, is also used in the Gaussian Model defined in~\cite{ipcac2015}.
+
+\subsection{Multivariate Gaussian Mixture Energy}
+\label{subsubsec:mgme}
+With these criteria, we present the Multivariate Gaussian Mixture energy (MGME), which is expressed in the following way:
+\begin{equation}
+E_{\mathrm{MixtGauss}} =\sum\limits_{h =1}^{2} \sum\limits_{p \in \Omega_h}-\log(P_h(p))
+\end{equation}
+where $P_h$ the Mixture Gaussian probability density function of the value of pixel $p$ to belong to region $h$:
+
+\begin{equation}
+P_h(I(p))=\sum\limits_{i=1}^{r_h}\frac{w_i}{2\vert\Sigma_i\vert\sqrt{2\pi}}e^{-\frac{(I-\mu_i)^T\Sigma_i^{-1}(I-\mu_i)}{2}}
+\end{equation}
+This probability density function has $r_h$ normal components, each of which has a mean $\mu_i$ a covariance matrix $\Sigma_i$, and a weight $w_i$ such that $\sum\limits_{i=1}^{r_h} w_i=1 $ where $w_i\geq 0$ for $i \in \{1,2, \dots, r_h\} $.
+
+\subsection{Analysis of the Energy}
+\label{subsec:analysis_mmge}
+
+In order to have a better understanding of this energy, we must look in which circumstances it has a minimum. Intuitively, this energy function tries to include points in a region whose values will contribute most to the energy value by being in it than in the opposite region. In this case, this contribution is the log-likelihood of the pixel belonging to the region in question.  More formally, we can state that a minimum is reached when a slight movement of the contour implies a loss of pixels in each region whose values have a higher log-likelihood of belonging to the regions' model than the other. 
+
+Again we calculate the gradient with respect to all the control points to minimize the energy using gradient descent: 
+\begin{equation}
+\nabla_{v_j} E_{\mathrm{MixtGauss}}  = \sum\limits_{h =1}^{2} \sum_{p \in \Omega_h} -\frac{1}{P_h(I(p))}\nabla_{v_j} P_h(I(p))
+\end{equation}
+is the mixture Gaussian defined by the seed in region $h$ which has $r$ Gaussian components. The gradient is 
+
+\begin{equation}\label{eq:mixture_gradient}
+\nabla_{v_j} P_h(I(p)= 
+\sum\limits_{i=1}^{r_h} \Biggl( \frac{w_ie^{-\frac{(I-\mu_i)^T\Sigma_i^{-1}(I-\mu_i)}{2}}}{\sqrt{\vert\Sigma_i\vert}\sqrt{2\pi}^k}
+(\mu_i-I(p))\Sigma_i^{-1}\cdot\nabla I(p) \varphi_j(p)\Biggr)
+\end{equation}
+
+
+\subsection{Descriptive analysis of the gradient's components}
+\label{subsubsec:descriptive_analysis}
+
+In this section the Mixture Gaussian energy function will be torn apart to its simplest components to understand the role each component plays in the gradient descent. For our example we will use image \ref{fig:image_in_question}. The white patch is the object to segment, the rest is the background, the circle in white is the initial contour, and the cage in blue the initial cage. In green, the next cage is depicted with a direction that has been exaggerated by multiplying by 10 the step size. This will give us an idea of the direction of the cage. 
+
+For simplicity's sake, we take the particular case of the mixture energy in gray-scale. The energy in this case is expressed in the following way:
+\begin{equation}
+E_{MixtGauss} = \sum\limits_{h =1}^{2} \sum\limits_{p \in \Omega_h}-\log(P_h(p))
+\end{equation}
+
+where
+
+\begin{equation}\label{eq:gme_density_descript}
+P_h(I(p))=\sum\limits_{i=1}^{r_h}\frac{w_i}{2\sigma_i\sqrt{2\pi}}e^{-\frac{(I(p)-\mu_i)^2}{2\sigma_i^2}}
+\end{equation}
+
+is the mixture Gaussian density function that best models the seed in region $h$ and which has $r_h$ Gaussian components.
+
+When we derive in order to apply gradient descent we get
+
+\begin{equation}\label{eq:gme_descript}
+\nabla_{v_j}E_{MixtGauss} =\sum\limits_{h =1}^{2} \sum\limits_{p \in \Omega_h} -\frac{1}{P_h(I(p))}\nabla_{v_j} P_h(I(p)
+\end{equation}
+where
+\begin{equation}\label{eq:mixture_gradient_descript}
+\nabla_{v_j} P_h(I(p)= \sum\limits_{i=1}^{r_h}\frac{w_i(\mu_i-I(p))}{\sigma_i^3\sqrt{2\pi}}e^{-\frac{(I(p)-\mu_i)^2}{2\sigma_i^2}}\cdot \nabla I(p) \varphi_i(p)
+\end{equation}
+
+In order to understand the behavior of the gradient, we have stripped it down to examine its simplest elements:
+Firstly, we only focus on the gradient with respect to the control point $v_i$. Secondly, we only consider the influence of the internal energy. Thirdly, we observe the contributions on the x components of each point $p=(x,y)$ on the gray dashed line crossing image~\ref{fig:image_in_question}. Before summing over all of the points on the region, we plot their contribution to the direction of $v_i$.
+
+
+\begin{figure}[h!]
+	\centering
+	\begin{minipage}{0.45\textwidth}
+		\centering
+		{\includegraphics[width=0.8\textwidth]{images/image_in_question_modified.png}} % first figure itself
+		\caption{First step of the iteration in the segmentation. The initial cage in blue, the contour in white and the next cage in green with ten times the learning rate of step 1.} \label{fig:image_in_question}
+	\end{minipage}\hfill
+	\begin{minipage}{0.5\textwidth}
+		\centering
+		{\includegraphics[width=1.\textwidth]{images/gradient_plot_edit.png}}
+		\caption{Contribution of the points in a slice of image~\ref{fig:image_in_question} on the direction of the gradient with respect to $v_i$ of the x axis.}\label{fig:plot_in_question}
+	\end{minipage}
+	\centering
+	
+\end{figure}
+
+In figure~\ref{fig:plot_in_question}, we have that the contribution of each every pixel is zero except at two peaks that corresponds to the change from black to white and vice versa, this show the contribution of the image gradient to the gradient of the energy: a priori we have that pixels with the same intensity but a greater gradient will have more influence. This analysis would be correct if both peaks had the same magnitude. However as we can see points that are closer to vertex $v_i$ have more influence than those that are not. This is due to the factor $\varphi_i(p)$ in~\eqref{eq:mixture_gradient_descript} whose value is inversely proportional to the distance from the point to the control point $v_i$ (see equation~\eqref{eq:affine_coordinates}).
+
+Another point must be made with respect to the contribution of each region to the energy gradient. In \eqref{eq:gme_descript} the gradient of the energy is divided by the probability of a point's membership to a particular region. Therefore if one region has points which belong to its probabilistic model, the influence of those points would be smaller than those that do not belong in the region. This can be understood by stating that, a region will not move when its points conform to the model defined in the region. Per contra, they will do so when it has points who do not belong in that region.
+
+\subsubsection{Numerical issue}
+\label{subsubsec:numerical_issue}
+The implementation of the Mixture models present a very challenging numeric problem when it comes to computation. This is because unlike single Normal density functions where  we have $\ln e^y=y$, this cannot be simplified analytically in the case of the logarithm of a sum of normal density functions and therefore when calculating the gradient in~\eqref{eq:gme_descript}, we divide by $P_h(I(p))$. When the probability is zero or very small, it is numerically treated as zero. For example $e^{-745}$ is not zero while $e^{-746}$ is. However, when divided by zero, $e^{-710}$ and smaller give an indetermination.
+
+This numerical problem emerges when calculating the probability of a point $p$'s value in~\eqref{eq:gme_density_descript} and the exponent is very small. The $i^{th}$ component of the density function $h$ is small or zero if the difference between its mean $\mu_i$ and the pixel value $I(p)$ are very different and its variance $\sigma_i^2$ is small. The workaround that has been proposed is the use of an $\varepsilon>0$ to substitute small probabilities. Thus, the computation of \eqref{eq:gme_descript} is done in the following way:
+
+
+\begin{equation}\label{eq:gme_descript_epsilon}
+\nabla_{v_j}E_{MixtGauss} =
+\sum\limits_{h =1}^{2} \sum\limits_{p \in \Omega_h} -\frac{1}{P_h^{\varepsilon}(I(p))}\nabla_{v_j} P_h(I(p) 
+\end{equation}
+
+where 
+
+\begin{equation}
+	P_h^{\varepsilon}(I(p))=
+	\begin{cases}
+	P_h(I(p)) & \mathrm{if\ } P_h(I(p))> \varepsilon\\
+	\varepsilon & \mathrm{if\ } P_h(I(p))\leq \varepsilon\\
+	\end{cases}
+\end{equation}
+
+This way, we avoid causing an indetermination when dividing. The problem with this workaround, is that if we give a very small $\varepsilon$ we will get that points that had practically no influence now are divided by very small numbers and thus increasing their influence greatly. This is why in the experiments we will add it as a parameter and search for an optimal value $\varepsilon$. 
+
+%
+%{\includegraphics[width=0.4\textwidth]{images/image_in_question_lighter.png}}
+%\caption{First step of the iteration in the segmentation. The initial cage in blue, the contour in white and the next cage in green with ten times the learning rate of step 1.} \label{fig:cage_intention}
+
+\section{Mean Energy in Hue}
+\label{subsec:hue_energy}
+
+The literature on color image segmentation generally agrees that the main two color models used in segmentation are the RGB and the HSI/HSV (Hue Saturation and Intensity/value) \cite{ChienHSI,Cheng01colorimage}. The RGB model was created to mimic the human eye's response to three main light frequencies red, green and blue. However, this is problematic in terms of intuitiveness since it has no intrinsic relation to the natural color properties, neither to human interpretation of color. In other words we cannot intuitively decompose any color into these three components~\cite{Lucchese_colorimage}. This is why in computer vision applications where the idea is to mimic a human's interpretation, other color spaces such as HSI or HSV are used~\cite{Huntsherger1985131}. The first component represents the Hue value, an intrinsic properties of surfaces of constant color which remain practically invariant under changes in illumination~\cite{Kohtaro200}. This is the reason which motivates us to extend the energies in CAC to work in HSI. However this space has the drawback of being cylindrical (see figure \ref{fig:hue_hsi}) because of the cyclic nature of the Hue component. This impedes us from reusing the previous energies as they are. This cyclic channel brings us to redefine three aspects: Difference between values, the gradient of the image and the descriptive model of each region. In this thesis, we have only developed this method to work on its homologous mean energy described in section \ref{subsubsec:mean_energy} yet we do lay the foundation for further investigation to apply the equivalent energies in this domain.
+
+\subsection{Converting the RGB model to HSV}
+\label{subsubsec:rgb_to_hsv}
+
+
+Given the intensities of the three primary components $R$, $G$, and $B$ of an RGB color, we can find its HSI or HSV representation with the following transformation:
+\begin{figure}[h]
+	\centering
+	{\includegraphics[width=0.8\textwidth]{images/hue_hsi.png}}
+	\caption{Different cylindric colors spaces (image from~\cite{WinNT})}
+%	 and the spherical color-space (image from~\cite{grf2088}).
+	\label{fig:hue_hsi}
+\end{figure}
+
+\begin{equation}
+\begin{bmatrix} [1.5]
+Y\\
+C_1\\
+C_2\\
+\end{bmatrix}
+=
+\begin{bmatrix} [1.5]
+\frac{1}{3}& \frac{1}{3} & \frac{1}{3} \\
+1 & -\frac{1}{2}& -\frac{1}{2} \\
+0 &-\frac{\sqrt{3}}{2}& \frac{\sqrt{3}}{2} \\
+\end{bmatrix}
+\begin{bmatrix} [1.5]
+R\\
+G\\
+B\\
+\end{bmatrix}
+\end{equation}
+HSI values are given as:
+\begin{equation}
+	I=Y, S=\sqrt{C_1^2+C_2^2}
+\end{equation}
+
+\begin{equation}
+H=
+\begin{cases}
+arccos(C_2), & C_1 \geq 0 \\
+2\pi-arccos(C_2) , & C_1 < 0
+\end{cases}
+\end{equation}
+
+In the case of HSV, the first two components Hue and Saturation are the same as in the HSI model but the \textit{value} component is defined as $V = max(R,G,B)$. In image \ref{fig:hue_hsi} we can see the cyclic representation of both models.
+
+Now let us define the homologous mean energy in \ref{subsubsec:mean_energy} in Hue values instead of gray-scale.
+The distance between two hue values $H_1$ and $H_2$ can be defined as 
+
+\begin{equation}
+d(H_1,H_2) =
+\begin{cases}
+\mid H_1 - H_2 \mid, & \mid H_1 - H_2 \mid \leq \pi \\
+2\pi-\mid H_1 - H_2 \mid, & \mid H_1 - H_2 \mid > \pi
+\end{cases}
+\end{equation}
+
+
+The directed distance between two hue values can be defined as:
+\begin{equation}
+\vec{d}(H_1,H_2) =
+\begin{cases}
+H_2 - H_1 , & \mid H_2 - H_1 \mid \leq \pi \\
+H_2 - H_1 - 2\pi, & \mid H_2 - H_1 \mid > \pi, H_2\geq H_1 \\
+2\pi +H_2 - H_1, & \mid H_2 - H_1 \mid > \pi, H_1 > H_2\\
+\end{cases}
+\end{equation}
+
+\begin{figure}[h]
+	\centering
+	{\includegraphics[width=0.5\textwidth]{images/hue_dist.png}}
+	\caption{Visual representation of hue distance and directed distance or a unit circle.}
+	\label{fig:hue_dist}
+\end{figure}
+
+The mean of cyclic values can be calculated in the following way~\cite{Zhang00anew}.
+
+\begin{equation}
+\mu_h = atan2\left(\frac{1}{\mid \Omega_h\mid}\sum_{p\in \Omega_h} sin\alpha(p),\frac{1}{\mid \Omega_h\mid}\sum_{p\in \Omega_h} cos\alpha(p)\right)
+\end{equation} 
+
+Figure \ref{fig:hue_dist} show the representation of the hue distance and the hue directed distance.
+
+\subsection{Mean Hue Energy}
+
+Working on the Hue channel presents challenges in the implementation of otherwise simple procedures. We have therefore chosen to extend the simplest energy in CAC: the mean Energy. The idea, again is to stabilize the color in each region. \\
+
+\begin{equation}
+E_{\mathrm{Hue}} = \sum\limits_{h=1}^2\sum_{p\in \Omega_h} \frac{1	}{2}\vec{d}(\alpha(p),\mu_h)^2
+\end{equation}
+
+\begin{equation}\label{eq:arctan2x} 
+\frac{\partial arctan2(x,y)}{\partial x} =
+\begin{cases}
+\frac{1}{1+(\frac{y}{x})^2}\frac{-yx'}{x^2},  & x\neq 0 \\
+0,  & x=0, y\neq 0 \\
+undefined, & x=y=0\\
+\end{cases}
+\end{equation}
+
+\begin{equation}\label{eq:arctan2y}
+\frac{\partial arctan2(x,y)}{\partial y} =
+\begin{cases}
+\frac{1}{1+(\frac{y}{x})^2}\frac{y'}{x},  & x\neq 0 \\
+0,  & x=0, y\neq 0 \\
+undefined, & x=y=0\\
+\end{cases}
+\end{equation}
+ 
+Using equations \eqref{eq:arctan2x} and \eqref{eq:arctan2y}, we get that the derivative of the mean with respect to a control point is defined as:
+\begin{equation}
+\nabla_{v_i} \mu_{h} =
+\begin{cases}
+\left(
+\frac{\frac{1}{\mid \Omega_h\mid}\sum_{p\in \Omega_h} cos\alpha(p)}{x^2+\bigl(\frac{1}{\mid \Omega_h\mid}\sum_{p\in \Omega_h} cos\alpha(p)\bigr)^2}\varphi_i,  
+\frac{1}{1+\bigl(\frac{1}{\mid \Omega_h\mid}\frac{\sum_{p\in \Omega_h} sin\alpha(p)}{x}\bigr)^2}\varphi_i
+\right)  & x\neq 0 \\
+(0,0),  & x=0, y\neq 0 \\
+undefined, & x=y=0\\
+\end{cases}
+\end{equation}
+
+However, by including a seed to learn the mean of each region beforehand, we get a simpler gradient form: 
+
+\begin{equation}\label{eq:hue_gradient}
+\nabla_{v_i}E_{\mathrm{Hue}} = \sum\limits_{h=1}^2\sum_{p\in \Omega_h} \vec{d}(\alpha(p),\mu_h)\nabla_{v_i}\alpha(p)\varphi_i(p)
+\end{equation}
+
+The key in \eqref{eq:hue_gradient} is how to calculate the gradient of the hue value $\nabla_{v_i}\alpha(p)$.  This can be done using simple central differences. However, we have to regard difference between values as a directed distance. A way of doing this optimally is by considering every 3 by 3 pixel patch and substituting its Hue value with the directed distance of the Hue values of the pixel to the central pixel whose gradient we want to calculate. We then proceed to applying the gradient with a Sobel convolution on the patch. 
+
+%\subsubsection{Analysis of the mean Hue energy}
+
+
+\subsection{Extending Hue energies}
+\label{subsec:extending_to_hsi}
+
+In this point, we leave the field open to define more complex energies on the Hue channel as well as extend these to the whole HSI or HSV color spaces. For example, the equivalent mixture Gaussian energy for the Hue channel would be
+
+\begin{equation}
+E_{\mathrm{MixtGaussHue}}=\sum\limits_{h =1}^{2} \sum_{p \in \Omega_h} -log(WP_h(I(p))))
+\end{equation}
+where $WP_h(I(p))$ is the wrapped Wrapped Mixture Model, which defines the . In order to extend to the whole HSI or HSV field, we have to turn to directional statistics, which is mainly concerned with observations which are unit vectors in the plane or in three-dimensional space~\cite{directionalStatistics} and in particular Cylindrical data~\cite{cylindrical_data}.
