@@ -1,0 +1,13 @@
+# Things that will be ignored
+*.log
+*.lof
+*.aux
+*.gz
+*.lot
+*.out
+*.bbl
+*.blg
+*.toc
+
+# Mac specific files
+*.DS_Store
