@@ -164,11 +164,7 @@ Furthermore I would also like to dedicate this master thesis to my beloved paren
 \pagenumbering{roman} % Roman numerals
 \chapter*{Abstract}
 \thispagestyle{empty}
-The main purpose of this master thesis is to enhance the performance of Cage Active Contours (CAC) in the context of color image object segmentation as well as provide a theoretical framework on which to justify the potential applications of the segmentation produced. 
-
-We present two new energy functions which expand on the previous energies in CAC, by using Mixture Gaussian Models to capture multiple components per region, and extend their applicability to two different color spaces: RGB and the Hue component of HSI/HSV. Furthermore, we provide a mathematical formalization of the components in CAC (\textit{cage} and \textit{contour}) in order to demonstrate and prove the good properties that allow for a segmentation to be used for shape description and for image morphing and warping. In addition, we provide a public implementation in Python for object segmentation of CAC with different energies along with tools for image morphing and warping.
-
-In order to validate our improvements, both quantitative and qualitative tests are used on three different datasets. The results show that the energy in RGB produces a substantial improvement over the previously developed energies for CAC. On the other hand we observe that the energy in the Hue component performs poorly on the given datasets despite its robustness with respect to changes in illumination. In the theoretical part, we prove which initial conditions are needed for a segmentation to provide useful results in shape description. Finally, we provide examples of some possible applications of CAC in morphing supported by our theoretical conclusions.
+NOT YET
 
 \tableofcontents
 
@@ -181,19 +177,19 @@ In order to validate our improvements, both quantitative and qualitative tests a
 \newpage\null\thispagestyle{empty}\newpage
 \input{sections/introduction}
 
-\input{sections/related_work}
+\input{sections/background}
 
-\input{sections/related_work}
+%\input{sections/related_work}
 
-\input{sections/proposed_methods}
+%\input{sections/proposed_methods}
 
-\input{sections/implementation}
+%\input{sections/implementation}
 
-\input{sections/experiments}
+%\input{sections/experiments}
 
-\input{sections/applications}
+%\input{sections/applications}
 
-\input{sections/conclusions}
+%\input{sections/conclusions}
 
 \vfill
 \renewcommand{\bibname}{\refname} % To change the heading of the chapter from Bibliography to References
@@ -201,7 +197,7 @@ In order to validate our improvements, both quantitative and qualitative tests a
 
 \bibliographystyle{apalike}
 
-\bibliography{example.bib}
+\bibliography{example}
 
 %\section*{\uppercase{Appendix}}
 %

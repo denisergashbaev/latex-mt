@@ -1,19 +1,109 @@
 \chapter{Background and definitions}
 \label{sec:Background}
 % neural networks 
-In this section, we go over the preliminarily concepts that help understand the contributions of this thesis. We start by looking at the family of methods to which Deep Neural Networks belong to, followed by a more detailed look at the method in question and explain how we will make our contribution using Deep Neural Network. 
+In this section, we go over the preliminarily concepts that help understand the contributions of this thesis. We start by looking at the family of methods to which Deep Convolutional Neural Networks belong to, followed by a more detailed look at the method in question and explain the some hyper-parameters incorporated for optimizing the proposed model. 
 
 \section{Deep Learning}
 
 %Today, \textit{Artiﬁcial Intelligence(AI)} is a thriving field with many practical applications and active research topics. We look to intelligent software to automate routine labor, understand speech or images, make diagnoses in medicine and support basic scientific research. 
-The true challenge to Artificial Intelligence(AI) proved to be solving the tasks that are easy for people to perform but hard for people to describe formally—problems that we solve intuitively, that feel automatic, like recognizing spoken words or faces in images. The solution is to allow computers to learn from experience and understand the world in terms of a hierarchy of concepts, with each concept defined in terms of its relation to simpler concepts. The hierarchy of concepts allows the computer to learn complicated concepts by building them out of simpler ones. If we draw a graph showing how these concepts are built on top of each other, the graph is deep, with many layers. For this reason, we call this approach to AI \textit{Deep Learning}\cite{dl book}.
+The true challenge to Artificial Intelligence(AI) proved to be solving the tasks that are easy for people to perform but hard for people to describe formally—problems that we solve intuitively, that feel automatic, like recognizing spoken words or faces in images. The solution is to allow computers to learn from experience and understand the world in terms of a hierarchy of concepts, with each concept defined in terms of its relation to simpler concepts. The hierarchy of concepts allows the computer to learn complicated concepts by building them out of simpler ones. If we draw a graph showing how these concepts are built on top of each other, the graph is deep, with many layers. For this reason, we call this approach to AI \textit{Deep Learning}\cite{Goodfellow-et-al-2016-Book}.
 
-In other words,  Deep Learning is a new are of Machine Learning research, which has been introduced with the objective of moving ML closer to one of its original goals: AI. Deep Learning is about learning multiple levels of representation and abstraction that help to make sense of data such as images, sound and text\cite{dldef2} 
+Modern deep learning provides a very powerful framework for supervised learning. By adding more layers and more units within a layer, a deep network can represent functions of increasing complexity. Most tasks that consist of mapping an input vector to an output vector, and that are easy for a person to do rapidly, can be accomplished via deep learning, given sufficiently large models and sufficiently large datasets of labeled training examples. Other tasks, that can not be described as associating one vector to another, or that are difficult enough that a person would require time to think and reflect in order to accomplish the task, remain beyond the scope of deep learning for now\cite{Goodfellow-et-al-2016-Book}.
+
+In other words,  Deep Learning is a new area of Machine Learning research, which has been introduced with the objective of moving ML closer to one of its original goals: AI. Deep Learning is about learning multiple levels of representation and abstraction that help to make sense of data such as images, sound and text\cite{tutorial2014lisa}.  
 
 \section{Deep Neural Networks}
 
+A standard neural network (NN) consists of many simple, connected processors called neurons, each producing a sequence of real-valued activations. Shallow NN-like models with few such stages have been around for many decades if not centuries\cite{deepnn}. However, theoretical results strongly suggest that in order to learn the kind of complicated functions that can represent high-level abstractions (e.g. in vision, language, and other AI-level tasks), one needs deep architectures. Deep Neural Networks are composed of multiple levels of non-linear operations, such as in neural nets with many hidden layers or in complicated propositional formulate re-using many sub-formulate\cite{bengio2009learning}. 
 
-A standard neural network (NN) consists of many simple, connected processors called neurons, each producing a sequence of real-valued activations. Shallow NN-like models with few such stages have been around for many decades if not centuries\cite{deepnn}. However, theoretical results strongly suggest that in order to learn the kind of complicated functions that can represent high-level abstractions (e.g. in vision, language, and other AI-level tasks), one needs deep architectures. Deep architectures are composed of multiple levels of non-linear operations, such as in neural nets with many hidden layers or in complicated propositional formulate re-using many sub-formulate\cite{dl for ai}.
+\subsection{Back Propagation}
+
+Backward Propagation of errors (BP) was the main advance in the 1980's that led to an explosion of interest in NNs. BP is one of the most common used methods for training NNs. The idea behind BP is that it repeatedly adjusts the weights of the connections in the network so as to minimize a measure of the difference between the actual output vector of the network and the desired one. As a result of the weight adjustments, internal \textit{hidden} units come to represent important features of the task domain, and the regularities in the task are captured by the interactions of these units\cite{williams1986learning}.
+
+In other words, BP computes how fast the error changes as we change a hidden activity by using error derivatives with respect to hidden activities. Since each hidden activity can have a notable effect on many output units and consequently on the error, a combination these effects must be considered. This combination is done efficiently which allows us to compute error derivatives for all the hidden units efficiently at the same time.  Computing the error derivatives for the hidden activities, it would be easy to get the error derivatives for the weights going into a hidden unit which is the key to be able to learn efficiently. 
+
+\subsection{Weight Sharing}
+
+Weight sharing consists in having several connections be controlled by a single parameter (weight). Weight sharing can be interpreted as imposing equality constraints among the connection strengths. An interesting feature of weight sharing is that it can be implemented with very little computational overhead\cite{lecun1989generalization}. The weight sharing technique has the interesting side effect of reducing the number of free parameters, thereby the capacity of the machine and improving its generalization ability\cite{lecun2010convolutional}.
+
+\section{Convolutional Neural Networks}
+
+Convolutional Neural Networks are a specialized kind of neural network for processing data that has a known grid-like topology such as image data which can be thought of as a 2D grid of pixels. CNN are simply neural networks that use convolution in place of general matrix multiplication in at least on of their layers\cite{Goodfellow-et-al-2016-Book}. 
+Basically , CNN combine three architectural ideas to ensure some degree of shift and distortion invariance local receptive fields, shared weights (or weight replication), and sometimes, spatial or temporal sub-sampling\cite{lecun2010convolutional}. 
+In the main body of any CNN's architecture, the following components exist:
+
+\subsection{Convolutional layer} 
+
+ Each unit of a convolutional layer receives inputs from a set of units located in a small neighborhood in the previous layer. With local receptive fields, neurons can extract elementary visual features such as oriented edges, end-points and corners. these features are then combined by the higher layers\cite{lecun2010convolutional}. In addition, elementary feature detectors that are useful on one part of the image are likely to be useful across the entire image. This knowledge can be applied by forcing a set of units, whose receptive fields are located at different places on the image, to have identical weight vectors\cite{williams1986learning}. The outputs of such a set of neurons constitute a \textit{feature map}. At each position, different types of units in different feature maps compute different types of features. A sequential implementation of this, for each feature map, would be to scan the input image with a single neuron that has a local receptive field, and to store the states of this neuron at corresponding locations in the feature map\cite{lecun2010convolutional}. \\
+\indent Units in a feature map are constrained to perform the same operation on different parts ot the image. A convolutional layer is usually composed of several feature maps (with different weight vectors), so that multiple features can be extracted at each location. 
+
+\subsection{Pooling/Sub-sampling layer}
+Once a feature is detected, its' exact position becomes less important as long as its' approximate position relative to other features is preserved. Besides, since the dimensionality of applying a filter is equal to the input dimensionality, we would not be gaining any translation invariance with these additional filters, we would be stuck doing pixel-wise analysis on increasingly abstract features. In order to solve this problem, \textit{subsampling} layer is introduced.
+
+ Subsampling, or down-sampling, refers to reducing the overall size of a signal. In many cases, such as audio compression for music files, subsampling is done simply for the size reduction \cite{sub}. But in the domain of 2D filter outputs, subsampling also can be thought of reducing the sensitivity of the output to shifts and distortions. One of the most applied subsampling methods used in\cite{lecun1995comparison}, is known as 'max pooling'. This involves splitting up the matrix of filter outputs into small non-overlapping grids (the larger the grid, the greater the signal reduction), and taking the maximum value in each grid as the value in the reduced matrix. By applying such a max pooling layer in between convolutional layers, we can increase spatial abstractness as we increase feature abstractness\cite{sub}.
+
+\subsection{Activation functions}
+To go from one layer to the next, a set of units compute a weighted sum of their inputs from the previous layer and pass the result through a non-linear activation function\cite{lecun2015deep}. There are many possible choices for the non-linear activation functions in a multi-layered network, and the choice of activation functions for the hidden units may often be different from that for the output units. This is because hidden and output units perform different roles\cite{bishop1995neural}. 
+
+\indent At present, the most popular non-linear function is the Rectified Linear Units (ReLU), which is simply the half-wave rectifier $f(z) = max(z, 0)$. In the past decades, neural nets used smoother non-linearities, such as $tanh(z)$ or $1/(1+ exp(-z))$, but ReLU typically learns much faster in networks with many layers, allowing training of a deep supervised network without unsupervised pre-training\cite{lecun2015deep}. 
+
+\indent The rectifier activation function allows a network to easily obtain sparse representations. For example, after uniform initialization of the weights, around 50\% of hidden units continuous output values are real zeros, and this fraction can easily increase with sparsity-including regularization. Apart from being more biologically plausible, sparsity also leads to mathematical advantages. On the other hand, one may hypothesize that the hard saturation at 0 may hurt optimization by blocking gradient back-propagation. However, conversely, experimental results done by\citeauthor{glorot2011deep} suggest that hard zeros can actually help supervised training\cite{glorot2011deep}.  
+
+\subsection{Local Response Normalization}
+
+ReLUs have the desirable property that they do not require input normalization to prevent them from saturating. If at least some training examples produce a positive input to a ReLU, learning will happen in that neuron. However, we still find that the following local normalization(LRN) scheme aids generalization. This sort of response normalization implements a form of lateral inhibition inspired by the type found in real neurons, creating competition for big activities amongst neuron outputs computed using different kernels\cite{krizhevsky2012imagenet}.
+
+\indent This scheme bears some resemblance to the local contrast normalization scheme proposed by \citeauthor{jarrett2009best} in \cite{jarrett2009best} without mean activity subtraction which has led to error rate reduction in \cite{krizhevsky2012imagenet} and \cite{hinton2012improving}. 
+
+\subsection{Fully connected/Inner product layer}
+
+Finally, after several convolutional and max pooling layers, the high-level reasoning in the neural network is done via \textit{fully connected layers}(IP). A fully connected layer takes all neurons in the previous layer (be it fully connected, pooling, or convolutional) and connects it to every single neuron it has. Fully connected layers are not spatially located anymore (you can visualize them as one-dimensional), so there can be no convolutional layers after a fully connected layer. 
+
+\section{Model Optimization}
+
+. Here, we describe in short some optimization methods along with definition of hyper-parameters used in our model.  
+\subsection{Stochastic Gradient Descent}
+It has often been proposed to minimize the \textit{empirical risk}(training set performance measure. For more detailed description, see \cite{vapnik1998statistical}) using \textit{gradient descent}(GD)\cite{bottou2010large}. The standard gradient descent algorithm updates the parameters $\theta$ of the objective \textit{J($\theta$)} as, 
+\begin{equation}
+\centering \theta = \theta - \alpha \bigtriangledown_\theta E[(J(\theta)]
+\end{equation}
+where the expectation in the above equation is approximated by evaluating the cost and gradient over the full training set(Empirical Risk Minimization(ERM)). Stochastic Gradient Descent(SGD) simply does away the expectation in the update and computes the gradient of the parameters using only a single or a few training examples. The new update is given by,   
+\begin{equation}
+\centering \theta = \theta - \alpha \bigtriangledown_\theta J(\theta; x^{(i)}, y^{(i)})
+\end{equation}
+with a pair $(x^{(i)}, y^{(i)})$ from the training set\cite{sgd}. 
+
+Generally each parameter update in SGD is computed with respect to a few training examples or a mini-batch as opposed to a single example. The reason for this is twofold\cite{sgd}:
+\begin{enumerate}
+	\item This reduces the variance in the parameter update and can lead to more stable convergence. 
+	\item This allows the computation to take advantage of highly optimized matrix operations that should be used in a well vectorized computation of the cost and gradient.  A typical mini-batch size is 256, although the optimal size of the mini-batch can vary for different applications and architectures.
+	\item One final but important point regarding SGD is the order in which we present the data to the algorithm. If the data is given in some meaningful order, this can bias the gradient and lead to poor convergence. Generally a good method to avoid this is to randomly shuffle the data prior to each epoch of training.
+\end{enumerate}
+
+\subsection{Weight Decay}
+
+As a part of BP algorithm and a subset of regularization methods, \textit{weight decay} adds a penalty term to the error function by multiplying weights to a factor slightly less than 1 after each update. 
+
+ It has been observed in numerical simulations that a weight decay can improve generalization in a feed-forward neural network. It is proven that a weight decay has two effects in a linear network. First, it suppresses any irrelevant components of the weight vector by choosing the smallest vector that solves the learning problem. Second, if the size is chosen right, a weight decay can suppress some of the effects of static noise on the targets, which improves generalization quite a lot\cite{moody1995simple}. 
+
+\subsection{Momentum}
+
+The \textit{momentum} method introduced by [\citeauthor{polyak1964some}, \citeyear{polyak1964some}] is a first-order optimization method for accelerating gradient descent that accumulates a velocity vector in directions of persistent reduction in the objective across iterations. Given an objective function $f(\theta)$ to be minimized, momentum is given by:
+\begin{equation}
+	\label{eq:t}
+	\begin{aligned}
+		\nu_{t+1} = \mu\nu_t - \varepsilon\bigtriangledown 
+	\end{aligned}
+\end{equation}
+\begin{equation}
+	\label{eq:t}
+	\begin{gathered}
+	\theta_{t+1} = \theta_t + \nu_{t + 1}
+	\end{gathered}
+\end{equation}
+where $\varepsilon > 0$ is the learning rate, $\mu \in [0,1]$ is the momentum coefficient, and $\bigtriangledown f(\theta_t)$ is the gradient at $\theta_t$ \cite{sutskever2013importance}. 
+
+For example, if the objective has form of a long shallow ravine leading to the optimum and steep walls on the sides, standard SGD will tend to oscillate across the narrow ravine since the negative gradient will point down one of the steep sides rather than along the ravine towards the optimum. The objectives of deep architectures have this form near local optima and thus standard SGD can lead to very slow convergence particularly after the initial steep gains. Momentum is one method for pushing the objective more quickly along the shallow ravine\cite{sgd}. 
 
 
 

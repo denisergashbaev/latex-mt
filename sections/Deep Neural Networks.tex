@@ -1,0 +1,660 @@
+\newpage
+\chapter{Cage Active Contours}
+\label{sec:cage_active_contours}
+
+Before defining Cage Active Contours, we have to introduce the coordinates which will be used to parametrize these active contours. Furthermore, we will derive some of the properties of these coordinates and formally introduce some concepts which will serve as an introduction to the shape description in section \ref{sec:applications}. 
+
+\section{Mean Value Coordinates}
+\label{sec:mean_value_coordinates}
+
+Mean value coordinates are used in computer graphics to linearly interpolate values given at a set of vertices of a closed
+contour. This allows for applications such as parametrization ~\cite{Kobayashi2003,Coquillart1990,Floater1999117}, shading ~\cite{Goraud,Phong:1975:ICG:360825.360839} or deformation to be carried out with extremely good results.
+Although these coordinates were initially introduced for mesh parametrization~\cite{Floater2003},
+Cage Active Contours uses them form deformation.
+
+These applications require that a point $p$ be expressed as an \emph{affine	combination} of the vertices $v_1,v_2,\dots, v_N$ of an enclosing closed contour. That is,
+\begin{equation}
+p = \sum\limits_{i=1}^N \varphi_i(p) v_i
+\label{equ:recover}
+\end{equation}
+where $\varphi_i(p)$ is  the corresponding \emph{affine coordinate} of the point $p$ with respect to the vertex $v_i$ and $N$ is the number of vertices.
+
+A variety of approaches have been presented for the computation of
+$\varphi_i(p)$.  In deformation applications we have harmonic coordinates~\cite{Joschi2007},
+Green coordinates~\cite{Lipman2008}, or mean value coordinates~\cite{Floater2003}. The advantage of the latter over the rest include a simple computation and the convenience of being able to parametrize any point of the space, 
+be it inside or outside the polygon demonstrated in ~\cite{Hormann2006}.
+\begin{figure}[h!]
+	\centering
+	{\includegraphics[width=0.4\textwidth]{images/MeanValue.pdf}}
+	\caption{Mean Value coordinate of vertex points (image from \cite{ipcac2015})} \label{fig:calculateMVC}
+\end{figure}
+
+
+Given a set of ordered\footnote{An ordered set will be defined with (,) while unordered set will be denoted by \{,\}} vertices $V=(v_1,v_2, \dots, v_N)$  of a polygon of $N$ points disposed in an anticlockwise order, 
+the \textit{mean value coordinates} of a point $p$ with respect to\footnote{In order to simplify the notation, we will use $\varphi(p)$ instead of $\varphi^V(p)$ unless there is a possible ambiguity in the context.} V are $\varphi^V(p)=(\varphi_i^V(p) | i\in (1,\dots,N) )$.
+
+\begin{equation} \label{eq:affine_coordinates}
+\varphi_i(p) = 
+\begin{cases} 
+\delta _{i,j}& \mathrm{if}\ p = v_j \\
+(1-\mu)\delta _{i,j}+ \mu \delta _{i,j+1}&  \mathrm{if}\ p=v_j(1-\mu)+v_{j+1}\mu\\
+\frac{w_i}{\sum_{j=1}^N w_j} \quad & \mathrm{otherwise}\\
+\end{cases}
+\end{equation}
+
+where 
+
+\begin{equation} \label{eq:indicator_function}
+\delta_{i,j}= 
+\begin{cases} 
+1& \mathrm{if}\  i=j \\
+0&  \mathrm{if}\ i\neq j\
+\end{cases}
+\end{equation}
+and $w_i$ is calculated %, see Fig.~\ref{fig:MeanValueCoordinates},
+
+%\begin{equation}\label{eq:mean_value_coord}
+%w_i = \frac{\tan(\frac{\alpha_{i-1}}{2})+\tan(\frac{\alpha_i }{2})}{|| v_i - p ||},
+%\end{equation}
+
+\begin{equation}\label{eq:mean_value_coord}
+w_i =\frac{\tan(\frac{\alpha_{i-1}}{2})+\tan(\frac{\alpha_i }{2})}{|| v_i - p ||} 
+\end{equation}
+
+where $\| v_i - p \|$ is the distance between the vertex $v_i$ and the considered point $p$ and $\alpha_i$ is the
+\emph{signed} angle of $[v_i, p,v_{i+1} ]$.
+
+Now we have that given the affine coordinates $\varphi(p)$ of a point $p$, the point $p$ can be recovered with \eqref{equ:recover}.
+If the vertex $v_i$ of the cage moves to position
+$v'_j$, the `deformed' point $p'$ can be recovered as
+
+\begin{equation} \label{eq:deform_points}
+p' = \sum_{i=1}^{N}\varphi_i(p)v_{i}',
+\end{equation}
+where note that the point $p'$ is recovered from the affine
+coordinates $\varphi_i(p)$, see figure~\ref{fig:mean_value_deformation}.
+
+
+Given a set of points, the affine coordinates for each
+point are computed in an independent way using (\ref{eq:affine_coordinates}).
+If a point $v_i$ of the polygon is stretched in a particular
+direction, all the points follow the same direction with an
+associated weight given by $\varphi_i(p)$ which is inversely proportional to the distance from $p$ to $v_i$, since it is the denominator of  \eqref{eq:mean_value_coord}. In figure~\ref{fig:mean_value_deformation}, this effect is depicted when point $v_i$ in the left image is translated to $v'_i$. the internal point p suffers a greater deformation
+than the points which are farther where the weight are smaller and hence, they
+are barely affected by this deformation.
+
+\begin{figure}[h]
+	\centering
+	{\includegraphics[width=0.8\textwidth]{images/mean_value_deformation}}
+	\caption{Influence of a vertex over the points on the plain (image from \cite{ipcac2015})}
+	\label{fig:mean_value_deformation}
+\end{figure}
+
+Figure~\ref{fig:different_ratios} illustrates the influence of the cage distance
+to the curve. The polygon is shown with a solid line whereas the evolution curve with a dashed
+line. The first column shows the initial configuration.
+The second and third column shows how the curve is deformed when a control
+point of the polygon is moved. As can be seen, the movement of the polygon
+produces a smooth deformation of the curve. The closer the polygon to the curve
+the higher the deformation that is applied to the curve.
+
+\begin{figure}[h!]
+	\centering
+	{\includegraphics[width=0.8\textwidth]{images/different_ratios.png}}
+	\caption{The curve deformation for two polygon configurations. The
+		polygon is shown as solid line and the evolving curve as dashed line.}
+	\label{fig:different_ratios}
+\end{figure}
+
+%Equations~(\ref{eq:affine_coordinates}) and (\ref{eq:pixel_recover}) are the
+%basis for the methods we have developed in our work. In the context of our
+%work, we use the vertices of the polygon to deform the evolving interface. The
+%polygon vertices will evolve according to the minimization of an energy that is
+%able to measure cues inside and outside the region, as well as on the contour
+%itself if necessary.
+
+\subsection{Properties of Mean value coordinates}
+\label{subsubsec:properties_mvc}
+Other properties that will be necessary for the development of the applications in section \ref{sec:applications} are that mean value coordinates have the following properties~\cite{Hormann2006}:
+
+\begin{enumerate}[label=\textbf{C.\arabic*}]
+	\item \label{property:mvc1} \textit{Affine precision}: , for any affine function $f:\mathbb{R}^2\to \mathbb{R}^D$, $f=\sum\limits_{i=1}^{N}f(v_i)\varphi_i^V $ for $v_i\in V$
+	\item \label{property:mvc2} \textit{Similarity invariance}: If $f:\mathbb{R}^2\to \mathbb{R}^2$ is a \textit{similarity} and for a cage $V'=f(V)$ we have that $\varphi^V(p)=\varphi^{V'}(f(p))$
+	\item \label{property:mvc3} \textit{Smoothness}: $\varphi_i$ is $C^{\infty}$ everywhere except at the vertices $v_j$ where it is only $C^0$.
+	\item \label{property:mvc4} \textit{Edge Linearity}: $\varphi_i^V$ is linear along the edges of the cage V.
+	\item \label{property:mvc5} \textit{Refinability}: if we redefine V to V' by splitting an edge between vertices $v_{j}$ and $v_{j+1}$ at $v=(1-\mu)*v_j+ \mu*v_{j+1}$, then $\varphi_{j}^V=\varphi_{j}^{V'}	\mu + (1-\mu)*\varphi_{j}^{V'}$.
+\end{enumerate}
+
+	
+\section{Components of Cage Active Contours}
+\label{subsec:components_cac}
+\noindent  Cage Active Contours are deformable models that have three major components: an \textit{initial contour}, an \textit{initial cage}, and an \textit{energy} function. 
+
+Let us define formally what we mean by each:
+\begin{definition}
+	A curve on a plane is a continuous mapping $\gamma:[a,b]\to \mathbb{R}^2$ such that $[a,b]\in \mathbb{R}$. 
+\end{definition}
+
+\begin{definition}
+	A Jordan curve is a non-intersecting, continuous closed curve.
+\end{definition}
+
+\begin{definition}
+	A contour will be used to define the image of a closed curve $\gamma:[a,b]\to \mathbb{R}^2$. such that $\gamma(a)=\gamma(b)$.
+\end{definition}
+
+From now on, however, we will use the word curve to mean contour for literary purposes unless it is explicitly distinguished.
+
+The CAC's \textit{initial contour} is a Jordan curve so that by the Jordan Curve Theorem we can assure that it divides the plane into two regions $\Omega_1$, $\Omega_2$ which correspond to the interior and the exterior of the Curve respectively.
+
+We define cage as
+\begin{definition}
+	A \textit{cage} is an \textit{ordered group of points}  $V=(v_1, v_2, \dots , v_N)$ on the plane $\mathbb{R}^2$.
+\end{definition}
+
+ The \textit{initial cage} $V$ of $N$ points must define\footnote{A cage defines a polygon by joining its vertices in order, the last with the first and removing the middle point of any consecutive collinear triplet. It is important to note that a cage is \textit{not} a polygon, since a cage can have three consecutive collinear points while a polygon cannot by definition.} a simple N-sided polygon since it is a requisite to be able to parametrize points on the plane using \textit{mean value coordinates}. These barycentric coordinates have very good properties which will also open the possibility to different applications such as silhouette descriptors, morphing or image interpolation in seciton~\ref{sec:applications}.
+
+The \textit{energy} $E$ is a function with respect to a contour, however, since the contour $C$ is parametrized by a cage $V$, and the contours that will be able to define will depend exclusively on $V$, we can define the energy function as 
+\begin{equation} %\label{eq1}
+\begin{split}
+E \colon & (\mathbb{R}^{2})^\mathrm{N} \to \mathbb{R} \\
+& \phantomarrow{AAa}{V} E(V) 
+\end{split}
+\end{equation}
+The function must be defined in a way so that it is minimum when the object to segment is in the interior region and the background in the exterior. Of course this idea stems from the assumption that the object differs from that of the background in appearance. The goal is then to minimize the energy with respect to a cage:
+
+\begin{equation}
+\min\limits_{{v_1, v_2, ..., v_N}}  E(v_1,v_2,\dots, v_N)
+\end{equation}
+Since the energy function is in terms of the cage, we can minimize the function by applying gradient descent on the energy with respect to the control points.
+
+From the very simple models on gray-scale image defined in \cite{ipcac2015}, we can develop more sophisticated energies as more complex properties are taken into consideration. 
+
+
+
+\section{Energy Functions}  
+\label{subsec:energy_functions}
+
+
+ As we have seen in section \ref{subsec:evolution}, CAC allows for more complex region-based energies to be used than other methods such as level sets. In~\cite{ipcac2015}, three different energy functions derived from analogous forms in level sets are defined: the Mean Energy, the Gaussian Energy and the Histogram Energy.
+
+\subsection{Mean Energy}
+\label{subsubsec:mean_energy}
+
+The first energy assumes that the gray-level values of pixels inside $\Omega_1$ and
+$\Omega_2$ can be modeled with a single value which corresponds to the mean.
+This method follows the formulation presented in~(\ref{eq:level_set_mean}).
+
+The measure of the region energy can be defined as follows
+\begin{equation}
+E_{\mathrm{Mean}} = \sum_{h=1}^2 \sum_{p \in \Omega_{h}} \frac{1}{2}(I(p)-\mu_{h})^2
+\end{equation}
+where the mean gray-level value of $\Omega_h$ is defined as
+\begin{equation}
+\label{eq:mean}
+\mu_{h} = \frac{1}{|\Omega_{h}|} \sum_{p \in \Omega_{h}}I(p),
+\end{equation}
+%and $|\cdot|$ denotes the cardinal of the set.
+
+Since the objective is to minimize this energy, we need to
+compute its derivatives with respect to the cage vertices $V$.
+The gradient of $E_{\mathrm{Mean}}$ with respect to $v_j$ is
+\begin{displaymath}
+\nabla_{v_j} {E_{\mathrm{Mean}}}=\sum_{h=1}^2 \sum_{p \in \Omega_{h}} (I(p)-\mu_h)  (\varphi_j(p) \nabla I(p) - \nabla_{v_j} \mu_h),
+\end{displaymath}
+where
+\begin{equation}
+\nabla_{v_j} \mu_h = \frac{1}{|\Omega_h|}\sum_{p \in\Omega_h} \nabla I(p)\varphi_j(p).
+\label{equ:derivative_mean}
+\end{equation}
+The previous formulation assumes a dependency of $\mu_h$ with respect to the
+region $\Omega_h$. In classical level set approaches, such as~\cite{ChanVese},
+authors do not take into account this dependency and use a coordinate descent
+approach to minimize the functional: the mean $\mu_h$ and the evolution
+equation are updated iteratively to evolve the equation. In the case of CAC, the authors
+assume $\nabla_{v_j} \mu_h = 0$ since no difference is appreciated in their experiments.
+
+\subsection{Gaussian Energy}
+\label{subsubsec:gaussian}
+
+The Gaussian energy presented in~\cite{ipcac2015} decreases when the values of each region $\Omega_h$ have stable statistics $\mu_h$ and $\sigma_h$. In other words, the curve will stop evolving when each region has points who's values have a higher probability of being in that region than otherwise. 
+
+\begin{equation}
+E_{\mathrm{Gauss}}=\sum\limits_{h =1}^{2} \sum_{p \in \Omega_h} -log(P_h(I(p))))
+\end{equation}
+where $P_h$ is the probability an intensity of $p$, $I(p)$ belongs to the normal distribution defined by region $h$'s seed.
+
+\begin{equation}
+	log(P_h(I(p))=-\log(\sqrt{2\pi}\sigma_h)-\frac{(I(p)-\mu_h)^2}{2\sigma_h^2}
+\end{equation}
+
+
+
+In order to minimize the energy, the authors calculate the gradient the derivative of the energy with respect to each control point $v_i$ to apply gradient descent:
+
+\begin{equation}
+	\nabla_{v_j} E_{\mathrm{Gauss}}  = \sum\limits_{h =1}^{2} \sum_{p \in \Omega_h} \frac{I(p)-\mu_h}{\sigma_h^2}\nabla I(p) \varphi_i(p)
+\end{equation}
+
+Notice that we do not apply the rule chain to $\mu_h$ or $\sigma_h$ like the original Gaussian CAC energy because they are previously chosen constants. 
+
+\subsection{Histogram Energy}
+\label{subsubsec:histogram_energy}
+
+Also presented in~\cite{ipcac2015} is the histogram energy an adaptation to CAC of a level set energy proposed in~\cite{Michailovich2007} (see section \ref{subsec:ActiveContours}). This energy is minimal when the probability density function of gray-values from each region $p_1$ and $p_2$ are most different. In order to measure this dissimilarity, the authors use the \textit{Bhattacharyya distance} between two density functions~\cite{Cha07comprehensivesurvey}. This distance is defined as:
+
+\begin{equation}
+	d_B=-log(B_{\mathrm{coeff}}(p_1,p_2))
+\end{equation}
+
+where the $B_{coeff}$ is a similarity measure known as the \textit{Bhattacharyya coefficient}:
+\begin{equation}\label{eq:continuous_bhattacharyya}
+	B_{coeff}(p_1,p_2)=\int{\sqrt{p_1(k)p_2(k)}}dx
+\end{equation}
+
+In order to simplify, the authors of CAC approximate the distribution with a probability histogram of K partitions, where the value of each bin is denoted $p_1(k)$ and $p_2(k)$. This way, the discrete version of  \eqref{eq:continuous_bhattacharyya} can be expressed as a finite sum and so the histogram energy can be expressed as:
+
+\begin{equation}\label{eq:discrete_bhattacharyya}
+E_{\mathrm{histogram}} =\sum\limits_{k=1}^K\sqrt{p_1(k)p_2(k)}
+\end{equation}
+
+The histogram bin $p_h(k)$,
+$h \in \{1,2\}$, is computed by means of the Parzen window~\cite{Michailovich2007}
+\begin{equation}
+\label{eq:bin_value}
+p_h(k) = \frac{1}{|\Omega_h|} \sum_{p \in \Omega_h} g_{\sigma_h}(k-I(p)),
+\end{equation}
+where $g_{\sigma_h}$ is the Gaussian function of zero mean and variance $\sigma_h$.
+
+The gradient with respect to a vertex $v_j$ is:
+\begin{equation}
+\nabla_{v_j} E_\mathrm{histogram} = 
+\sum_{k=0}^{K-1} \left( \frac{1}{2} \sqrt{\frac{p_2(k)}{p_1(k)}} \nabla_{v_j} p_{1}(k)
++ \frac{1}{2} \sqrt{\frac{p_1(k)}{p_2(k)}} \nabla_{v_j} p_2(k) \right)
+\end{equation}
+
+and where the derivative of \eqref{eq:bin_value} each bin's function is
+\begin{equation}
+\nabla_{v_j} p_{h}(k) = - \frac{1}{|\Omega_h|}\sum_{p \in \Omega_h} g_{\sigma_h}' (k-I(p))\nabla I(p) \varphi_{j}(p),
+\end{equation}
+where $g'_{\sigma_h}(.)$ is the derivative of the Gaussian function. The value
+of $\sigma_h$ is automatically computed as proposed in~\cite{Michailovich2007}.
+
+%\begin{displaymath}
+%\sigma^*_h = (4/3)^{1/5}\sigma_{0,h} |\Omega|^{-1/5} \approx \sigma_{0,h} |\Omega|^{-1/5},
+%\end{displaymath}
+%where $\sigma_{0,h}^2$ is the second moment of the function $p_h(z)$, which can be estimated
+%easily from $p_h(z)$.
+
+
+\section{Internal Energies}
+
+Internal energies are energies that focus on restraining the behavior of the shape of the Curve. Properties like smoothness, length, curvature, flexibility, expandability and contractability, topological preservation as well as shape priors can all be introduced in these energies.
+
+ In the context of active contours, the problem of handling the crossings of the
+active contour $\mathcal{C}$ has already been tackled in the
+literature~\cite{Delingette2000}.
+
+This constraint has been implemented by defining two cost functions. The first
+cost function allows to detect if a vertex $v_i$ gets at a distance
+less than $d$ to a vertex $v_j$, with $j\neq i$, as follows
+
+
+\subsection{Cage constraint Energy}
+\label{subsubsec:CageConstraint}
+The Cage constraints energy grows when a vertex of a cage gets too close to an edge, or another vertex. This is used to avoid the polygon defined by the cage from self-intersecting.
+
+Thus, the internal energies are defined for vertex to vertex and vertex to edge repulsion.
+\begin{equation}
+\psi_{\mathrm{Constraint}}(v) = \sum_{i} \left( \psi_{\mathrm{Vertex}}(v_i) +\psi_{\mathrm{Edge}}(v_i) \right).
+\label{equ:E_constraint}
+\end{equation}
+
+\begin{figure}[h]
+	\centering
+	{\includegraphics[width=0.8\textwidth]{images/EdgeConstraints.pdf}}
+	\caption{Band around the cage, where the vertices are repulsed. Image from\cite{ipcac2015}}
+	\label{fig:internal_energies}
+\end{figure}
+
+\subsection*{Vertex Constraint Energy}
+\label{subsubsec:vertex_constraint_energy}
+The vertex constraint energy insures that vertices do not come together. This will not only avoid merging points but will also avoid dividing by zero in the gradient of the edge constraint Energy in \eqref{eq:gradient_edge_energy} (see section \ref{subsubsec:edge_constraint_energy}).
+
+\begin{equation}
+E_{\mathrm{Vertex}} = \sum\limits_{i=1}^{N-1}\sum\limits_{j=i+1} \psi_{vertex}(v_i, v_j)
+\end{equation}
+where
+\begin{equation}
+	\psi_{vertex}(v_i, v_j)=(d-\|v_i - v_j\|)^2 
+\end{equation}
+
+\begin{equation}
+\psi_{\mathrm{vertex}}(v_i, v_j)= 
+\begin{cases} 
+0 & d\leq\|v_i - v_j\|  \\
+(d-\|v_i - v_j\|)^2 & d>\|v_i - v_j\| \\
+\end{cases}
+\end{equation}
+Since the gradient with respect to each vertex will be applied to the whole energy, we need to we have to find the partial derivatives. If $d<\|v_i-v_j\|$, we have:
+
+\begin{equation}\label{eq:gradient_edge_energy}
+\nabla_{v_i} \psi_{vertex}(v_i, v_j)= 
+\begin{cases} 
+0 & d\leq\|v_i - v_j\|  \\
+\frac{\partial (d-\|v_i-v_j\|)^2}{\partial v_i} = \frac{2(\|v_i - v_j\|-d)(v_i-v_j)}{\|v_i - v_j\|} & d>\|v_i - v_j\| \\
+\end{cases}
+\end{equation}
+
+\begin{equation}
+\nabla_{v_j} \psi_{vertex}(v_i, v_j)= 
+\begin{cases} 
+0 & d\leq\|v_i - v_j\|  \\
+\frac{\partial (d-\|v_i-v_j\|)^2}{\partial v_i} = -\frac{2(\|v_i - v_j\|-d)(v_i-v_j)}{\|v_i - v_j\|} & d>\|v_i - v_j\| \\
+\end{cases}
+\end{equation}
+
+Finally we get that 
+\begin{equation}
+	\nabla_{v_i}E_{\mathrm{Vertex}} = \sum_{j=1}^{i-1}\limits\psi_{vertex}(v_j, v_i)+\sum\limits_{j=i+1}^{N}\nabla_{v_i} \psi_{vertex}(v_i, v_j)
+\end{equation}
+
+
+\subsection*{Edge Constraint Energy}
+\label{subsubsec:edge_constraint_energy}
+For each edge of the cage defined by $v_j$ and $v_{j+1}$, all other vertexes $v_i\notin \{v_j,v_{j+1}\}$ we define the edge energy as 
+
+\begin{equation}
+E_{\mathrm{Edge}} = \sum\limits_{i=1}^N\sum\limits_{j \neq i, i-1} \psi_{edge}(v_i,v_j)
+\end{equation}
+
+where 
+
+\begin{equation}
+\psi_{\mathrm{Edge}} (v_i,v_j) = 
+\begin{cases} 
+0 & R(v_j, v_{j+1})  < 0  \\
+0 & 1<R(v_j, v_{j+1}) \\
+0 & d<d_{\perp}\\
+(d-d_{\perp})^2 & Otherwise \\
+\end{cases}
+\end{equation}
+
+where $d_{\perp}=\frac{\|q_{\perp} \cdot r\|}{\|q_{\perp}\|}$, $q=(v_{j+1}-v_j)$, $r=(v_i-v_j)$ and $R(v_j, v_{j+1})$ is the projection of r on q normalized with respect to q so that if it is in between zero or one, the vertex $v_i$ is in the band defined by the perpendicularly prolonged segment $\overline{v_j,v_{j+1}}$.
+
+For each vertex, we have to calculate the derivative of $E_{\mathrm{edge}}$. This would imply that for each summand that depends the vertex (with which we derive), would have to be derived. There are three possible positions of a vector in $\psi_{edge} (v_i,v_j,v_j+1)$ depending on whether they are $v_i$, $v_j$ or $v_{j+1}$:
+
+When $R(v_j, v_{j+1})  \geq 0$,  $1\geq R(v_j, v_{j+1})$  and $d\geq d_{\perp}$
+
+For $k \in \{i,j,j+1\} $
+
+
+
+\begin{equation}
+\nabla_{v_k} \psi_{\mathrm{Edge}} (v_i,v_j) = 2(d-d_{\perp})\nabla_{v_k} d_{\perp}
+\end{equation}
+
+
+% Derivative with respect to v_i
+\begin{equation}
+\nabla_{v_i}d_{\perp} =
+ %\frac{\partial  \frac{\|q_{\perp} \cdot r\|}{\|q_{\perp}\|} }{\partial v_i}=
+\frac{1}{\|q_{\perp}\|}\frac{\partial  \sqrt{(q_{\perp} \cdot (v_i-v_j)^2}}{\partial  v_i} =
+\frac{(q_{\perp} \cdot (v_i-v_j))q_{\perp}}{\|q_{\perp}\|  \sqrt{(q_{\perp} \cdot (v_i-v_j))^2}} =\frac{(q_{\perp} \cdot r)q_\perp}{\|q_{\perp}\|\|q_{\perp} \cdot r\|}
+\end{equation}
+
+
+
+% Derivative with respect to v_j
+\begin{equation}
+\nabla_{v_j}d_{\perp} = 
+%\frac{\partial  \frac{\|q_{\perp} \cdot r\|}{\|q_{\perp}\|} }{\partial v_j}=
+\frac{
+	\|q_{\perp}\|\frac{
+		\partial \|q_{\perp} \cdot r\|
+	}{
+	\partial v_{j}
+}
+-\|q_{\perp} \cdot r\|\frac{
+	\partial \|q_{\perp} \|
+}{
+\partial v_{j}
+}
+}{
+\|q_{\perp}\|^2
+}
+=
+\frac{
+	-\|q_{\perp}\|\frac{
+		(q_{\perp} \cdot r)(r+q_{\perp})
+	}{
+	\|q_{\perp} \cdot r\|
+}
++\|q_{\perp} \cdot r\|\frac{
+	q_{\perp}
+}{
+\|q_{\perp} \|
+}
+}{
+\|q_{\perp}\|^2
+}
+\end{equation}
+
+% Derivative with respect to v_j+1
+\begin{equation}
+\nabla_{v_{j+1}} d_{\perp}= 
+%\frac{\partial  \frac{\|q_{\perp} \cdot r\|}{\|q_{\perp}\|} }{\partial v_{j+1}}=
+\frac{
+	\|q_{\perp}\|\frac{
+		\partial \|q_{\perp} \cdot r\|
+	}{
+	\partial v_{j+1}
+}
+-\|q_{\perp} \cdot r\|\frac{
+	\partial \|q_{\perp} \|
+}{
+\partial v_{j+1}
+}
+}{
+\|q_{\perp}\|^2
+}=
+\frac{ 
+	\|q_{\perp}\|\frac{
+		(q_{\perp} \cdot r)r
+	}{
+	\|q_{\perp} \cdot r\|
+}
+-\|q_{\perp} \cdot r\|\frac{
+	q_{\perp}
+}{
+\|q_{\perp} \|
+}
+}{
+\|q_{\perp}\|^2
+}
+\end{equation}
+
+
+
+Therefore the derivative of the Edge energy turns out to be:
+
+\begin{equation}
+\nabla_{v_k}E_{\mathrm{Edge}} 
+=
+\sum\limits_{j\neq k, k-1 } 
+\nabla_{v_k}  \psi_{edge}(v_k,v_j) 
++
+\sum\limits_{i\neq k, k+1 } 
+\nabla_{v_k} \psi_{edge}(v_i,v_k) 
++
+\sum\limits_{i\neq k, k-1 } 
+\nabla_{v_k}  \psi_{edge}(v_i,v_{k-1}) 
+\end{equation}
+
+
+This means that in a cage of N vertices, each vertex has a total of 3(N-2) derivatives of $\psi_{\mathrm{Edge}}$ as summands. This can be too computationally expensive.  A possible alternative would be to treat the psi function as a function depending solely on $v_i$, $\psi_{\mathrm{Edge}}(v_i)$ thus reducing tremendously the number of computations.
+
+
+\section{Segmentation process of CAC}
+\label{subsec:evolution}
+
+Assuming that $E$, $V$ and $C$ are given, we can begin the process which takes place in the CAC segmentation algorithm.  pseudo-code is provided in algorithm~\ref{alg:cac_algorithm}.  In figure~\ref{fig:cac_algorithm} a diagram of this process is shown. The inputs of this system are the image on one hand and the components of Cage Active Contours on the other, the initial contour, the initial cage and the energy function.
+A more thorough description of the segmentation process can be found in~\cite{ipcac2015}.
+
+
+
+\begin{figure}[h!]
+	\centering
+	{\includegraphics[width=0.8\textwidth]{images/cac_algorithm.png}}
+	\caption{CAC diagram.}
+	\label{fig:cac_algorithm}
+\end{figure}
+
+
+\begin{algorithm}[h]
+	\small
+	\caption{Segmentation algorithm of Cage Active Contours}\label{alg:cac_algorithm}
+	\begin{algorithmic}[1]
+		\Require{\textit{Initial Contour}, \textit{Initial Cage}, \textit{Energy Function}}
+		\Procedure{Segment Object}{\textit{Image}}\label{cac:line:segment_object}
+		\State \textit{Contour}, \textit{Cage}  $\leftarrow$ \textit{Initial Contour}, \textit{Initial Cage}
+		\State \textit{Stage}, $\alpha$ $\leftarrow$ 1, Maximum number of pixels per step
+		\State \textit{affine contour coordinates}$=$\label{cac:line:get_affine_coord} \Call{GetAffineCoordinates}{\textit{Contour}, \textit{Cage}}
+		\While{ \Call{Stop Condition}{} not reached }
+		\State Gradient $\leftarrow$ \Call{Calculate Gradient}{\textit{Contour}, \textit{Cage}, \textit{Image}}
+		\If{\textit{Stage} = 1} \label{cac:line:stage_1}
+		\State Project Gradient on the line from their vertex to the mid point of all the vertices.
+		\State Standardize Gradient
+		\State \textbf{if} Cage is stuck \textbf{then} Stage $\leftarrow$ 2 \textbf{end if}
+		\Else\label{cac:line:stage_2}
+		\State Standardize Gradient
+		\State $\alpha$ $\leftarrow$ \Call{Backtracking}{Gradient, $\alpha$, Contour, Cage, Image}
+		\EndIf\label{cac:line:end_stages}
+		\State \textit{Cage} $\leftarrow$ \textit{Cage} $-$ $\alpha \cdot Gradient$ \Comment{Update cage}
+		\State \textit{Contour} $\leftarrow$ \Call{Deform Points}{\textit{affine contour coordinates}, \textit{cage}} \Comment{Deform contour}\label{cac:line:deform_contour}
+		\EndWhile
+		\State \Return \textit{Contour}, \textit{Cage}
+		\EndProcedure \label{cac:line:end_segment_object}
+		
+		\Statex
+		\Function{Calculate Gradient}{Contour, Image}
+		\State $\Omega_1$, $\Omega_2$  $\leftarrow$ Retrieve the Interior and Exterior Regions of the \textit{Contour}
+		\State $Model_1$, $Model_2$ $\leftarrow$ Fetch inner and outer models
+		\State \textit{Gradient} $\leftarrow$ Gradient of the Energy with respect to the control points in the \textit{Cage}
+		\State \Return \textit{Gradient}
+		\EndFunction
+		
+		\Statex
+		\Function{Calculate Energy}{Contour, Cage, Image}
+		\State $\Omega_1$, $\Omega_2$  $\leftarrow$ Retrieve the Interior and Exterior Regions of the \textit{Contour}
+		\State $Model_1$, $Model_2$ $\leftarrow$ Fetch inner and outer models
+		\State \textit{Energy Value} $\leftarrow$ Value of the \textit{Energy function} with respect to the Contour
+		\State \Return \textit{Energy Value}
+		\EndFunction
+		
+		\Statex
+		\Function{Backtracking}{Gradient, $\alpha$, Contour, Cage, Image}
+		\State Previous Energy = \Call{Calculate Energy}{Contour, Cage, Image}
+		\Do 
+		\State \textit{Contour} $\leftarrow$ \Call{Deform Points}{\textit{affine contour coordinates},  \textit{Cage} $-$ $\alpha \cdot Gradient$}
+		\State Energy = \Call{Calculate Energy}{Contour,  \textit{Cage} $-$ $\alpha \cdot Gradient$, Image}
+		\State $\alpha \leftarrow \alpha-\epsilon$
+		\doWhile Energy $>$ Previous Energy \textbf{and} $\alpha>0$
+		\State \Return $\alpha$+$\epsilon$
+		\EndFunction
+		
+		
+		\Statex
+		\Function{GetAffineCoordinates}{\textit{Points}, \textit{Cage}}
+		\State \textit{affine coordinates} $\leftarrow$  Obtain the \textit{Points}' \textit{mean value coordinates} with respect to the \textit{Cage}.
+		\State \Return \textit{affine coordinates}
+		\EndFunction
+		\Statex
+		\Function{Deform Points}{\textit{affine coordinates}, \textit{cage}}
+		\State \textit{deformed points} $\leftarrow$  Deform the points using equation \eqref{eq:deform_points}
+		\State \Return \textit{deformed points}
+		\EndFunction
+	\end{algorithmic}
+\end{algorithm}
+
+\subsection{Gradient descent}
+\label{subsubsec:gradient_descent}
+
+In order to segment the image, the Energy function with respect to the contour must be minimized. Since there are a few restrictions on the cage, the iterative gradient descent algorithm is integrated into the \textit{Segment Object} procedure in lines~\ref{cac:line:segment_object} to \ref{cac:line:end_segment_object} of the pseudo-code. The \textit{Calculate Gradient} method iteratively updates the cage $V=\{v_1, \ldots, v_N \}$ represented as $V^k$  in iteration $k$ to $V^{k+1}$ for iteration $k+1$ through the update:
+\begin{equation}
+V^{k+1} = V^k + \alpha^k \, S^k,
+\label{eq:update_cage}
+\end{equation}
+where $S^k$ is the search direction and $\alpha^k$ the step. Usually the
+steepest descent direction $S^k = - \nabla_{V^k} E$
+is taken as the
+search direction.
+\begin{equation}
+S^k = - \left( \frac{\nabla_{V_1^k} E}{|| \nabla_{v^k} E ||_\mathrm{max}},
+\frac{\nabla_{v_2^k} E}{|| \nabla_{v^k} E ||_\mathrm{max}},
+\ldots,
+\frac{\nabla_{v_N^k} E}{|| \nabla_{v^k} E ||_\mathrm{max}} \right)
+\end{equation}
+where 
+\begin{equation}
+|| \nabla_{v^k} E ||_\mathrm{max} = \mathrm{max} \left\{ || \nabla_{v_{\mathrm{j}}^k} E || \, : \, j = 1 \ldots N\right\}.
+\end{equation}
+%
+%\begin{displaymath}
+%S^k = - \left( \mathrm{min} \left\{\frac{\nabla_{V_1^k} E}{|| \nabla_{v^k} E ||_\mathrm{mean}},1\right\},
+%\mathrm{min} \left\{\frac{\nabla_{v_2^k} E}{|| \nabla_{v^k} E ||_\mathrm{mean}},1\right\},
+%\ldots,
+%\mathrm{min} \left\{\frac{\nabla_{v_N^k} E}{|| \nabla_{v^k} E ||_\mathrm{mean}} , 1\right\}\right)
+%\end{displaymath}
+%where 
+%\begin{displaymath}
+%|| \nabla_{v^k} E ||_\mathrm{mean} \coloneqq \frac{\sum\limits_{i=1}^{N}| \nabla_{v_i^k} E ||}{N}
+%\end{displaymath}
+
+The authors assure that the computation of $\alpha$ is a critical issue for the good performance of the algorithm.
+After this update, the \textit{Deform Points} function is applied to the Contour so that it is updated with respect to the new cage using equation~\eqref{eq:deform_points}. It is of extreme importance the fact that the mean value coordinates of the contour are only computed once in the beginning. This is seen in line \ref{cac:line:get_affine_coord} of the pseudo-code before the iterative loop.
+
+
+In CAC the authors use gradient descent by means of a two stage process. 
+
+\subsection*{First stage}
+The goal in this stage is to obtain a segmentation as close as possible to
+the solution by restricting the step and direction in which the cage vertices may
+evolve. The authors are inspired in balloon forces similar to the ones described
+in~\cite{Cohen1991}. At each iteration of the gradient descent each cage vertex $v_j^k$ is restricted to move along the line that passes through the center point of $v_c$ and $v_j^k$. That is, the gradient
+vector $\nabla_{v_j^k} E$ is projected on the line joining
+$v_c$ and $v_j$ before normalizing it. This can be seen in figure \ref{fig:projected_gradient} with red lines representing the gradient vector while the blue lines their projection on the line that passes through its corresponding vertex $v_j$ and the center point $v_c$.
+
+\begin{figure}[h!]
+	\centering
+	{\includegraphics[width=0.8\textwidth]{images/projected_gradient.png}}
+	\caption{Depiciton of the first stage restriction.}
+	\label{fig:projected_gradient}
+\end{figure}
+
+In this first stage, the step $\alpha$ is constant for each iteration
+and corresponds to a motion of $\alpha=\beta$ pixels of the
+cage vertices\footnote{$\beta$ is explained in section \ref{subsubsec:CageConstraint}.}, which is the maximum distance points are allowed to approach edges or other vertices to ensure the cage does not cross over. 
+
+The authors suppose that if the cage vertices move iteratively from side to side around the reached minimum,they have approximated a certain minimum. Since each cage vertex move
+in a one-dimensional direction, this phenomena can be mathematically
+expressed as follows:
+\begin{equation}\label{eq:condition_stage_1}
+(\nabla_{\mathbf{v}_j^k} E)^T
+\nabla_{\mathbf{v}_j^{k-2}} E > 0,\ \ \ \ \ \ (\nabla_{\mathbf{v}_j^{k-1}} E)^T
+\nabla_{\mathbf{v}_j^{k-3}} E > 0,\ \ \ \ \ \ (\nabla_{\mathbf{v}_j^k} E)^T \nabla_{\mathbf{v}_j^{k-1}} E < 0,
+\ \ \ \ \ \ \forall k \in V
+\end{equation}
+
+%These conditions indicate that the gradient at
+%iteration $k$ and $k-2$, as well as $k-1$ and $k-3$ should have the same
+%direction. On the other hand, the gradient at $k$ and $k-1$ should have
+%opposite directions.
+This condition has to be satisfied independently, for each cage vertex, in order to stop the first stage and begin the second stage.
+
+
+\subsection*{Second stage}
+
+When the cage meets the conditions in \eqref{eq:condition_stage_1}, an approximation of the segmentation is met and the second stage begins. The restrictions on the direction of the gradient are immediately removed. The objective of this stage is to move the cage vertices in the direction given by the gradient only if the energy is minimized. To do this, the authors of the CAC use a back-tracking of the value alpha as seen in the pseudo-code \ref{alg:cac_algorithm}. Once the energy can no longer be reduced, it is considered that the cage has reached a minimum of the energy and the inner region of the contour deformed by the cage using \eqref{eq:deform_points} is the final segmentation of the object. 
+
+In the undesirable case where the cage does not reach the second stage after a long time, we have added a maximum number of iterations which ends the segmentation when reached returning the current segmentation as the final one.
