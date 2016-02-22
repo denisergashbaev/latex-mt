@@ -1,0 +1,209 @@
+\documentclass[11pt, oneside]{book}
+\usepackage{setspace}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+%\usepackage{fancyhdr}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1.1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{epsfig}
+\usepackage{subfigure}
+\usepackage{calc}
+\usepackage{dsfont}
+\usepackage{amssymb}
+\usepackage{amstext}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{multicol}
+\usepackage{mathtools,xparse}
+\usepackage[hidelinks]{hyperref}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{calligra}
+
+% % % % REFERENCES
+%
+\usepackage[numbers]{natbib}
+\usepackage{amsmath}
+%
+% % % %
+
+% % % %
+%
+\usepackage[labelfont=bf]{caption} %labelfont is to make the Figure X.X: in bold
+\usepackage[titletoc,toc,page]{appendix}
+%
+% % % %
+
+% % % % TableFootnote
+%
+\newcommand*{\savedfootnotes}{}
+\newcommand*{\resetsavedfootnotes}{\global\let\savedfootnotes\empty}
+\newcommand{\tablefootnote}[1]
+{
+	\footnotemark
+	\xdef\savedfootnotes
+	{\unexpanded\expandafter{\savedfootnotes}\noexpand\footnotetext{#1}}
+}
+\edef\endtable
+{
+	\aftergroup\noexpand\savedfootnotes
+	\aftergroup\noexpand\resetsavedfootnotes
+	\unexpanded\expandafter{\endtable}
+}
+%
+% % % %
+
+% % % % Norms
+%
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\NewDocumentCommand{\normL}{ s O{} m }{
+	\IfBooleanTF{#1}{\norm*{#3}}{\norm[#2]{#3}}_{L_2(\Omega)}%
+}
+%
+% % % %
+
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+\newcommand\phantomarrow[2]{
+	\setbox0=\hbox{$\displaystyle #1\to$}
+	\hbox to \wd0{
+		$#2\mapstochar
+		\cleaders\hbox{$\mkern-1mu\relbar\mkern-3mu$}\hfill
+		\mkern-7mu\rightarrow$}
+	\,}
+
+\graphicspath{{Images//},{sections//},{Images/qualitative_tests/}}
+\input epsf
+
+\subfigtopskip=0pt
+\subfigcapskip=0pt
+\subfigbottomskip=0pt
+
+
+% % % Sections 
+\usepackage{titlesec}
+\titleformat{\chapter}[hang]{\Huge\bfseries}{\thechapter}{15pt}{\Huge\bfseries}
+%\titlespacing{\chapter}{0pt}{-50pt}{20pt}
+
+
+%Bigger elements in matrix
+\makeatletter
+\renewcommand*\env@matrix[1][\arraystretch]{%
+	\edef\arraystretch{#1}%
+	\hskip -\arraycolsep
+	\let\@ifnextchar\new@ifnextchar
+	\array{*\c@MaxMatrixCols c}}
+\makeatother
+
+% % DEFINITIONS, propositions enviornment
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+% % 
+
+
+% ALGORITHMS
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{pifont}
+%\algdisablelines
+
+
+
+\newcommand{\old}{\texttt{algorithmic}}
+\newcommand{\euk}{Euclid}
+\newcommand\ASTART{\bigskip\noindent\begin{minipage}[b]{0.5\linewidth}}
+	\newcommand\ACONTINUE{\end{minipage}\begin{minipage}[b]{0.5\linewidth}}
+	\newcommand\AENDSKIP{\end{minipage}\bigskip}
+\newcommand\AEND{\end{minipage}}
+%\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+%\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\newcommand{\algorithmicbreak}{\textbf{break}}
+
+\algdef{SE}[DOWHILE]{Do}{doWhile}{\algorithmicdo}[1]{\algorithmicwhile\ #1}%
+% % % % % % % % % % % % % % % % % % % %
+
+\begin{document}
+
+%\title{Cage active contours: Extension to color spaces and
+%		 application to image morphing }
+%
+%\keywords{The paper must have at least one keyword. The text must be set to 9-point font size and without the use of bold or italic font style. For more than one keyword, please use a comma as a separator. Keywords must be titlecased.}
+%
+%\abstract{This master thesis explores. experimental results confirm the superiority in results of
+%	the algorithm compared to the previous existing energies. Furthermore,
+%	we propose a pipeline for its application in morphing,}
+%
+%\onecolumn \maketitle \normalsize \vfill
+\setcounter{page}{3}
+\input{sections/titlepage}
+\thispagestyle{empty}
+
+\thispagestyle{empty}
+\chapter*{Acknowledgments}
+\thispagestyle{empty}
+I would like to sincerely thank my supervisors Oriol Pujol and Santi Segui for their support, guidance and mentorship. I greatly appreciate their demanding and inquisitive scientific attitude, while keeping always a calm and positive mindset. They are, in my mind, an inspiring example of what university professors should be.
+
+Furthermore I would also like to dedicate this master thesis to my beloved parents and sister for their unsparing supports. My gratitude knows no bounds.
+
+ Another special acknowledgment must be made to my friends in the master: Denis, Jeroni, Philipp, Pablo, Lorenzo, Iosu, Ferran and many others for the endless studying hours, morning coffees after crunching the brutal assignments all night long, valuable and constructive discussions which allowed me carry out this program. 
+ 
+
+
+
+\pagenumbering{arabic}
+\setcounter{page}{0}
+\clearpage
+
+%Table of contents
+\newpage
+\pagenumbering{roman} % Roman numerals
+\chapter*{Abstract}
+\thispagestyle{empty}
+NOT YET
+
+\tableofcontents
+
+\listoffigures
+
+
+\newpage
+\pagenumbering{arabic} % Normal numerals
+
+\newpage\null\thispagestyle{empty}\newpage
+\input{sections/introduction}
+
+\input{sections/background}
+
+\input{sections/related_work}
+
+%\input{sections/proposal}
+
+%\input{sections/implementation}
+
+%\input{sections/experiments}
+
+%\input{sections/applications}
+
+%\input{sections/conclusions}
+
+\vfill
+\renewcommand{\bibname}{\refname} % To change the heading of the chapter from Bibliography to References
+\addcontentsline{toc}{chapter}{\bibname}
+
+\bibliographystyle{apalike}
+
+\bibliography{example}
+
+%\section*{\uppercase{Appendix}}
+%
+%\noindent If any, the appendix should appear directly after the
+%references without numbering, and not on a new page. To do so please use the following command:
+%\textit{$\backslash$section*\{APPENDIX\}}
+
+\vfill
+\end{document}
