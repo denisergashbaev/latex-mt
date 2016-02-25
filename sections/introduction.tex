@@ -1,13 +1,12 @@
-\chapter{Introduction}
+\part{title}\chapter{Introduction}
 \label{sec:introduction}
-
-
-
-
-%2. What is the background, the context, in which the research took place? 
-Learning to count is an important \todo{"educational/developmental milestone" --- hmm, it's smth different. maybe concept or ability} educational/developmental milestone  which constitutes the most fundamental idea of mathematics. In Computer Vision, the counting problem is the estimation of the number of objects in a still image or video frame. Learning to count visual objects is a new approach towards dealing with detecting objects in the images and video, which has been recently \todo{proffered means offered, do you mean that?} proffered in the literature\todo{such as paper1, paper2,...}. It arises in many real-world applications, including cell counting in microscopic images, monitoring crowds in surveillance systems, and performing wildlife census or counting the number of trees in an aerial image of a forest\cite{NIPS2010_4043}\todo{citation missing}. 
-
 \section{Motivations}
+%2. What is the background, the context, in which the research took place? 
+The concept of learning to count is an important educational/developmental milestone  which constitutes the most fundamental idea of mathematics. In Computer Vision\cite{umbaugh1997computer}, the counting problem is the estimation of number of objects in a still image or video frame. Learning to count visual objects is a new approach towards dealing with detecting object in the images and video, which has been recently proffered in the literature\cite{viola2005detecting, rabaud2006counting, kong2005counting, chan2008privacy, segui2015learning}. It arises in many real-world applications, including cell counting in microscopic images\cite{flaccavento2011learning}, monitoring crowds in surveillance systems\cite{rahmalan2006crowd, valera2005intelligent}, and performing wildlife census or counting the number of trees in an aerial image of a forest\cite{brandtberg1998automated, pollock1996automatic}\cite{NIPS2010_4043}. 
+
+Artificial intelligence and computer vision share topics such as pattern recognition and machine learning\cite{michalski2013machine, mitchell1997machine} techniques. Consequently, computer vision is sometimes seen as a part of the artificial intelligence field or the computer science field in general. Recent machine learning methods applied for computer vision tasks, require large number of data for the learning process. To learn to count the object of interest in an image or video, various object features need to be designed, extracted or detected during the learning phase. The complexity of feature detection process in vision tasks, restrict their usage in large-scale computer vision applications thus demanding more efficient solutions to alleviate, expedite and improve this process. \\
+\indent One recent and commonly used method to facilitate feature detection process is application of deep Convolutional Neural Networks(CNN)\cite{szegedy2015going, krizhevsky2012imagenet, lecun1995convolutional, sermanet2013overfeat, ji20133d, taylor2010convolutional}. One of the promises of deep CNN is replacing handcrafted features with efficient algorithms for unsupervised or semi-supervised feature learning and hierarchical feature extraction\cite{song2013hierarchical}. CNNs have been claimed and practically proven to achieve the most assuring performance in different vision benchmark problems\cite{ciresan2011flexible, szegedy2015going, ciresan2012multi}. 
+
 \section{Objectives}
 \section{Contributions of the Research}
 This thesis contains the following contributions:

@@ -22,6 +22,7 @@
 \usepackage{enumitem}
 \usepackage{calligra}
 \usepackage{float}
+\usepackage[acronym]{glossaries}
 % % % % REFERENCES
 %
 \usepackage[numbers]{natbib}
@@ -181,7 +182,7 @@ NOT YET
 
 \input{sections/related_work}
 
-%\input{sections/proposal}
+\input{sections/proposal}
 
 %\input{sections/implementation}
 
@@ -204,6 +205,6 @@ NOT YET
 %\noindent If any, the appendix should appear directly after the
 %references without numbering, and not on a new page. To do so please use the following command:
 %\textit{$\backslash$section*\{APPENDIX\}}
-
+\printglossary[type=\acronymtype]
 \vfill
 \end{document}
