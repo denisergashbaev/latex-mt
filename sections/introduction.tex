@@ -4,11 +4,20 @@
 %2. What is the background, the context, in which the research took place? 
 The concept of learning to count is an important educational/developmental milestone  which constitutes the most fundamental idea of mathematics. In Computer Vision\cite{umbaugh1997computer}, the counting problem is the estimation of number of objects in a still image or video frame. Learning to count visual objects is a new approach towards dealing with detecting object in the images and video, which has been recently proffered in the literature\cite{viola2005detecting, rabaud2006counting, kong2005counting, chan2008privacy, segui2015learning}. It arises in many real-world applications, including cell counting in microscopic images\cite{flaccavento2011learning}, monitoring crowds in surveillance systems\cite{rahmalan2006crowd, valera2005intelligent}, and performing wildlife census or counting the number of trees in an aerial image of a forest\cite{brandtberg1998automated, pollock1996automatic}\cite{NIPS2010_4043}. 
 
-Artificial intelligence and computer vision share topics such as pattern recognition and machine learning\cite{michalski2013machine, mitchell1997machine} techniques. Consequently, computer vision is sometimes seen as a part of the artificial intelligence field or the computer science field in general. Recent machine learning methods applied for computer vision tasks, require large number of data for the learning process. To learn to count the object of interest in an image or video, various object features need to be designed, extracted or detected during the learning phase. The complexity of feature detection process in vision tasks, restrict their usage in large-scale computer vision applications thus demanding more efficient solutions to alleviate, expedite and improve this process. \\
-\indent One recent and commonly used method to facilitate feature detection process is application of deep Convolutional Neural Networks(CNN)\cite{szegedy2015going, krizhevsky2012imagenet, lecun1995convolutional, sermanet2013overfeat, ji20133d, taylor2010convolutional}. One of the promises of deep CNN is replacing handcrafted features with efficient algorithms for unsupervised or semi-supervised feature learning and hierarchical feature extraction\cite{song2013hierarchical}. CNNs have been claimed and practically proven to achieve the most assuring performance in different vision benchmark problems\cite{ciresan2011flexible, szegedy2015going, ciresan2012multi}. 
+Artificial intelligence and computer vision share topics such as pattern recognition and machine learning\cite{michalski2013machine, mitchell1997machine} techniques. Consequently, computer vision is sometimes seen as a part of the artificial intelligence field or the computer science field in general. Recent machine learning methods applied for computer vision tasks, require large number of data for the learning process. To learn to count the object of interest in an image or video, various object features need to be designed, extracted or detected during the learning phase. The complexity of feature detection process in vision tasks, restrict their usage in large-scale computer vision applications thus demanding more efficient solutions to alleviate, expedite and improve this process. 
+
+\indent One recent and commonly used method to facilitate feature detection process is application of deep Convolutional Neural Networks(CNN)\cite{szegedy2015going, krizhevsky2012imagenet, lecun1995convolutional, sermanet2013overfeat, ji20133d, taylor2010convolutional}. One of the promises of deep CNN is replacing handcrafted features with efficient algorithms for unsupervised or semi-supervised feature learning and hierarchical feature extraction\cite{song2013hierarchical}. CNNs have been claimed and practically proven to achieve the most assuring performance in different vision benchmark problems concerning feature detection and classification\cite{ciresan2011flexible, szegedy2015going, ciresan2012multi}. 
 
 \section{Objectives}
-\section{Contributions of the Research}
+This work sets forward several objectives:
+\begin{enumerate}
+	\item To apply deep CNN for feature detection and classification in a learning to count problem where the concept of interest will be counted by no giving explicit information about what we are counting to the system, except for its multiplicity in the image. 
+	\item To synthetically create datasets of images, as realistic as possible, and completely automatically annotated for CNN to train with.
+	\item To explore the behavior of proposed algorithm on synthetic datasets of different types comparing the performance with a state-of-the-art outcomes\cite{segui2015learning}.   
+	\item To analyze the performance of designed system on real world crowd counting problem comparing the results with state-of-the-art results\cite{chan2008privacy}.   
+
+\end{enumerate}
+\section{Contributions}
 This thesis contains the following contributions:
 \begin{enumerate}
 	\item It proposes the problem of object representation as an indirect learning problem casted as learning to count strategy. The devised algorithm is capable of counting the number of pedestrians in the image that does not depend on object detection or feature tracking. The model is also privacy-preserving in a sense that it can be implemented with hardware that does not produce a visual record of the individuals in the scene. 
@@ -24,22 +33,11 @@ This thesis contains the following contributions:
 \end{enumerate}
 
 \section{Organization}
-%3. Why is this subject or issue important 
 
+This report takes off with the review of Deep Learning(DL) as a branch of Artificial Intelligence (AI) which deep convolutional neural networks belong to, and moves on to introduce a deep CNN's basic architecture and components in details along with the definition of applied optimization methods and hyper-parameters in our work (Section 2.1). This section ends with a review of state of the art (Section 2.2). 
 
-%4. Who are the key participants and/or ‘actors’ in the area under investigation? 
+In section 4, we describe our proposal for constructing a deep neural network to tackle feature detection issue learning to count problems. 
 
-%5. Are there important trends or pivotal variables of which the reader needs to be made aware? 
+Section 5 revolves around the empirical experiments and analysis along with the peculiarities of proposed data creation process and network modeling.  
 
-%6. A clear and succinct statement of the aims and objectives that the dissertation is going to address. 
-
-%7. Have you presented a clear and unambiguous exposition of your research aim, the objectives you will address to meet this aim and your research questions? 
-
-%8. The reasons why this study was carried out 
-
-%9. Was this study undertaken for example in order to test some aspect of  professional or business practice or theory or framework of analysis? 
-
-%10. Was the research carried out to fulfil the demands of a business  organisation? 
-%11. The way the Dissertation is to be organised 
-
-
+Lastly, in Chapter 6 we conclude the report with a short summary of the scope of work conducted and the new areas of research that this master thesis has opened.
