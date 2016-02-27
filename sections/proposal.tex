@@ -1,14 +1,34 @@
 \newpage
-\chapter{Proposal}
+\chapter{Methodology}
 \label{sec:proposal}
 \noindent
+This master thesis proposes an application of deep CNNs to a task of counting objects in the image. The provided system is to address all the aforestated issues which object detection and counting applications have encountered. Such as:
+\begin{itemize}
+	\item Being prone to error in noisy or crowded scenes with a noticeable occlusion. 
+	\item Establishing the viability of a privacy-preserving approach. 
+	\item Painstaking hand-crafted image features which are highly dependent on the object class. 
+	\item Scrupulous data annotation for manifold data. 
+\end{itemize} 
+In addition, the deficit in the state-of-the-art \cite{segui2015learning} which would be the applicability and performance of a system trained with synthetic dataset in real world counting problem\cite{chan2008privacy}. The novelty of our approach compare to the state of the art is that we hypothesize that features learned by training a counting deep CNN on a synthetic dataset, are representative enough to count the number of object of interest in a real dataset. We tackle this task as a regression problem. 
+To the best of our knowledge, the proposed work would be the first one in which a counting system trained with synthetic images is able to be incorporated in real-world similar counting problems.
 
-This master thesis proposes an application of deep neural networks to a task of counting objects in the image. The novelty of our approach is that we hypothesize that features learned by training a counting deep CNN on synthetic dataset, are representative enough to count the number of object of interest on a real dataset. Hence, to verify our hypothesis and resolve the deficits of the state of the art, first we scale up  \citealt*{segui2015learning}' work along with a different architecture to observe if we attain promising results, and then we compare the performance of our model with the results \citeauthor{chan2008privacy} achieved on real dataset\cite{chan2008privacy}.  
-To the best of our knowledge, the proposed work would be the first one in which a counting system built by trained with synthetic images is able to be incorporated in real-world similar counting problems.
+Henceforth, in the rest of this chapter, we justify our methodology along with a comparison to state-of-the-art from different aspects such as method selection, architecture, dataset and its application.   
 
-\section{title}
- 
 
+%This master thesis proposes an application of deep convolutional neural networks to a task of counting objects in the image. The novelty of our approach compare to the state of the art is that we hypothesize that features learned by training a counting deep CNN on a synthetic dataset, are representative enough to count the number of object of interest in a real dataset. This approach has been taken to immensely reduce feature detection and data annotation efforts in the state of the art. Furthermore, due to the synthetic nature state of the art\cite{segui2015learning}, we would to examine the performance of such systems on a larger scale real world counting problem. 
+
+%Hence, to verify our hypothesis and resolve the deficits of the state-of-the-art, first we scale up  \citealt*{segui2015learning}' work along with a different architecture to observe if we attain promising results, and then we compare the performance of our model with the results \citeauthor{chan2008privacy} achieved on real dataset\cite{chan2008privacy}.  
+%To the best of our knowledge, the proposed work would be the first one in which a counting system trained with synthetic images is able to be incorporated in real-world similar counting problems.
+
+%Henceforth, in the course of this chapter, we explain different components of our system more in details
+
+\section{Method selection}
+
+\section{Architecture}
+
+\section{Datasets} 
+
+\section{Method Application}
 
 
 %\begin{equation} \label{eq:curvilinear_energy}
