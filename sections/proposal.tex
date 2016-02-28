@@ -30,26 +30,19 @@ For a long time in Computer Vision, there has been a prevailing paradigm in whic
 
 \indent Therefore, since the features are doing most of the works in these algorithms, if we improve those, we can attain better algorithms. The difficulty of feature improvement and high cost of numerous features computation on each image brought us into the application of deep learning in order to learn the features themselves rather than hand-crafting them. 
 
-In deep learning techniques, we essentially have a hierarchy of feature extractors which attempts to model high-level abstractions in data\cite{deng2014deep, bengio2009learning, bengio2013representation, arel2010deep, schmidhuber2015deep}
+In deep learning techniques, we essentially have a hierarchy of feature extractors which attempts to model high-level abstractions in data\cite{deng2014deep, bengio2009learning, bengio2013representation, arel2010deep, schmidhuber2015deep} where each layer of hierarchy extracts features from output of previous layer. Designing such trainable feature extractors, we would be able to build a multi-stage model which goes all the way from image pixels up to a high-level feature vector which we can feed it to a standard classifier. Thus, from the family of DL, we select deep CNNs due to its' success in may recent vision problems such as \cite{cirecsan2011convolutional, ciresan2015multi, wan2013regularization, cirecsan2012multi}, their capacity of knowledge transfer for a number of tasks and also the ability for performing different tasks simultaneously, even when it has been trained for only one task\cite{zhou2014learning}. 
 
-
-
-
-
-
-
-
-
-
-% why cnn are good for feature detection. remarkable results of this method. 
-% the future and the existence of big data and fast gpu computation 
-% great performance on regression and classification 
 \section{Architecture}
+
+CNNs actually have a long heritage. The origin of CNN comes from \cite{hubel1962receptive} where first simple cells detect local features and afterwards, complex cells pool the outputs of simple cells within a retinotopic neighborhood. Also, \citeauthor*{fukushima1975cognitron} in \citeauthor*{fukushima1975cognitron, fukushima1980neocognitron} introduced a similar architecture with filtering layers following by pooling layers. However, the the first deep CNN architecture was designed by \citealt{lecun1989backpropagation} who demonstrated that this kind of architecture can perform quite well for vision tasks like digit recognition. 
+
+\indent 
+ 
 % convolutional layer and fully connected layers
 % why not too deep and not too shallow 
 % why stochastic gradient descent and other methods 
 \section{Datasets} 
-
+%\cite{deng2009imagenet}
 
 \section{Method Application}
 
