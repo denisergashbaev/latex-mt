@@ -24,9 +24,26 @@ Henceforth, in the rest of this chapter, we justify our methodology along with a
 
 \section{Method selection}
 
-\section{Architecture}
+For a long time in Computer Vision, there has been a prevailing paradigm in which we have a set of feature descriptors such SIFT \cite{lowe1999object}, HOG\cite{dalal2005histograms}, SURF\cite{bay2006surf} and many more to that can be extracted from the image with possible higher level feature building following by a classifier like Support Vector Machines (SVM) \cite{vapnik1964note, boser1992training}. In fact, for the most part, these features are not learned, but hand-crafted by some vision experts. However, they do have indeed descent performance. For instance, in one of the most successful works in object detection, in \cite{felzenszwalb2010object} the author essentially introduces a linear classifier on top of HOG features, or regarding classification approaches that work quite well, \citeauthor{yu2010object} use all manners of features (HOG, SIFT, Color SIFT, etc) extracted from the images and consequently obtain impressive results. 
 
+\indent The analysis of these works develop this question that in order to improve the vision systems accuracy, in which part of the system should we focus on? Should we try to enhance classifiers, should we increase the amount of data or we had better provide finer features? \citeauthor*{parikh2010role} in \cite{parikh2010role} analyze the role of features by taking some of the quite successful past deformable models\cite{albrecht2015deformable}, and replace some components of them with humans. they present identical learning tasks \textit{i.e.} the same feature representation and the same training data, to machines and humans which allows drawing a comparison between the two. The author concludes that features are the main factor contributing to superior human performance. Furthermore, in \cite{gehler2009feature}, compared 39 different learning kernels with different combination features to see which kernel outperforms the rest and how it should be weighted. Although they got a big jump over the existing methods, the analysis of their results shows that the gain they obtained from the learning operators is not as dramatic as the improvement they achieved from the features itself. 
+
+\indent Therefore, since the features are doing most of the works in these algorithms, if we improve those, we can attain better algorithms. The difficulty of feature improvement and high cost of numerous features computation on each image bring us into the application of deep learning in order to learn the features themselves rather than hand-crafting them. 
+
+
+
+
+
+
+% why cnn are good for feature detection. remarkable results of this method. 
+% the future and the existence of big data and fast gpu computation 
+% great performance on regression and classification 
+\section{Architecture}
+% convolutional layer and fully connected layers
+% why not too deep and not too shallow 
+% why stochastic gradient descent and other methods 
 \section{Datasets} 
+
 
 \section{Method Application}
 
