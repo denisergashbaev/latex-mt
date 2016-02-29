@@ -40,25 +40,22 @@ Following the same structure of classical CNNs, in our architecture, the image p
 
 \indent Thereafter, a pooling layer takes a special region of the obtained feature maps and take the maximum (or sum over the pixels of the neighborhood) pixel value as the strongest structure of that neighborhood. We chose Max-pooling since it tends to give more discrimination of the features\cite{boureau2010theoretical}. In our model, we use \textit{spatial} pooling. However, depending on the problem we are trying to solve, pooling might be done within feature maps\cite{goodfellow2013maxout}.  The main advantage of pooling layers in the architecture can be that it results in invariance to small transformations. In addition to that, as we go up in CNNs, thanks to pooling, each of the units essentially has a larger receptive fields looking back the input so that at the top high-level layers, each unit looks at the entire scene.  
 
-To improve the model performance, after each pooling layer in the proposed model, we used local response normalization (LRN)layer to apply a contrast normalization. This type of normalization was introduced and used for the first time in \cite{krizhevsky2012imagenet}. Empirically, using LRN in the architecture seems to help improving the results \cite{jarrett2009best, krizhevsky2012imagenet}. Basically LRN introduces a local competition between features, in a way that it picks a single location in the output and it looks at a special neighborhood around that location in the input. Then it computes the local mean in that region, weight it by the Gaussian distribution, translate and make it to corresponding vectors with local mean = 0 and local standard deviation = 1(the chosen values are problem dependent. In our case, we chose $\mu = 0 \& std = 1 $ ). This brings out more details in the darker regions of the feature maps. 
+To improve the model performance, after each pooling layer in the proposed model, we used local response normalization (LRN)layer to apply a contrast normalization. This type of normalization was introduced and used for the first time in \cite{krizhevsky2012imagenet}. Empirically, using LRN in the architecture seems to help improving the results \cite{jarrett2009best, krizhevsky2012imagenet}. Basically LRN introduces a local competition between features, in a way that it picks a single location in the output and it looks at a special neighborhood around that location in the input. Then it computes the local mean in that region, weight it by the Gaussian distribution, translate and make it to corresponding vectors with local mean = 0 and local standard deviation = 1(the chosen values are problem dependent. In our case, we chose $\mu = 0$ \& $std = 1 $ ). This brings out more details in the darker regions of the feature maps. 
 
 \indent Moreover, LRN helps to scale activations at each layer better for learning by making energy surface more isotropic. That means that if we use a single learning rate for all the layers, then each gradient step tends to make much more progress\cite{jarrett2009best}. 
 
 And finally on top of the model, we put fully connected layers in order to do either a classification or regression strategy. In our model, since we are casting the problem as a regression problem, a \textit{Euclidean Loss} layer is stated on top of fully connected layers to project the output as the difference between model prediction and the ground truth. 
 
-The above explanation is just to reason the selected architecture and how it can help us to overcome the deficiencies of previous related works. However, the most important fact regarding CNNs' capability to learn features is the deepness of the architecture which will be addressed in details in the next chapter.  
+The above explanation is just to reason the selected architecture and how it can help us to overcome the deficiencies of previous related works. However, the most important fact regarding CNNs' capability to learn features is the deepness and settings of the architecture which will be attentively addressed in the next chapter.  
 
-
-% 
-% some contrast conrast normalization operation between the feature responses can help
-%
-
- % our proposed architecture consist of the 
-% convolutional layer and fully connected layers
-% why not too deep and not too shallow 
-% why stochastic gradient descent and other methods 
 \section{Datasets} 
-%\cite{deng2009imagenet}
+
+Here, starting with a short review of data for CNN in vision, we express a succinct reasoning about the datasets we used in our experiment and later on, in the implementation section, the specifications and preprocessing phases regarding each dataset will be described in details. 
+
+In spite of remarkable  performance of CNN in some simple recognition benchmarks \cite{cirecsan2011convolutional, ciresan2015multi, wan2013regularization, cirecsan2012multi}, until recently the models' performances were poor at more complex datasets \cite{griffin2007caltech} due to lack of labeled input samples to train the network parameters with. It was with the creation of ImageNet\cite{deng2009imagenet} and GPU implementation\cite{krizhevsky2012imagenet} (50x speedup over CPU) that efficiency of deep CNN in vision tasks became crystal clear.
+
+In our work, we use three different datasets for two distinct but related tasks. First we create
+
 
 
 
