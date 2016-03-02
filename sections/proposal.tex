@@ -50,13 +50,21 @@ The above explanation is just to reason the selected architecture and how it can
 
 \section{Datasets} 
 
-In this section, starting with a short review of data for CNN in computer vision, we express a succinct reasoning about the datasets we used in our experiment and later on, in the implementation section, the specifications and preprocessing phases regarding each dataset will be described in details. 
+In this section, starting with a short review of data for CNN in computer vision, we express a succinct reasoning about the datasets we used in our experiments. Later on, in the implementation section, the specifications and preprocessing phases regarding each dataset will be described in details. 
 
 In spite of remarkable  performance of CNN in some simple recognition benchmarks \cite{cirecsan2011convolutional, ciresan2015multi, wan2013regularization, cirecsan2012multi}, until recently the models' performances were poor at more complex datasets \cite{griffin2007caltech} due to lack of labeled input samples to train the network parameters with. It was with the creation of ImageNet\cite{deng2009imagenet} and GPU implementation\cite{krizhevsky2012imagenet} (50x speedup over CPU) that efficiency of deep CNN in vision tasks became crystal clear.
 
-In our work, we use three different datasets for two distinct but related tasks. First we create
+\subsection{MNIST pool of digits dataset}
 
+For the first empirical experience in our work, we created a large set of images each containing up to 15 MNIST digits. Images are automatically labeled with the number of even digits in each image. Using this dataset, we can examine the digits' representations learned by our deep CNN are not dependent on the specific task we are dealing with. It is done by using our model's learned features for other tasks and analyze the results. 
 
+\subsection{Synthetic crowd counting dataset}
+
+For the second task, since we needed a large dataset to train all the parameters of our model, we synthetically created a large dataset of pedestrians in a walkway with maximum 25 people in each image. Achieving success on crowd counting system using CNN on our synthetic dataset, we save enormous amount of time for data annotation and feature detection. 
+
+\subsection{UCSD crowd counting dataset}
+
+However, we need our model to perform well in practice rather than in theoretical experiments. Therefore, we used UCSD crowd counting dataset \cite{chan2008privacy} to validate the performance of our model on it and also make a comparison with their system in \cite{chan2008privacy} to see if we can obtain better results while decreasing feature extraction and labeling efforts. 
 
 
 
