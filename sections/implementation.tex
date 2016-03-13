@@ -82,7 +82,7 @@ Now, we delve into the data processing part of this work by introducing three di
 
 \subsection{Even-odd digits dataset}
 
-For the first analysis,we used original MNIST dataset to create our set of images\cite{lecun1998mnist}. MNIST dataset contains a training set of 60,000 examples and a test set of 10,000 examples. Each image has a size of 28*28 with one random hand-written digit centered in the image. 
+For the first analysis,we used original MNIST dataset \cite{lecun1998mnist} to create our set of images. MNIST dataset contains a training set of 60,000 examples and a test set of 10,000 examples. Each image has a size of 28*28 with one random hand-written digit centered in the image. 
 An example of original MNIST is depicted in the below figure.
 
 \begin{figure}[H]
@@ -103,6 +103,32 @@ Our Even-odd handwritten dataset contains images of size 100*100. Each image is 
 
 \indent This dataset has in total 1 million images, 800,000 images for training set and 200,000 as the test. Also, the dataset is uniformly generated, meaning that for instance, the number of images containing 0 even digits are equal to the number of images containing 15 even digits.  
 
-\subsection{Synthetic pedestrian dataset}
+\subsection{Synthetic pedestrians dataset}
+
+Learning features using deep architectures require a large amount of data. More importantly, for a fully supervised learning, this data should be annotated. Lack of data or its' High annotation cost prohibit the usage of deep learning methods for many problems including Crowd counting. 
+
+\indent However, in order to soften this cost, in our research, we decided to synthetically generate a data set of pedestrians in a walkway. To do that, we used UCSD unlabeled dataset of pedestrians used in \cite{chan2009analysis, mahadevan2010anomaly, li2014anomaly}. UCSD Anomaly detection dataset contains clips of groups of people walking towards and away from the camera, and some amount of perspective distortion. Contains 34 training video samples and 36 testing video samples. Each video has 200 frames.
+
+\indent In our study, we used the 36 testing video samples to generate the synthetic pedestrians dataset. To pore over the generation of our dataset, we divide this process into data generation and data improvement.
+
+  
+\subsubsection{Data generation}
+
+In our dataset, we constrained each image by having up to 30 pedestrians in the walkway. The process of generating the data includes the following steps:
+\begin{enumerate}
+
+\item \textbf{Background extraction:} Firstly, we simply subtract the background from each video frame. We extract two types of backgrounds, the median of all the backgrounds in each video(in total, 36 different backgrounds), and the median of all median backgrounds.
+
+\item \textbf{Pedestrian extraction:}
+
+\item \textbf{Pedestrian's impersonator creation:}
+
+\item \textbf{Background generation:}
+
+\end{enumerate}
+
+\subsubsection{Data improvement}
+
+
 
 \subsection{UCSD crowd counting dataset}
