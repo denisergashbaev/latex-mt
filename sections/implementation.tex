@@ -107,7 +107,8 @@ Our Even-odd handwritten dataset contains images of size 100*100. Each image is 
 
 Learning features using deep architectures require a large amount of data. More importantly, for a fully supervised learning, this data should be annotated. Lack of data or its' High annotation cost prohibit the usage of deep learning methods for many problems including Crowd counting. 
 
-\indent However, in order to soften this cost, in our research, we decided to synthetically generate a data set of pedestrians in a walkway. To do that, we used UCSD unlabeled dataset of pedestrians used in \cite{chan2009analysis, mahadevan2010anomaly, li2014anomaly}. UCSD Anomaly detection dataset contains clips of groups of people walking towards and away from the camera, and some amount of perspective distortion. Contains 34 training video samples and 36 testing video samples. Each video has 200 frames.
+\indent However, in order to soften this cost, in our research, we decided to synthetically generate a data set of pedestrians in a walkway. To do that, we used UCSD unlabeled dataset of pedestrians used in \cite{chan2009analysis, mahadevan2010anomaly, li2014anomaly}. UCSD Anomaly detection dataset contains clips of groups of people walking towards and away from the camera, and some amount of perspective distortion. Contains 34 training video samples and 36 testing video samples. Each video has 200 frames of each 158*238 pixels.
+
 
 \indent In our study, we used the 36 testing video samples to generate the synthetic pedestrians dataset. To pore over the generation of our dataset, we divide this process into data generation and data improvement.
 
@@ -117,18 +118,28 @@ Learning features using deep architectures require a large amount of data. More 
 In our dataset, we constrained each image by having up to 30 pedestrians in the walkway. The process of generating the data includes the following steps:
 \begin{enumerate}
 
-\item \textbf{Background extraction:} Firstly, we simply subtract the background from each video frame. We extract two types of backgrounds, the median of all the backgrounds in each video(in total, 36 different backgrounds), and the median of all median backgrounds.
+\item \textbf{Background extraction:} Firstly, we simply subtract the background from each video frame. We extract two types of backgrounds, the median of all the backgrounds in each video (in total, 36 different backgrounds), and the median of all median backgrounds.
 
-\item \textbf{Pedestrian extraction:}
+\item \textbf{Pedestrian extraction:} Subtracting each image from the mean background, we were able to label the connected regions of the subtraction using morphological labeling methods. Then, properties of labeled regions are measured and bound-boxed(see \cite{van2014scikit} for more detailed explanation). Boxes of people are center-based annotated. These labeled boxes shape our initial list of pedestrians with black and white masks of the same size of each box.
 
-\item \textbf{Pedestrian's impersonator creation:}
+\item \textbf{Background generation:} In this step, we tried to make the backgrounds of images as realistic as we could, by first, make a sparse combination of median backgrounds, secondly, changing the global illumination of the images randomly and at last, adding some \textit{Gaussian noise} to the backgrounds. 
 
-\item \textbf{Background generation:}
+\item \textbf{Generating the images:} Having backgrounds generated and pedestrians extracted and labeled, backgrounds are selected randomly. Then, for training and comparison purposes, images are masked with a \textit{Region Of Interest}(ROI) filter. Afterwards, pedestrians are added to the masked background in a way that the center of each person is placed inside white area of the mask. Finally images are normalized and resized to 158*158 in order to be fed to convolution layers
 
 \end{enumerate}
 
 \subsubsection{Data improvement}
-
+Although we managed to successfully generate synthetic images of people in the street, the generated images were still quite distinguishable from the real dataset. Thus, in order to better and enrich images, we improved the dataset in the aspects explained underneath:
+\begin{itemize}
+\item \textbf{Non-pedestrian objects:} Amongst the extracted boxes of pedestrians, there were some non-pedestrian boxes. Some with objects instead of pedestrians and others with more than one person inside the box. Therefore, we manually removed these outliers. After this edition, we ended with 315 samples of people. 
+\item \textbf{Lacking pedestrians:} For the sake of generalization of our model, we needed a decent variety of pedestrians. To that end, we created 3 versions of current pedestrians list, each darkened by the factor of 20\% from each other. 
+\item \textbf{Halos around the pedestrians:} Due to lack of accuracy of the region measuring method, a fine layer of the background the pedestrians were extracted from, were still remained around the pedestrians. In the new images, depending on where the person was placed, these thin layer appeared like a halo around the person. To tackle this issue, we tried two approaches:
+\begin{enumerate}
+\item \textbf{Masks erosion:} 
+\end{enumerate}
+\item \textbf{Image Perspective :}
+\item \textbf{Perspective:}
+\end{itemize}
 
 
 \subsection{UCSD crowd counting dataset}
