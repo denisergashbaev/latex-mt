@@ -72,5 +72,8 @@ In the case of counting pedestrians task, we applied the same settings to a diff
 
 \indent In order to not lose information, we used merely two pooling layers for the first two convolutional layers. Each pooling layer has a kernel size of 2*2 with stride = 1 and padding = 0. 
 
-\indent There are three fully connected layers to regress the number of pedestrians in images. The first two fully connected layers have 16 outputs each and are connected to ReLU non-linearity layers. The last layer however, with solely one output, passes the models' prediction of the number of pedestrians to the Euclidean loss layer to calculate the sum of squares of differences of its two inputs, the true labels and predictions.  
+There are three fully connected layers to regress the number of pedestrians in images. The first two fully connected layers have 16 outputs each and are connected to ReLU non-linearity layers. The last layer however, with solely one output, passes the models' prediction of the number of pedestrians to the Euclidean loss layer to calculate the sum of squares of differences of its two inputs, the true labels and predictions.  
 
+To the best of our knowledge and experience, the designed architectures outperform the other architectures while fasten the training phase. However, apart from the basic knowledge about network architectures, hyper-parameters initialization and some rules of thumbs of successful experiences in similar works, the rest of design has been done intuitively.
+
+\section{The datasets}
