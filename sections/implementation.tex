@@ -3,7 +3,7 @@
 \label{sec:implementation}
 \noindent
 
-In this chapter, we provide a detailed implementation of our proposed methodology. We start with presenting the platform we incorporated to shape and design our model. Then we demonstrate our network's architecture in detail. Finally, we attempt to give insight into the datasets we used to train and test our model. 
+\noindent In this chapter, we provide a detailed implementation of our proposed methodology. We start with presenting the platform we incorporated to shape and design our model. Then we demonstrate our network's architecture in detail. Finally, we attempt to give insight into the datasets we used to train and test our model. 
 
 \section{Caffe deep learning platform}
 
@@ -37,23 +37,40 @@ Having Caffe platform introduced, we propose the designed network for two experi
 
 \subsection{Even digit recognition}
 
-For learning to count even digits problem, since we used MNIST dataset to generate our dataset, we decided to start with an architecture similar to the classic MNIST hand-written digit recognition problem\cite{lecun1995comparison}. From there, we modified the architecture so that we can optimize the performance. The selected model obtaining the best results, has the following settings and design. 
- 
-\begin{figure}[]
-	\centering
-	{\includegraphics[width=0.3\textwidth]{images/model}}
-	\caption{An MNIST digit classification example of a Caffe network, where blue boxes represent layers and yellow octagons represent data blobs produced by or fed into the layers\cite{jia2014caffe}.}
-	\label{fig:caffe}
-\end{figure}
+For learning to count even digits problem, since we used MNIST dataset to generate our dataset, we decided to start with an architecture similar to the classic MNIST hand-written digit recognition problem\cite{lecun1995comparison}. From there, we modified the architecture to optimize the performance of the network.
 
-\begin{figure}[H]
- \begin{flushright}% or better \raggedleft see comments below
-  {\includegraphics[width=0.2\textwidth]{images/model}}
-	\caption{An MNIST digit classification example of a Caffe network, where blue boxes represent layers and yellow octagons represent data blobs produced by or fed into the layers\cite{jia2014caffe}.}
- \end{flushright}
-\end{figure}
+\indent In our network, the data layer fetches the images and labels from the disk, passes it through, the first convolutional layer with 20 filters, each of size 15*15 followed by a ReLU non-linearity and LRN normalization layer. Then the output is pooled by the size of 2*2. This process repeats again but this time with the second convolutional layer having 50 filters of size 3*3. In all convolution and pooling layers, the \textit{stride} = 1 and \textit{padding} = 1 are considered. Afterwards,
 
+\begin{wrapfigure}[45]{r}{0.58\textwidth}
+  \centering
+   {\includegraphics[width=0.33\textwidth]{images/model}}
+  %\end{center}
+	\caption{Proposed network architecture for Even digits recognition task}
+	\label{fig:l2cNet}
+\end{wrapfigure}
 
+\noindent the output of the second pooling layer is fed to two fully connected (inner product) layers with respectively 64 and 1 number of outputs (since the problem is approached as a regression task). Both fully connected layers are followed by ReLU non-linearities. Figure~\ref{fig:l2cNet} shows a schematic of the architecture. In addition, parameters of the network are set as below:
+\begin{itemize}
+\item \textbf{Learning rate:} The basic learning rate is 0.0001. However, for our experiment we chose \textit{multi-step} learning policy in which, after each \textit{stepsize}=40000 iterations, the learning rate drops by the rate of $\gamma = 0.1$. This initialization is based on rules of thumbs used in \cite{krizhevsky2012imagenet}.
+\item \textbf{Momentum:} We use momentum $\mu = 0.9$. This selection also is based one rules of thumbs. Because, momentum setting $\mu$ effectively multiplies the size of our updates by a factor of $\frac{1}{1-\mu}$. Hence, changes in momentum and learning rate ought to be accompanied with an inverse correlation. When momentum $\mu = 0.9$, we have an effective update size of 10 since we also drop the learning rate by the factor of $\gamma= 0.1$.
+\item \textbf{Weight decay:} Weight decay as a penalty term to the error function, has a constant value of 0.0005. This decay constant is multiplied to the sum of squared weights.
+\end{itemize}
 
+\noindent We should also mention that at the top layer of the network, we used \textit{Euclidean Loss }layer to compute  the euclidean distance between the predictions and ground truth. 
+
+\begin{wrapfigure}[44]{r}{0.58\textwidth}
+  \centering
+   {\includegraphics[width=0.31\textwidth]{images/model}}
+  %\end{center}
+	\caption{Proposed network architecture for Even digits recognition task}
+	\label{fig:l2cNet}
+\end{wrapfigure}
+%\newpage
 \subsection{Crowd counting}
+
+In the case of counting pedestrians task, we applied the same settings to a different architecture. This time, due to more complexity of images, we considered a deeper network. Here the data blobs pass through 4 convolutional layers. First convolutional layer has 4 filters, each with 5*5 kernel and the other 3 layers have again 4 filters but each of size 3*3. Similar to the previous model, each convolutional layer is followed by ReLU non-linearity layer and LRN normalization layer. Also the stride and padding values for all the convolutional layers are respectively equal to 1 and 0. 
+
+\indent In order to not lose information, we used merely two pooling layers for the first two convolutional layers. Each pooling layer has a kernel size of 2*2 with stride = 1 and padding = 0. 
+
+\indent There are three fully connected layers to regress the number of pedestrians in images. The first two fully connected layers have 16 outputs each and are connected to ReLU non-linearity layers. The last layer however, with solely one output, passes the models' prediction of the number of pedestrians to the Euclidean loss layer to calculate the sum of squares of differences of its two inputs, the true labels and predictions.  
 
