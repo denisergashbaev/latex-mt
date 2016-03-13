@@ -115,7 +115,7 @@ Learning features using deep architectures require a large amount of data. More 
   
 \subsubsection{Data generation}
 
-In our dataset, we constrained each image by having up to 30 pedestrians in the walkway. The process of generating the data includes the following steps:
+In our dataset, we constrained each image by having up to 29 pedestrians in the walkway. The process of generating the data includes the following steps:
 \begin{enumerate}
 
 \item \textbf{Background extraction:} Firstly, we simply subtract the background from each video frame. We extract two types of backgrounds, the median of all the backgrounds in each video (in total, 36 different backgrounds), and the median of all median backgrounds.
@@ -135,11 +135,16 @@ Although we managed to successfully generate synthetic images of people in the s
 \item \textbf{Lacking pedestrians:} For the sake of generalization of our model, we needed a decent variety of pedestrians. To that end, we created 3 versions of current pedestrians list, each darkened by the factor of 20\% from each other. 
 \item \textbf{Halos around the pedestrians:} Due to lack of accuracy of the region measuring method, a fine layer of the background the pedestrians were extracted from, were still remained around the pedestrians. In the new images, depending on where the person was placed, these thin layer appeared like a halo around the person. To tackle this issue, we tried two approaches:
 \begin{enumerate}
-\item \textbf{Morphological erosion:} Among morphological operations on image, we decided to use \textit{erosion} \cite{van2014scikit} to erode the pedestrians masks. In this way, the halos were ignored to some noticeable extent. 
+\item \textbf{Morphological erosion:} Among morphological operations on image, we applied \textit{erosion} \cite{van2014scikit} to erode the pedestrians masks. In this way, the halos were ignored to some noticeable extent. 
 \item \textbf{Poisson image editing:} Poisson image editing is a technique for seamlessly blending two images together fully automatically  \cite{perez2003poisson}. In addition to erosion, we tried Poisson image editing tool to remove the halos. However, due to our gray-scale and low-resolution images, this tool did not have a great impact on our images.      
 \end{enumerate}
 \item \textbf{Image Perspective:} Since pedestrians of different sizes were put randomly in the images, we considered people's tallness perspective in the images. Human height almost follows a Gaussian distribution \cite{subramanian2011height}. Therefore, with respect to \cite{subramanian2011height, garcia2007evolution}, we mapped individual's heights with the length of the walkway in the image, considering a Gaussian noise with mean $\mu = 0$ and $\sigma = 3.5$.  
 \end{itemize}
 
+\noindent Thusly, we created a set of 1 million images, each of size 158*158 pixels with up to 29 pedestrians. We assigned 800,000 images for training set and 200,000 instances as the test set. We believe the created synthetic dataset of pedestrians is realistic enough to be able to represent a real-world crowd counting scenario.
 
 \subsection{UCSD crowd counting dataset}
+
+To verify and validate our model, we used UCSD crowd counting dataset created by \citeauthor*{chan2008privacy} and used in \cite{chan2008privacy,chan2009bayesian,chan2012counting}. The dataset contains video of pedestrians on UCSD walkways, taken from a stationary camera. There are currently two  viewpoints  available among which we used \textit{vidf} videos. All videos are 8-bit gray-scale, with dimensions 238*158. In our experiment, the first 20 videos which are labeled with the number of pedestrians were incorporated. Each video file has 200 video frames. 
+
+\indent Among the labeled images, we selected the ones in which the number of pedestrians do not exceed 29. Hence, in total we have a dataset of 3375 real images which we will use to first, validate the performance of our model trained with synthetic data, on a real dataset, and also to comparison between work done in \cite{chan2008privacy} and our approach. 
