@@ -65,8 +65,9 @@ Finally, after several convolutional and max pooling layers, the high-level reas
 
 \section{Model Optimization}
 \todo{this really does not belong to the background section}
-In this section we briefly describe some optimization methods along with definition of hyper-parameters used in our model.  
+Our work in general is an optimization problem since we project the results as loss function we try to minimize. For this reason, model optimization methods have a critical impact on the performance of the model. In this section we briefly describe some optimization methods along with definition of hyper-parameters used in our model.  
 \subsection{Stochastic Gradient Descent}
+\label{subsec:sgd}
 It has often been proposed to minimize the \textit{empirical risk} (training set performance measure). For more detailed description, see \cite{vapnik1998statistical}) using \textit{gradient descent}(GD)\cite{bottou2010large}. The standard gradient descent algorithm updates the parameters $\theta$ of the objective \textit{J($\theta$)}  
 \begin{equation}
 \centering \theta = \theta - \alpha \bigtriangledown_\theta E[(J(\theta)]
