@@ -158,7 +158,7 @@ where:\\
 \textit{$x_{obs}$}: a vector of observed value (ground truth) for input x\\
 
 The mathematical benefits of mean squared error are particularly evident in its use at analyzing the performance of linear regression, as it allows one to partition the variation in a dataset into variation explained by the model and variation explained by randomness.
-\item \textbf{Mean absolute error(MAE)}:The MAE measures the average magnitude of the errors in a set of predictions, without considering their direction. In other words, it measures how close predictions are to the eventual outcomes \cite{willmott2005advantages}. MAE can simply be computed by:
+\item \textbf{Mean absolute error(MAE)}: MAE measures the average magnitude of the errors in a set of predictions, without considering their direction. In other words, it measures how close predictions are to the eventual outcomes \cite{willmott2005advantages}. MAE can simply be computed by:
 $$MAE = {\frac{1} {N}{\sum\limits_{i = 1}^N {|x_{pred} - x_{obs} } }| } $$
 where:\\
 \textit{N}: number of instances\\
@@ -187,7 +187,46 @@ Mean absolute error      & 0.20  \\
 \end{tabular}
 \end{table} 
 
+Accordingly, the spread-error plot corresponding to the model is provided.
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=0.7\textwidth]{images/1}}
+	\caption{}
+	\label{fig:splot}
+\end{figure}
+
+As you may observe in Figure~\ref{fig:splot}, most
+of the frames are correctly labeled. Moreover, most of the
+errors correspond to adjacent number values.
+
+A similar experiment was done by \citeauthor*{segui2015learning}. In their work, they used images with up to 5 digits with slightly different architecture. Also each digit in the images had a dimension of $28\times28$. They approached the problem as a classification task. 
+
+\indent Therefore, in order to provide a fair comparison, we demonstrate the difference the accuracy of both experiments from random, and from there we draw a proportional comparison. These comparison has been shown in the table~\ref{tab:comp}.
+
+\begin{table}[H]
+\caption{Table caption font is different from the normal text font in order to get a better differentiation -- I like it that way.}
+\centering
+\small\sffamily
+\begin{tabular}{llr}
+%\toprule
+\multicolumn{3}{c}{\textbf{\textbf{Performance Comparison}}} \\
+\bottomrule
+\textbf{Experiments}  & \textbf{Chance} & \textbf{Accuracy} \\
+\bottomrule
+%\midrule
+Euclidean loss           & 0.20 & 0.30 \\
+Mean squared error       & 0.20 & 0.30 \\
+
+\bottomrule
+\end{tabular}
+\end{table} 
+
+\textbf{EXPLANATION OF THE COMPARISON}
 
 \subsection{Conclusion}
 
+\textbf{CONCLUSION AFTER THE EXPERIMENT} 
+
 \section{Counting pedestrians in a walkway}
+
