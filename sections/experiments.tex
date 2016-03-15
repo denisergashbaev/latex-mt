@@ -3,25 +3,25 @@
 \label{sec:experiments}
 
 Prior to jumping to the final results obtained with our algorithm, this
-chapter will attempt to give insight into the experiments we designed to verify our hypothesis. We examine our approaches on two different but related scenarios. Thus, we divide this section into two subsections where each presents, one experiment to test our methods, a comparison on the obtained results and conclusions about their performances and their properties.  
+chapter will attempt to give insight into the experiments we designed to verify our hypothesis. We examine our proposed methodology on two different but related scenarios. In the former scenario, we tackle the learning to count even hand-written digits, for the latter one, crowd counting problem is considered.   
+This chapter contains experiments details, obtained results, comparison to similar works and finally a conclusion about the performance of our models in each of the experiments.
 
 \section{Learning to count Even-odd hand-written digits}
 
-We attempt to explore the features learned when training a deep CNN, in order to understand their underlying representations. To this end, we designed a synthetic problem of counting even digits in images. This experiment clearly illustrates the basic idea behind this work, where we hypothesize that the features learned during this task are:
+We intend to explore the features learned when training a deep CNN, in order to understand their underlying representations. To this end, we designed a synthetic problem of counting even digits in images. This experiment clearly illustrates the basic idea behind this work, where we hypothesize that the features learned during this task are:
 \begin{enumerate}
 \item Efficient descriptors of digits to enable the model to count them.
 \item Sufficiently representative of the digits to be applied for digits recognition tasks. 
 \end{enumerate}
 
 In this experiment, we feed images of digits into a deep convolutional neural network. Images are labeled with the number of even digits in each image. We apply a regression strategy to tackle this problem. Therefore, the output of the network is a single number determining the model's prediction for the amount of even digits present in the images. 
-
-\indent Having the experiment introduced briefly, we go over different steps of this analysis. After a succinct summary of the dataset, we explain training and testing the model. Then we provide the attained results along with a comparison to similar work and finally the conclusion we draw from this experiment. 
+ 
 
 \subsection{Dataset} 
 As it was meticulously described in (section ~\ref{subsubsec:digit}), we synthetically generated \textit{Even-odd digits dataset} to use for this task. the dataset holds the following properties:
 \begin{itemize}
 \item Images of MNIST hand-written digits where each image contains up to 15 digits. Also the images are made in gray-scale.
-\item Each image has a dimension of 100*100. And each digit in the image is 18*18 pixels.  
+\item Each image has a dimension of $100\times100$. And each digit in the image is $18\times18$ pixels.  
 \item A minimum distance of 18 pixels is considered between each two digits (from center to center) in an image to prevent overlapping.
 \item The dataset is generated uniformly. It means that there are equal number of images for each amount of digits in the image. For instance, the number of images with 5 even digits are the same as number of images containing 10 even digits.
 \item The dataset of 1,000,000 samples is divided into a training set of 800,000 and a test set of 200,000. 
@@ -31,45 +31,78 @@ Since we use Caffe platform to do our experiments, we convert the images into LM
 
 \subsection{Learning process}
 
-As discussed in chapter~\ref{subsubsec:digitarch}, for learning to count the number of even digits, we designed a deep CNN. Table~\ref{fig:caffe} shows a summary of the network's specification and architecture.
+As discussed in chapter~\ref{subsubsec:digitarch}, for learning to count the number of even digits, we designed a deep CNN. Table~\ref{fig:digitnet} shows a review of the network's specification and architecture.
 
-\begin{figure}[H]
-\centering
-\begin{tabular}{ |p{2cm}|p{2.5cm}| }
-\hline 
-\multicolumn{2}{|c|}{\textbf{Network parameters}} \\
-\hline
-\hline
-\textbf{Layers} & \textbf{setting }\\
-\hline
-Conv1 & 20*15*15\\
-\hline
-ReLU1 & max(x,0)  \\
-\hline
-LRN1 & $\alpha$=0.0001, $\beta$=0.75\\
-\hline
-Pool1    & max(2*2) \\
-\hline
-Conv2 & 50*3*3\\
-\hline
-ReLU2 & max(x,0)  \\
-\hline
-LRN2 & $\alpha$=0.0001, $\beta$=0.75\\
-\hline
-Pool2    & max(2*2) \\
-\hline
-IP1 & 64 outputs \\
-\hline
-ReLU3 & max(x,0)  \\
-\hline
-IP2 & 1 outputs \\
-\hline
-\end{tabular}
-\end{figure}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ |p{2cm}|p{2cm}| }
+	\hline 
+	\multicolumn{2}{|c|}{\textbf{Network parameters}} \\
+	\hline
+	\hline
+	\textbf{Layers} & \textbf{setting }\\
+	\hline
+	Conv1 & $20\times15\times15$\\
+	\hline
+	ReLU1 & max(x,0)  \\
+	\hline
+	LRN1 & $\alpha$=0.0001, $\beta$=0.75\\
+	\hline
+	Pool1    & $max(2\times2)$ \\
+	\hline
+	Conv2 & $50\times3\times3$\\
+	\hline
+	ReLU2 & max(x,0)  \\
+	\hline
+	LRN2 & $\alpha$=0.0001, $\beta$=0.75\\
+	\hline
+	Pool2    & $max(2\times2)$ \\
+	\hline
+	IP1 & 64 outputs \\
+	\hline
+	ReLU3 & max(x,0)  \\
+	\hline
+	IP2 & 1 outputs \\
+	\hline
+	\end{tabular}
+		\caption{The deep CNN with 2 convolution layers to count the number of even digits.}
+		\label{fig:digitnet}
+\end{table}
+
+
+
 
 However, a well-designed network solely cannot guarantee an optimal performance for the model. The responsibilities of learning are divided between the Net for yielding loss and gradients, and the optimization methods and parameters for overseeing the optimization and generating parameter updates. 
 
-Among Caffe solvers, As described in section~\ref{subsec:sgd}, we use Stochastic Gradient Descent optimization method. Apart from solver method, solver parameters need to be set attentively in order to optimize the model performance. These parameters settings are shown in table~\ref{tab:solver}.
+Among Caffe solvers, As described in section~\ref{subsec:sgd}, we use Stochastic Gradient Descent optimization method. Apart from solver method, we solver parameters need to be set attentively in order to optimize the model performance. Table~\ref{tab:digitsolver} summarizes the initial settings for the solver parameters while the upcoming items justify our decisions.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ |p{1.7cm}|p{1.7cm}| }
+	\hline 
+	\multicolumn{2}{|c|}{\textbf{Optimization parameters}} \\
+	\hline
+	\hline
+	\textbf{Parameter} & \textbf{value}\\
+	\hline
+	base\_lr & 0.0001\\
+	\hline
+	momentum & 0.9  \\
+	\hline
+	weight decay & 0.0005\\
+	\hline
+	step size   & 40000 \\
+	\hline
+	gamma($\gamma$) & 0.1\\
+	\hline
+	power & 0.9 \\
+	\hline
+	iterations & 1,600,000\\
+	\hline
+	\end{tabular}
+		\caption{The solver parameters settings for even digit counting problem}
+		\label{tab:digitsolver}
+\end{table}
 
 
 \begin{itemize}
