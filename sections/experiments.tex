@@ -35,6 +35,7 @@ As discussed in chapter~\ref{subsubsec:digitarch}, for learning to count the num
 
 \begin{table}[H]
 	\centering
+			\caption{The deep CNN with 2 convolution layers to count the number of even digits.}
 	\begin{tabular}{ |p{2cm}|p{2cm}| }
 	\hline 
 	\multicolumn{2}{|c|}{\textbf{Network parameters}} \\
@@ -65,7 +66,6 @@ As discussed in chapter~\ref{subsubsec:digitarch}, for learning to count the num
 	IP2 & 1 outputs \\
 	\hline
 	\end{tabular}
-		\caption{The deep CNN with 2 convolution layers to count the number of even digits.}
 		\label{fig:digitnet}
 \end{table}
 
@@ -78,6 +78,7 @@ Among Caffe solvers, As described in section~\ref{subsec:sgd}, we use Stochastic
 
 \begin{table}[H]
 	\centering
+			\caption{The solver parameters settings for even digit counting problem.}
 	\begin{tabular}{ |p{2cm}|p{2cm}| }
 	\hline 
 	\multicolumn{2}{|c|}{\textbf{Optimization parameters}} \\
@@ -100,7 +101,7 @@ Among Caffe solvers, As described in section~\ref{subsec:sgd}, we use Stochastic
 	iterations & 1,600,000\\
 	\hline
 	\end{tabular}
-		\caption{The solver parameters settings for even digit counting problem.}
+
 		\label{tab:digitsolver}
 \end{table}
 
@@ -113,17 +114,80 @@ Among Caffe solvers, As described in section~\ref{subsec:sgd}, we use Stochastic
 \item \textbf{Iterations:} Given the time and hardware we had, we managed to let the system train for 1,600,000 iterations
 \end{itemize}
 
-\noindent The algorithm trained on a GPU NVIDIA \cite{kirk2007nvidia} Tesla K40 \cite{lindholm2008nvidia}.It took almost 4 days to train 800,000 samples and tested over 200,000 images. Moreover, a schematic of the model with the output of each layer is depicted in figure~\ref{fig:digitnet}.
+\noindent The algorithm trained on a GPU NVIDIA \cite{kirk2007nvidia} Tesla K40 \cite{lindholm2008nvidia}.It took almost 4 days to train 800,000 samples and tested over 200,000 images. The learning curves of this learning process are shown in the figure~\ref{fig:curve}
 
 \begin{figure}[H]
 	\centering
-	{\includegraphics[width=1\textwidth]{images/caffe}}
-	\caption{An MNIST digit classification example of a Caffe network, where blue boxes represent layers and yellow octagons represent data blobs produced by or fed into the layers\cite{jia2014caffe}.}
-	\label{fig:caffe}
+	{\includegraphics[width=0.7\textwidth]{images/1}}
+	\caption{}
+	\label{fig:curve}
 \end{figure}
 
+\textbf{ADD EXPLANATION OF THE LEARNING CURVES}
+
+\noindent Moreover, figure~\ref{fig:feat} illustrates the features learned from one input sample at each convolutional layer in the network.
+
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=0.7\textwidth]{images/1}}
+	\caption{}
+	\label{fig:feat}
+\end{figure}
+
+\textbf{ADD EXPLANATION OF THE FEATURES}
+ 
+%Moreover, a schematic of the model with the output of each layer is depicted in figure~\ref{fig:digitnet}.
+%%\begin{figure}[H]
+%%	\centering
+%	{\includegraphics[width=1\textwidth]{images/caffe}}
+%	\caption{An MNIST digit classification example of a Caffe network, where blue boxes represent layers and yellow octagons represent data blobs produced by or fed into the layers\cite{jia2014caffe}.}
+%	\label{fig:digitnet}
+%\end{figure}
+\textbf{A SHORT TRANSITIVE PARAGRAPH TO GO TO RESULTS}
 
 \subsection{Results}
+
+In addition to the Euclidean loss function we implemented in our architecture, we use two other error measurements to evaluate and compare the performance of our model. These measurements are briefly described and justified in below:
+\begin{enumerate}
+\item \textbf{Mean squared error(MSE)}: Mean squared error is arguably the most important criterion used to evaluate the performance of a predictor or an estimator. The mean squared error is also useful to relay the concepts of bias, precision, and accuracy in statistical estimation. The MSE is the second moment (about the origin) of the error, and thus incorporates both the variance of the estimator and its bias \cite{lehmann1998theory}. The MSE can be estimated by
+$$MSE = {\frac{1} {N}{\sum\limits_{i = 1}^N {(\hat{x_{pred}} - x_{obs} } })^{2} } $$
+where:\\
+\textit{N}: the number of instances\\
+\textit{ $\hat{x_{pred}}$}: a vector of N predictions\\
+\textit{$x_{obs}$}: a vector of observed value (ground truth) for input x\\
+
+The mathematical benefits of mean squared error are particularly evident in its use at analyzing the performance of linear regression, as it allows one to partition the variation in a dataset into variation explained by the model and variation explained by randomness.
+\item \textbf{Mean absolute error(MAE)}:The MAE measures the average magnitude of the errors in a set of predictions, without considering their direction. In other words, it measures how close predictions are to the eventual outcomes \cite{willmott2005advantages}. MAE can simply be computed by:
+$$MAE = {\frac{1} {N}{\sum\limits_{i = 1}^N {|x_{pred} - x_{obs} } }| } $$
+where:\\
+\textit{N}: number of instances\\
+\textit{ $x_{pred}$}: prediction for instance x\\
+\textit{$x_{obs}$}: observed value (ground truth) for instance x
+\end{enumerate}
+
+\noindent Having our used error measurements explained, for the task of counting even digits, using 800,000 training samples and 200,000 test images, and after 1,600,000 iterations, our model obtained the following results:
+
+
+\begin{table}[H]
+\caption{Table caption font is different from the normal text font in order to get a better differentiation -- I like it that way.}
+\centering
+\small\sffamily
+\begin{tabular}{llr}
+%\toprule
+\multicolumn{2}{c}{\textbf{\textbf{Results}}} \\
+\bottomrule
+\textbf{Error measurement}        & \textbf{Error} \\
+\bottomrule
+%\midrule
+Euclidean loss           & 0.20  \\
+Mean squared error       & 0.20  \\
+Mean absolute error      & 0.20  \\
+\bottomrule
+\end{tabular}
+\end{table} 
+
+
 \subsection{Conclusion}
 
 \section{Counting pedestrians in a walkway}
