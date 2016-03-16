@@ -25,7 +25,9 @@
 \usepackage{todonotes}
 \usepackage{wrapfig}
 \usepackage[acronym]{glossaries}
-% % % % REFERENCES
+\usepackage[table]{xcolor}
+\usepackage{lipsum}
+ % % % REFERENCES
 %
 \usepackage[numbers]{natbib}
 \usepackage{amsmath}
@@ -115,7 +117,9 @@
 \usepackage{pifont}
 %\algdisablelines
 
-
+\setlength{\arrayrulewidth}{1mm}
+\setlength{\tabcolsep}{18pt}
+\renewcommand{\arraystretch}{1.5}
 
 \newcommand{\old}{\texttt{algorithmic}}
 \newcommand{\euk}{Euclid}
@@ -173,6 +177,7 @@ NOT YET
 
 \listoffigures
 
+\listoftables
 
 \newpage
 \pagenumbering{arabic} % Normal numerals
@@ -188,11 +193,9 @@ NOT YET
 
 \input{sections/implementation}
 
-%\input{sections/experiments}
+\input{sections/experiments}
 
-%\input{sections/applications}
-
-%\input{sections/conclusions}
+\input{sections/conclusions}
 
 \vfill
 \renewcommand{\bibname}{\refname} % To change the heading of the chapter from Bibliography to References
