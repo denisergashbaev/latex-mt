@@ -18,7 +18,7 @@ In this experiment, we feed images of digits into a deep convolutional neural ne
  
 
 \subsection{Dataset} 
-As it was meticulously described in (section ~\ref{subsubsec:digit}), we synthetically generated \textit{Even-odd digits dataset} to use for this task. the dataset holds the following properties:
+As it was meticulously described in section ~\ref{subsubsec:digit}), we synthetically generated \textit{Even-odd digits dataset} to use for this task. the dataset holds the following properties:
 \begin{itemize}
 \item Images of MNIST hand-written digits where each image contains up to 15 digits. Also the images are made in gray-scale.
 \item Each image has a dimension of $100\times100$. And each digit in the image is $18\times18$ pixels.  
@@ -107,6 +107,7 @@ Among Caffe solvers, As described in section~\ref{subsec:sgd}, we use Stochastic
 
 
 \begin{itemize}
+\label{solv:param}
 \item \textbf{Learning rate:} The basic learning rate is 0.0001. However, for our experiment we chose \textit{multi-step} learning policy in which, after each \textit{stepsize}=40000 iterations, the learning rate drops by the rate of $\gamma = 0.1$. This initialization is based on rules of thumbs used in \cite{krizhevsky2012imagenet}.
 \item \textbf{Batch size:} Due to the non-complex and low-resolution dataset we are training on, we were able to use batches of size 256 for our training and testing phases.
 \item \textbf{Momentum:} We use momentum $\mu = 0.9$. This selection also is based one rules of thumbs. Because, momentum setting $\mu$ effectively multiplies the size of our updates by a factor of $\frac{1}{1-\mu}$. Hence, changes in momentum and learning rate ought to be accompanied with an inverse correlation. When momentum $\mu = 0.9$, we have an effective update size of 10 since we also drop the learning rate by the factor of $\gamma= 0.1$.
@@ -146,7 +147,7 @@ Among Caffe solvers, As described in section~\ref{subsec:sgd}, we use Stochastic
 %\end{figure}
 \textbf{A SHORT TRANSITIVE PARAGRAPH TO GO TO RESULTS}
 
-\subsection{Results}
+\subsection{Experimental results}
 
 In addition to the Euclidean loss function we implemented in our architecture, we use two other error measurements to evaluate and compare the performance of our model. These measurements are briefly described and justified in below:
 \begin{enumerate}
@@ -166,11 +167,12 @@ where:\\
 \textit{$x_{obs}$}: observed value (ground truth) for instance x
 \end{enumerate}
 
-\noindent Having our used error measurements explained, for the task of counting even digits, using 800,000 training samples and 200,000 test images, and after 1,600,000 iterations, our model obtained the following results:
+\noindent Having our used error measurements explained, for the task of counting even digits, using 800,000 training samples and 200,000 test images, and after 1,600,000 iterations, our model obtained the results shown in table~\ref{tab:res}:
 
 
 \begin{table}[H]
 \caption{Table caption font is different from the normal text font in order to get a better differentiation -- I like it that way.}
+\label{tab:res}
 \centering
 \small\sffamily
 \begin{tabular}{llr}
@@ -200,7 +202,7 @@ As you may observe in Figure~\ref{fig:splot}, most
 of the frames are correctly labeled. Moreover, most of the
 errors correspond to adjacent number values.
 
-A similar experiment was done by \citeauthor*{segui2015learning}. In their work, they used images with up to 5 digits with slightly different architecture. Also each digit in the images had a dimension of $28\times28$. They approached the problem as a classification task. 
+\noindent A similar experiment was done by \citeauthor*{segui2015learning}. In their work, they used images with up to 5 digits with slightly different architecture. Also each digit in the images had a dimension of $28\times28$. They approached the problem as a classification task. 
 
 \indent Therefore, in order to provide a fair comparison, we demonstrate the difference the accuracy of both experiments from random, and from there we draw a proportional comparison. These comparison has been shown in the table~\ref{tab:comp}.
 
@@ -220,6 +222,7 @@ Mean squared error       & 0.20 & 0.30 \\
 
 \bottomrule
 \end{tabular}
+\label{tab:comp}
 \end{table} 
 
 \textbf{EXPLANATION OF THE COMPARISON}
@@ -229,4 +232,239 @@ Mean squared error       & 0.20 & 0.30 \\
 \textbf{CONCLUSION AFTER THE EXPERIMENT} 
 
 \section{Counting pedestrians in a walkway}
+
+The first experiment proved that features can be learned automatically using deep CNN. It also shows that these deep features can be used to detect the object of interest in different but similar tasks. However, the use of deep architectures for fully supervised learning problems requires a large amount of annotated data. At the moment, for crowd counting problems, such data does not exist for research purposes. 
+
+Hence, we propose a crowd counting problem using synthetic dataset in order to examine first, how well the model trained with synthetic images would perform? And then, is this model applicable for a real-world crowd counting scenario? We believe that this experiment will enlighten and address these questions. 
+
+\subsection{Datasets} 
+
+As fully discussed in chapter~\ref{subsec:synped}, for this case study, we synthetically created a dataset of 1 million images. To recap, the dataset specifications are the followings:
+\begin{itemize}
+\item Each image is in gray-scale, $158\times158$ pixels, normalized, and contains up to 29 pedestrians in a walkway. Images are labeled with the number of pedestrians present in the image.  
+\item Pedestrians' location in the images are center-based. A mask (region of interest) has been applied to images that defines the area in which the pedestrians are counted. Thus, the person is labeled if it's center is put in the region of interest.   
+\item Out of 1 million images, 800,000 are considered for training and 200,000 for testing sets.
+\end{itemize} 
+
+\noindent In addition, in order to examine the performance of our model in a real problem, we used UCSD crowd counting dataset \cite{chan2008privacy} with the underneath properties:
+
+\begin{itemize}
+\item The dataset consists of 3375 video frames shot by a stationary camera. Each image has up to 29 pedestrians present in the image.
+\item Images are in gray-scale, resized to $158\times158$ pixels, normalized and filtered by the same mask (region of interest) as the other dataset. Labels are the number pedestrians placed in the region of interest.
+\item Pedestrians annotation is center-based. The ones inside the mask are labeled.  
+\item Images are continuous video frames of 20 different videos. Each video contains up to 200 images.  
+\end{itemize}
+
+Once again, to improve the training time, we converted the synthetic data into LMDB format for Caffe to read it in the fastest way.
+
+
+\subsection{The learning process}
+
+As fully described in chapter~\ref{subsec:ucsdarch}, we implemented a deep convolutional neural network in Caffe to learn the number of pedestrians in the walkway. As a reminder, the designed network has the components mentioned in table~\ref{tab:ucsdnet}.  
+
+\begin{table}[H]
+	\centering
+			\caption{The deep CNN with 2 convolution layers to count the number of even digits.}
+	\begin{tabular}{ |p{2cm}|p{2cm}| }
+	\hline 
+	\multicolumn{2}{|c|}{\textbf{Network parameters}} \\
+	\hline
+	\hline
+	\textbf{Layers} & \textbf{setting }\\
+	\hline
+	Conv1 & $20\times15\times15$\\
+	\hline
+	ReLU1 & max(x,0)  \\
+	\hline
+	LRN1 & $\alpha$=0.0001, $\beta$=0.75\\
+	\hline
+	Pool1    & $max(2\times2)$ \\
+	\hline
+	Conv2 & $50\times3\times3$\\
+	\hline
+	ReLU2 & max(x,0)  \\
+	\hline
+	LRN2 & $\alpha$=0.0001, $\beta$=0.75\\
+	\hline
+	Pool2    & $max(2\times2)$ \\
+	\hline
+	IP1 & 64 outputs \\
+	\hline
+	ReLU3 & max(x,0)  \\
+	\hline
+	IP2 & 1 outputs \\
+	\hline
+	\end{tabular}
+		\label{tab:ucsdnet}
+\end{table}
+
+The model's optimization method and parameters (as called solver in Caffe) are set similar to the learning to count problem. The network trains with stochastic gradient descent. Our justification for the setting the solver parameters remains the same previous experiment (explained in section~\ref{solv:param}). Therefore, the repetitive explanations are skipped and only the final settings are described in table~\ref{tab:solvparam}.
+
+\begin{table}[H]
+	\centering
+			\caption{The solver parameters settings for even digit counting problem.}
+	\begin{tabular}{ |p{2cm}|p{2cm}| }
+	\hline 
+	\multicolumn{2}{|c|}{\textbf{Optimization parameters}} \\
+	\hline
+	\hline
+	\textbf{Parameter} & \textbf{value}\\
+	\hline
+	base\_lr & 0.0001\\
+	\hline
+	batch size & 256\\
+	\hline
+	momentum & 0.9  \\
+	\hline
+	weight decay & 0.0005\\
+	\hline
+	step size   & 40000 \\
+	\hline
+	gamma($\gamma$) & 0.1\\
+	\hline
+	iterations & 1,600,000\\
+	\hline
+	\end{tabular}
+
+		\label{tab:solvparam}
+\end{table}
+
+\noindent Similarly, we used GPU NVIDIA TESLA K40 to train our network. After 5 days of training, we obtained the following learning curves :
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=0.7\textwidth]{images/1}}
+	\caption{}
+	\label{fig:ucsdcurve}
+\end{figure}
+
+\noindent And the network was able to learn sufficient features corresponding to the pedestrians. To illustrate, the learned features for one input sample, and after each convolutional layer in the network, has been depicted in the following figures: 
+
+
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=0.7\textwidth]{images/1}}
+	\caption{}
+	\label{fig:feats}
+\end{figure}
+
+And finally, the network along with the outputs of different layers is shown in a schematic form in figure~\ref{fig:ucsdout}.
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=0.7\textwidth]{images/1}}
+	\caption{}
+	\label{fig:ucsdout}
+\end{figure}
+
+\textbf{A SHORT TRANSITIVE PARAGRAPH TO GO TO RESULTS}
+
+\subsection{Experimental results}
+
+Equivalently to the first analysis, we use mean squared error, mean absolute error and default Euclidean loss function to present the results obtained in this experiment. Having that said, the following results were obtained:
+
+\begin{table}[H]
+\caption{Table caption font is different from the normal text font in order to get a better differentiation -- I like it that way.}
+\label{tab:res}
+\centering
+\small\sffamily
+\begin{tabular}{llr}
+%\toprule
+\multicolumn{2}{c}{\textbf{\textbf{Results}}} \\
+\bottomrule
+\textbf{Error measurement}        & \textbf{Error} \\
+\bottomrule
+%\midrule
+Euclidean loss           & 0.20  \\
+Mean squared error       & 0.20  \\
+Mean absolute error      & 0.20  \\
+\bottomrule
+\end{tabular}
+\end{table} 
+
+These results were attained after 1,600,000 iterations on 800,000 train and 200,000 test sets. Correspondingly, figure~\ref{fig:splot} depicts the spread-error plot of the model performance on the test set.
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=0.7\textwidth]{images/1}}
+	\caption{}
+	\label{fig:splot}
+\end{figure}
+
+As you may notice, the network's predictions closely follow the target values. Also a direct correlation between the number of pedestrians and error deviation can be inferred from the spread-error plot which is reasonable due to the more overlapping in the crowded scenes. 
+
+\noindent In state-of-the-art, \citeauthor*{segui2015learning} did a similar experiment with maximum 25 pedestrians in each image. Beside that, the difference between their work with this analysis, mainly revolves around the architecture design. Nonetheless, the table of comparison between these two approaches are shown in below:
+ 
+\begin{table}[H]
+\caption{Table caption font is different from the normal text font in order to get a better differentiation -- I like it that way.}
+\centering
+\small\sffamily
+\begin{tabular}{llr}
+%\toprule
+\multicolumn{3}{c}{\textbf{\textbf{Performance Comparison}}} \\
+\bottomrule
+\textbf{Experiments}  & \textbf{Chance} & \textbf{Accuracy} \\
+\bottomrule
+%\midrule
+Euclidean loss           & 0.20 & 0.30 \\
+Mean squared error       & 0.20 & 0.30 \\
+
+\bottomrule
+\end{tabular}
+\label{tab:}
+\end{table} 
+
+As you may observe, although we there are more pedestrians in our images, our model shows a more promising performance. 
+
+\noindent As an innovative part of this Master thesis, we were interested to figure out if we have been able to overcome the exhaustive labeling in problems such as crowd counting. For this reason, we tested our model on a real UCSD crowd counting dataset \cite{chan2008privacy}. Table~\ref{tab:ucsdreal} demonstrates the performance of our model on UCSD dataset.
+
+
+\begin{table}[H]
+\caption{Table caption font is different from the normal text font in order to get a better differentiation -- I like it that way.}
+\label{tab:ucsdreal}
+\centering
+\small\sffamily
+\begin{tabular}{llr}
+%\toprule
+\multicolumn{2}{c}{\textbf{\textbf{Results}}} \\
+\bottomrule
+\textbf{Error measurement}        & \textbf{Error} \\
+\bottomrule
+%\midrule
+Euclidean loss           & 0.20  \\
+Mean squared error       & 0.20  \\
+Mean absolute error      & 0.20  \\
+\bottomrule
+\end{tabular}
+\end{table} 
+
+As it can e inferred from the above table, the results are convincing and rational given the results we achieved on the synthetic test set and 
+minor inevitable differences between the synthetic and real datasets.
+
+
+\noindent Moreover, we compared our model with \citeauthor*{chan2008privacy} research study in \cite{chan2008privacy} regarding crowd counting using exhaustive labeling and hand-crafted feature detectors using UCSD dataset. One difference we need to mention is that in their work, they computed the results for pedestrians towards camera and away from camera separately. However, in our dataset, we consider all pedestrians as one. Hence, we compare the average results of people towards and away from camera with our results. This comparison has been drawn in the following table:
+
+\begin{table}[H]
+\caption{Table caption font is different from the normal text font in order to get a better differentiation -- I like it that way.}
+\centering
+\small\sffamily
+\begin{tabular}{llr}
+%\toprule
+\multicolumn{3}{c}{\textbf{\textbf{Performance Comparison}}} \\
+\bottomrule
+\textbf{Experiments}  & \textbf{Chance} & \textbf{Accuracy} \\
+\bottomrule
+%\midrule
+Euclidean loss           & 0.20 & 0.30 \\
+Mean squared error       & 0.20 & 0.30 \\
+
+\bottomrule
+\end{tabular}
+\label{tab:realcomp}
+\end{table} 
+
+\subsection{Conclusion}
+
+\textbf{CONCLUSION AFTER THE EXPERIMENT}
 
