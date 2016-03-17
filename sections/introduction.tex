@@ -1,4 +1,5 @@
-\part{title}\chapter{Introduction}
+%\part{title}
+\chapter{Introduction}
 \label{sec:introduction}
 \section{Motivations}
 %2. What is the background, the context, in which the research took place? 
@@ -11,10 +12,10 @@ Artificial intelligence and computer vision share topics such as pattern recogni
 \section{Objectives}
 This work sets forward several objectives:
 \begin{enumerate}
-	\item To apply deep CNN for feature detection and classification in a learning to count problem where the concept of interest will be counted by no giving explicit information about what we are counting to the system, except for its multiplicity in the image. 
-	\item To synthetically create datasets of images, as realistic as possible, and completely automatically annotated for CNN to train with.
-	\item To explore the behavior of proposed algorithm on synthetic datasets of different types comparing the performance with a state-of-the-art outcomes\cite{segui2015learning}.   
-	\item To analyze the performance of designed system on real world crowd counting problem comparing the results with state-of-the-art results\cite{chan2008privacy}.   
+	\item To apply deep CNN for feature detection and classification in learning to count problems where the concept of interest will be counted by no given explicit information about what we are counting to the system, except for its multiplicity in the image.
+	\item To demonstrate that deep features learned by deep CNN can be an appropriate surrogate for hand-crafted feature descriptors.In addition, tzo synthetically create datasets of images, as realistic as possible, and completely automatically annotated for CNN to train with.
+	\item To explore the behavior of proposed algorithm on synthetic datasets of different types and compare the performance with a state-of-the-art outcomes\cite{segui2015learning}.   
+	\item To analyze the performance of designed system on real world crowd counting problem and compare the results with state-of-the-art \cite{chan2008privacy}.   
 
 \end{enumerate}
 \section{Contributions}
@@ -22,7 +23,7 @@ This thesis contains the following contributions:
 \begin{enumerate}
 	\item It proposes the problem of object representation as an indirect learning problem casted as learning to count strategy. The devised algorithm is capable of counting the number of pedestrians in the image that does not depend on object detection or feature tracking. The model is also privacy-preserving in a sense that it can be implemented with hardware that does not produce a visual record of the individuals in the scene. 
 	\item It provides a synthetically generated and automatically labeled dataset of pedestrians using unlabeled University of California San Diego(UCSD) pedestrian dataset used in \cite{mahadevan2010anomaly}, to train a counting deep convolutional neural network which is adequate for apprehending the underlying representations of the learned features. To this end, we describe a counting problem for MNIST dataset to demonstrate the capability of the internal representation of the network for classifying digits with no direct supervising while training. 
-	\item The proposed model is able to count the number of people in the real and unseen dataset using the features learned by training the network on synthetic training set. To our knowledge, this is the first crowd counting system trained by synthetic data that successfully operates continuously on real data. 
+	\item The proposed model is able to count the number of people in the real and unseen dataset using the features learned by training the network on synthetic training set. To our knowledge, this is the first crowd counting system trained by synthetic data that successfully operates on real data. 
 	\item Along with the validation of our proposal in the following ways:
 	\begin{itemize}
 		\item First, we learn to count even hand-written digits using MNIST dataset. 
@@ -34,10 +35,14 @@ This thesis contains the following contributions:
 
 \section{Organization}
 
-This report takes off with the review of Deep Learning(DL) as a branch of Artificial Intelligence (AI) which deep convolutional neural networks belong to, and moves on to introduce a deep CNN's basic architecture and components in details along with the definition of applied optimization methods and hyper-parameters in our work (Section 2.1). This section ends with a review of state of the art (Section 2.2). 
+This report takes off with the review of Deep Learning(DL) (chapter~\ref{sec:dl}) as a branch of Artificial Intelligence (AI) which deep convolutional neural networks belong to, and moves on to introduce a deep CNN's basic architecture and components in details (chapter~\ref{sec:deepcnn}). 
 
-In section 4, we describe our proposal for constructing a deep neural network to tackle feature detection issue learning to count problems. 
+Chapter ~\ref{sec:stateoftheart} presents a review of state-of-the-art of feature detection and learning to count. 
 
-Section 5 revolves around the empirical experiments and analysis along with the peculiarities of proposed data creation process and network modeling.  
+In section ~\ref{sec:proposal}, we describe our proposal for constructing a deep neural network to tackle feature detection issue learning to count problems. 
 
-Lastly, in Chapter 6 we conclude the report with a short summary of the scope of work conducted and the new areas of research that this master thesis has opened.
+Chapter ~\ref{sec:implementation} introduces the applied platform to implement our methodology  along with the peculiarities of proposed data creation process and network modeling. 
+
+Section ~\ref{sec:experiments} revolves around the empirical experiments and analysis. Obtained results and comparisons drawn to state-of-the-art also is placed in this section.  
+
+Lastly, in Chapter ~\ref{sec:conclusions} we conclude the report with a short summary of the scope of work conducted and the new areas of research that this master thesis has opened.
