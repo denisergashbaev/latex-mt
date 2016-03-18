@@ -12,23 +12,35 @@ Artificial intelligence and computer vision share topics such as pattern recogni
 \section{Objectives}
 This work sets forward several objectives:
 \begin{enumerate}
+<<<<<<< HEAD
 	\item To apply deep CNN for feature detection and classification in learning to count problems where the concept of interest will be counted by no given explicit information about what we are counting to the system, except for its multiplicity in the image.
 	\item To demonstrate that deep features learned by deep CNN can be an appropriate surrogate for hand-crafted feature descriptors.In addition, tzo synthetically create datasets of images, as realistic as possible, and completely automatically annotated for CNN to train with.
 	\item To explore the behavior of proposed algorithm on synthetic datasets of different types and compare the performance with a state-of-the-art outcomes\cite{segui2015learning}.   
 	\item To analyze the performance of designed system on real world crowd counting problem and compare the results with state-of-the-art \cite{chan2008privacy}.   
+=======
+	\item To apply deep CNN for feature detection and classification in a learning to count problem where the concept of interest will be counted by not giving explicit information about what we are counting to the system, except for its multiplicity in the image. 
+	\item To synthetically create datasets of images, as realistic as possible, and completely automatically annotated for CNN to train with.
+	\item To explore the behavior of proposed algorithm on synthetic datasets of different types comparing the performance with a state-of-the-art outcomes\cite{segui2015learning}.   
+	\item To analyze the performance of designed system on real world crowd counting problem comparing the results with state-of-the-art results\cite{chan2008privacy}.   
+>>>>>>> d4c61abff9f85720cfd50a9958fab5437b5357fe
 
 \end{enumerate}
 \section{Contributions}
 This thesis contains the following contributions:
 \begin{enumerate}
 	\item It proposes the problem of object representation as an indirect learning problem casted as learning to count strategy. The devised algorithm is capable of counting the number of pedestrians in the image that does not depend on object detection or feature tracking. The model is also privacy-preserving in a sense that it can be implemented with hardware that does not produce a visual record of the individuals in the scene. 
+<<<<<<< HEAD
 	\item It provides a synthetically generated and automatically labeled dataset of pedestrians using unlabeled University of California San Diego(UCSD) pedestrian dataset used in \cite{mahadevan2010anomaly}, to train a counting deep convolutional neural network which is adequate for apprehending the underlying representations of the learned features. To this end, we describe a counting problem for MNIST dataset to demonstrate the capability of the internal representation of the network for classifying digits with no direct supervising while training. 
 	\item The proposed model is able to count the number of people in the real and unseen dataset using the features learned by training the network on synthetic training set. To our knowledge, this is the first crowd counting system trained by synthetic data that successfully operates on real data. 
+=======
+	\item It provides a synthetically generated and automatically labeled dataset of pedestrians using unlabeled University of California San Diego~(UCSD) pedestrian dataset used in \cite{mahadevan2010anomaly}, to train a counting deep convolutional neural network which is adequate for apprehending the underlying representations of the learned features. To this end, we describe a counting problem for MNIST dataset to demonstrate the capability of the internal representation of the network for classifying digits with no direct supervising while training. 
+	\item The proposed model is able to count the number of people in the real and unseen dataset using the features learned by training the network on synthetic training set. To our knowledge, this is the first crowd counting system trained by synthetic data that successfully operates continuously on real data. 
+>>>>>>> d4c61abff9f85720cfd50a9958fab5437b5357fe
 	\item Along with the validation of our proposal in the following ways:
 	\begin{itemize}
 		\item First, we learn to count even hand-written digits using MNIST dataset. 
 		\item Second, we validate the system quantitatively on a large synthetic dataset of pedestrian, containing 100,000 images with maximum 30 pedestrians in each image. 
-		\item Last but not least, we count the number of pedestrians in the manually labeled dataset of 3375 images provided by[\citeauthor*{chan2013ground}, \citeyear{chan2013ground}]. 
+		\item Last but not least, we count the number of pedestrians in the manually labeled dataset of 3375 images provided by~[\citeauthor*{chan2013ground}, \citeyear{chan2013ground}]. 
 	\end{itemize}
 	
 \end{enumerate}
@@ -37,7 +49,11 @@ This thesis contains the following contributions:
 
 This report takes off with the review of Deep Learning(DL) (chapter~\ref{sec:dl}) as a branch of Artificial Intelligence (AI) which deep convolutional neural networks belong to, and moves on to introduce a deep CNN's basic architecture and components in details (chapter~\ref{sec:deepcnn}). 
 
+<<<<<<< HEAD
 Chapter ~\ref{sec:stateoftheart} presents a review of state-of-the-art of feature detection and learning to count. 
+=======
+In Section 4\todo{you know, you can link to section -- automatically generating numbers -- by using labels (see my report)}, we describe our proposal for constructing a deep neural network to tackle feature detection issue learning to count problems. 
+>>>>>>> d4c61abff9f85720cfd50a9958fab5437b5357fe
 
 In section ~\ref{sec:proposal}, we describe our proposal for constructing a deep neural network to tackle feature detection issue learning to count problems. 
 
