@@ -36,7 +36,23 @@ f(x) = \sigma(\sum\limits_{i=1}^{n}x_iw_i + b)
 \label{eq:neuron}
 \end{equation}
 
-In this equation, $x_i$ is the input i, $w_i$ is the weight associated with input i, b is a bias term and $\sigma$ is a non-linear function. Common non-linear functions are Rectified Linear Unit non-linearity (described in ~\ref{sec:actfun}), and sigmoid function).
+In this equation, $x_i$ is the input i, $w_i$ is the weight associated with input i, b is a bias term and $\sigma$ is a non-linear function. Common non-linear functions are Rectified Linear Unit non-linearity, and sigmoid function.
+
+\subsection{Activation functions}
+\label{sec:actfun}
+To go from one layer to the next in a NN, units compute a weighted sum of their inputs from the previous layer and pass the result through a non-linear activation function\cite{lecun2015deep}. There are many possible choices for the non-linear activation functions in a multi-layered network, and the choice of activation functions for the hidden units may often be different from that for the output units. This is a consequence of the fact the hidden and output units perform different roles\cite{bishop1995neural}. 
+
+\indent At present, the most popular non-linear function is the Rectified Linear Units (ReLU), which is simply the half-wave rectifier $f(z) = max(z, 0)$. In the past decades, neural nets used smoother non-linearities, such as $tanh(z)$ or $1/(1+ exp(-z))$, but ReLU typically learns much faster in networks with many layers, allowing training of a deep supervised network without unsupervised pre-training\cite{lecun2015deep}. A rectified linear unit has been illustrated in figure~\ref{fig:relu}
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=0.4\textwidth]{images/relu}}
+	\caption{A Rectified Linear Unit (ReLU)}
+	\label{fig:relu}
+\end{figure}
+
+\indent The rectifier activation function allows a network to easily obtain sparse representations. For example, after uniform initialization of the weights, around 50\% of hidden units continuous output values are real zeros, and this fraction can easily increase with sparsity-including regularization. Apart from being more biologically plausible, sparsity also leads to mathematical advantages. On the other hand, one may hypothesize that the hard saturation at 0 may hurt optimization by blocking gradient back-propagation. However, experimental results done by\citeauthor{glorot2011deep} suggest that hard zeros can actually help supervised training\cite{glorot2011deep}.  
+
 
 \subsection{Multi-layer Neural network}
 
@@ -88,40 +104,27 @@ The error function can be minimized using Gradient-Based Learning. This strategy
 
 Specifically, BP computes how fast the error changes as we adjust a hidden activity by using error derivatives with respect to hidden activities. Since each hidden activity can have a notable effect on many output units and consequently on the error, a combination of these effects must be considered. This aggregation is done efficiently which allows us to compute error derivatives for all the hidden units quickly at the same time. 
 
-\indent Computing the error derivatives for the hidden activities, it would be easy to get the error derivatives for the weights going into a hidden unit which is the key to be able to learn efficiently. For instance, to calculate the gradient respective to the weights in a layer we have the
-equation below, as described in \cite{alpaydin2014introduction}:
-
-\begin{equation}
-\frac{\delta E}{\delta w_{hj}} = \frac{\delta E}{\delta y_i} \frac{\delta y_i}{\delta z_h} \frac{\delta z_h}{\delta w_{hj}}
-\label{eq:CE}
-\end{equation}
-\indent Where $y_i$ is the output of the neuron, $z_h$ is the output before applying the activation
-function, and $w_{hj}$ ’s are the weights. In order to use this strategy, we need to calculate:
-\begin{enumerate}
-\item The derivative of the error with respect to the neurons in the last layer which is $\frac{\delta E}{\delta y_i^{l}}$
-
-\item The derivative of the outputs $ y_i$ with respect to the outputs before the activation function $z_i$ , that is: $\frac{\delta y_i^{l}}{\delta z_i^{l}} $
-
-\item The derivative of $z_j$ with respect to the weights $w_{ij} $ , that is: $\frac{\delta z_j^{l}}{\delta w_{i,j}^{l}} $
-
-\item The derivative of $z_j$ with respect to the bias $b_j$ , that is:$\frac{\delta z_j^{l}}{\delta b_j^{l}} $
-
-\item The derivative of $z_j$ with respect to its inputs, that is: $ \frac{\delta z_j^{l}}{\delta y_i^{l-1}}$
-\end{enumerate}
-
-
-
-
-
-
-
-
-
+\indent Computing the error derivatives for the hidden activities, it would be easy to get the error derivatives for the weights going into a hidden unit which is the key to be able to learn efficiently. 
+%For the first-layer weights, $w_{hj}$ , we use the chain rule to calculate the gradient, as described in \cite{alpaydin2014introduction}:
+%
+%\begin{equation}
+%\frac{\delta E}{\delta w_{hj}} = \frac{\delta E}{\delta y_i} \frac{\delta y_i}{\delta z_h} \frac{\delta z_h}{\delta w_{hj}}
+%\label{eq:CE}
+%\end{equation}
+%\indent Where $y_i$ is the output of the neuron, $z_h$ is the output before applying the activation function, and $w_{hj}$ ’s are the weights. It is as if the error propagates from the output y back to the inputs.
+%
 \section{Deep Neural Networks}
 \label{sec:deepcnn}
 As mentioned, standard neural network (NN) consists of many simple neurons, each producing a sequence of real-valued activations\cite{deepnn}. The depth of an architecture refers to the number of non-linear operations that are composed on the network. While many of the early successful applications of neural networks used shallow architectures (up to 3 levels), the mammal brain is organized in a deep architecture. The brain appears to process information through multiple stages, which is particularly clear in the primate visual system \cite{bengio2009learning}.
 
-Moreover, theoretical results strongly suggest that in order to learn the kind of complicated functions that can represent high-level abstractions (e.g. in vision, language, and other AI-level tasks), one needs deep architectures. Deep Neural Networks are composed of multiple levels of non-linear operations, such as those present in neural nets with many hidden layers\cite{bengio2009learning}. 
+Moreover, theoretical results strongly suggest that in order to learn the kind of complicated functions that can represent high-level abstractions (e.g. in vision, language, and other AI-level tasks), one needs deep architectures. Deep Neural Networks are composed of multiple levels of non-linear operations, such as those present in neural nets with many hidden layers\cite{bengio2009learning}. figure~\ref{fig:deepl} demonstrates a deep neural network. 
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=0.7\textwidth]{images/deepnn}}
+	\caption{A deep neural network with three hidden layers}
+	\label{fig:deepl}
+\end{figure}
 
 Deep Neural Networks have been investigated for decades, but training deep networks consistently yielded poor results, until very recently. It was observed in many experiments that deep networks are harder to train than shallow networks, and that training deep networks often get stuck in apparent local minima (or plateaus) when starting with random initialization of the network parameters.
 
@@ -129,44 +132,82 @@ It was discovered, however, that better results could be achieved by pre-trainin
 
 \indent Similar results were reported using auto-encoders for training each layer \cite{bengio2007greedy}. These experiments identified that layers could be pre-trained one at a time, in a greedy layer-wise format. After the layers are pre-trained, the learned weights are used to initialize the neural network, and then the standard back-propagation algorithm (explained in ~\ref{subsec:bp}) is used for fine-tuning the network. The advantage of unsupervised pre-training was demonstrated in several statistical comparisons \cite{bengio2007greedy,larochelle2007empirical,erhan2009difficulty}, until recently, when deep neural networks trained only with supervised learning started to register similar results in some tasks (like object recognition). \citealt{ciresan2012multi} demonstrate that properly trained deep neural networks (with only supervised learning) are able to achieve top results in many tasks, although not denying that pre-training might help, especially in cases were little data is available for training, or when there are massive amounts of unlabeled data. On the task of image classification, the best published results use a particular type of architecture called Convolutional Neural Network, which is described ~\ref{sec:cnn}.
 
-%ok, now you need a transition here to other definitions
 
-
-
-\subsection{Weight Sharing}
-\todo{Transition missing: smth like `another itegral part part/building block/technique' of deep learning is `weight sharing'}
-Weight sharing refers to having several connections controlled by a single parameter (weight). Weight sharing can be interpreted as imposing equality constraints among the connection strengths. An interesting feature of weight sharing is that it can be implemented with very little computational overhead\cite{lecun1989generalization}. The weight sharing technique has an interesting side effect of reducing the number of free parameters, thereby the capacity of the machine and improving its generalization ability\cite{lecun2010convolutional}.
-\todo{how is weight sharing relevant in this research. for instance, `we will later try to modify weight sharing / capitalize on it to build a more efficient model'}
 
 \section{Convolutional Neural Networks}
 \label{sec:cnn}
-Convolutional Neural Networks are a specialized kind of neural network for processing data that has a known grid-like topology such as image data which can be thought of as a 2D grid of pixels. CNN are simply neural networks that use convolution in place of general matrix multiplication in at least one of their layers\cite{Goodfellow-et-al-2016-Book}. 
-Essentially, CNNs combine three architectural ideas to ensure some degree of shift and distortion invariance of local receptive fields, shared weights (or weight replication), and, sometimes, spatial or temporal sub-sampling\cite{lecun2010convolutional} \todo{what are `local receptive fields', `spacial/temporal subsampling'}. 
-The following components compose the main body of any CNN architecture:
+Convolutional Neural Networks are a specialized kind of neural network for processing data that has a known grid-like topology such as image data which can be thought of as a 2D grid of pixels. CNN are simply neural networks that use convolution in place of general matrix multiplication in at least one of their layers \cite{Goodfellow-et-al-2016-Book}. This type of network was used to obtain state-of-the-art results in the CIFAR-10 object recognition task \cite{ciresan2012multi} and, more recently, to obtain state-of-the-art results in more challenging tasks such as the ImageNet Large Scale Visual Recognition Challenge \cite{russakovsky2015imagenet}. For both tasks, the training process benefited from the significant speed-ups on processing using modern GPUs (Graphical Processing Units), which are well suited for the implementation of convolutional networks.
+
+
+Essentially, CNNs combine three architectural ideas to ensure some degree of shift and distortion invariance of local receptive fields, shared weights (or weight replication), and, sometimes, spatial or temporal sub-sampling\cite{lecun2010convolutional}. we are going to explain these basic ideas of CNN while introducing the main components that compose the main body of any CNN architecture.
 
 \subsection{Convolutional layer} 
 
- Each unit of a convolutional layer receives inputs from a set of units located in a small neighborhood in the previous layer. With local receptive fields, neurons can extract elementary visual features such as oriented edges, end-points and corners. These features are then combined by the higher layers\cite{lecun2010convolutional}. In addition, elementary feature detectors that are useful on one part of the image are likely to be useful across the entire image. This knowledge can be applied by forcing a set of units, whose receptive fields are located at different places on the image, to have identical weight vectors\cite{williams1986learning}. The outputs of such a set of neurons constitutes a \textit{feature map}. At each position, different types of units in various feature maps compute different types of features. A sequential implementation of this, for each feature map, would be to scan the input image with a single neuron that has a local receptive field, and to store the states of this neuron at corresponding locations in the feature map\cite{lecun2010convolutional}. \\
+Each unit of a convolutional layer receives inputs from a set of units located in a small neighborhood in the previous layer. With local receptive fields, neurons can extract elementary visual features such as oriented edges, end-points and corners. These features are then combined by the higher layers\cite{lecun2010convolutional}. In addition, elementary feature detectors that are useful on one part of the image are likely to be useful across the entire image. This knowledge can be applied by forcing a set of units, whose receptive fields are located at different places on the image, to have identical weight vectors\cite{williams1986learning}. The outputs of such a set of neurons constitutes a \textit{feature map}. At each position, different types of units in various feature maps compute distinct types of features. Figure~\ref{fig:cnnsample} presents a convolutional layer functionality during forward propagation. 
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=0.7\textwidth]{images/conv}}
+	\caption{The forward propagation phase of a convolutional layer}
+	\label{fig:cnnsample}
+\end{figure}
+ 
+A sequential implementation of this process, for each feature map, would be to scan the input image with a single neuron that has a local receptive field, and to store the states of this neuron at corresponding locations in the feature map\cite{lecun2010convolutional}. \\
 \indent Units in a feature map are constrained to perform the same operation on different parts ot the image. A convolutional layer is usually composed of several feature maps (with different weight vectors), so that multiple features can be extracted at each location. 
 
+\noindent More formally, the definition of a 2D convolution is formulated in equation~\ref{eq:convf}. It is the
+application of a discrete convolution of the inputs $y^{l-1}$ with a filter $w^{l}$ , adding a bias $b^{l}$, followed by the application of a non-linear function $\sigma$:
+
+\begin{equation}
+y_{rc}^{l} =  \sigma \sum_{i=1}^{F_r}\sum_{j=1}^{F_c}  y_{(r+i-1)(c+j-1)}^{l-1} w_{ij}^{l} + b^{l})
+\label{eq:convf}
+\end{equation}
+l
+In this equation, $y_{rc}^{l}$ is the output unit at \{r, c\}, $F_r$ and $F_c$ are the number of rows and columns in the 2D filter, $w_{ij}^{l}$ is the value of the filter at position \{i, j\},  $y_{(r+i-1)(c+j-1)}^{l-1}$ is the value of input to this layer, at position \{r + i - 1, c + j - 1\}, and $b^{l}$ is the bias term.
+
+The equation above is defined for all possible applications of the filter, that is, for r $\in$ \{1, ..., $X_r$ - $F_r$ + 1\} and c $\in$ \{1, ..., $X_c$ - $F_c$ + 1\}, where $X_r$ and $X_c$ are the number of rows and columns in the input to this layer. The convolutional layer can either apply the filters for all possible inputs, or use a different strategy. Mainly to reduce computation time, instead of applying the filter for all possible \{r, c\} pairs, only the pairs with distances are used, which is called the \textit{stride}. A stride, s = 1, is equivalent to apply the convolution for all possible pairs, as defined above. 
+
+\noindent The inspiration for convolutional layers originated from models of the mammal visual system. Modern research in the physiology of the visual system found it consistent with the processing mechanism of convolutional neural networks, at least for quick recognition of objects \cite{bengio2009learning}. Although being a biological plausible model, the theoretical reasons for the success of convolutional networks are not yet fully understood. One hypothesis is that the small fan-in of the neurons (i.e. the number or input connections to the neurons) helps the derivatives to propagate through many layers - instead of being diffused in a large number of input neurons.
+
+\subsubsection{Weight Sharing}
+
+Weight sharing refers to having several connections controlled by a single parameter (weight). Weight sharing can be interpreted as imposing equality constraints among the connection strengths. An interesting feature of weight sharing is that it can be implemented with very little computational overhead\cite{lecun1989generalization}. The weight sharing technique has an interesting side effect of reducing the number of free parameters, thereby the capacity of the machine and improving its generalization ability\cite{lecun2010convolutional}.
+
+
+
 \subsection{Pooling/Sub-sampling layer}
-Once a feature is detected, its' exact position becomes less important as long as its' approximate position relative to other features is preserved. Furthermore, as the dimensionality of applying a filter is equal to the input dimensionality, we would not be gaining any translation invariance with these additional filters, we would be stuck doing pixel-wise analysis on increasingly abstract features. In order to solve this problem, a \textit{subsampling} layer is introduced.
+Once a feature is detected, its' exact position becomes less important as long as its' approximate position relative to other features is preserved. Furthermore, as the dimensionality of applying a filter is equal to the input dimensionality, we would not be gaining any translation invariance with these additional filters, we would be stuck doing pixel-wise analysis on increasingly abstract features. In order to solve this problem, a \textit{sub-sampling} layer is introduced.
 
- Subsampling, or down-sampling, refers to reducing the overall size of a signal. In many cases, such as audio compression for music files, subsampling is done simply for size reduction \cite{sub}. But in the domain of 2D filter outputs, subsampling  can also be thought of as reducing the sensitivity of the output to shifts and distortions. One of the most applied subsampling methods used in \cite{lecun1995comparison}, is known as `max pooling'. This involves splitting up the matrix of filter outputs into small non-overlapping grids (the larger the grid, the greater the signal reduction), and taking the maximum value in each grid as the value in the reduced matrix. By applying such a max pooling layer in between convolutional layers, we can increase spatial abstractness as we raise feature abstractness\cite{sub}.
+ Sub-sampling, or down-sampling, refers to reducing the overall size of a signal. In many cases, such as audio compression for music files, sub-sampling is done simply for size reduction \cite{sub}. But in the domain of 2D filter outputs, sub-sampling  can also be thought of as reducing the sensitivity of the output to shifts and distortions.
 
-\subsection{Activation functions}
-\label{sec:actfun}
-To go from one layer to the next, a set of units compute a weighted sum of their inputs from the previous layer and pass the result through a non-linear activation function\cite{lecun2015deep}. There are many possible choices for the non-linear activation functions in a multi-layered network, and the choice of activation functions for the hidden units may often be different from that for the output units. This is a consequence of the fact the hidden and output units perform different roles\cite{bishop1995neural}. 
+One of the most applied sub-sampling methods used in \cite{lecun1995comparison}, is known as \textit{max-pooling}. Equation ~\ref{eq:pool} presents te formulation of a max-pooling layer. 
 
-\indent At present, the most popular non-linear function is the Rectified Linear Units (ReLU), which is simply the half-wave rectifier $f(z) = max(z, 0)$. In the past decades, neural nets used smoother non-linearities, such as $tanh(z)$ or $1/(1+ exp(-z))$, but ReLU typically learns much faster in networks with many layers, allowing training of a deep supervised network without unsupervised pre-training\cite{lecun2015deep}. 
+\begin{equation}
+y_{rc}^{l} =  \max_{i,j\in\{0,1,...,m\} }  y_{(r+i-1)(c+j-1)}^{l-1}
+\label{eq:pool}
+\end{equation}
+In this equation, $y_{rc}^{l}$ is the output for index \textit{{r, c}}, \textit{m} is the size of the pooling area, and $y_{(r+i-1)(c+j-1)}^{l-1}$ is the value of the input at the position \{r + i - 1, c + j - 1\}.
 
-\indent The rectifier activation function allows a network to easily obtain sparse representations. For example, after uniform initialization of the weights, around 50\% of hidden units continuous output values are real zeros, and this fraction can easily increase with sparsity-including regularization. Apart from being more biologically plausible, sparsity also leads to mathematical advantages. On the other hand, one may hypothesize that the hard saturation at 0 may hurt optimization by blocking gradient back-propagation. However, experimental results done by\citeauthor{glorot2011deep} suggest that hard zeros can actually help supervised training\cite{glorot2011deep}.  
+
+ 
+This involves splitting up the matrix of filter outputs into small non-overlapping grids (the larger the grid, the greater the signal reduction), and taking the maximum value in each grid as the value in the reduced matrix. A schematic of max-pooling is depicted in figure~\ref{fig:pooling}.Similarly for the convolutional layer described above, instead of generating all possible pairs of \{i, j\}, a \textit{stride, s,} can be used. In particular, a stride s = 1 is equivalent to using all possible pooling windows, and a stride s = m is equivalent of using all non-overlapping pooling windows.
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=0.5\textwidth]{images/pooling}}
+	\caption{The forward propagation phase of a pooling layer with stride equal to 1.}
+	\label{fig:pooling}
+\end{figure}
+ 
+\citealt{scherer2010evaluation} evaluated different pooling architectures, and note that the max-pooling layers obtained the best results. Pooling layers add robustness to the model, providing a small degree of translation invariance, since the unit activates independently on where the image feature is located within the pooling window \cite{bengio2013deep}. Empirically, pooling has demonstrated to contribute to improved classification accuracy for object recognition \cite{lecun1989backpropagation}.
+
 
 \subsection{Local Response Normalization}
 
-ReLUs have the desirable property that they do not require input normalization to prevent them from saturating. If at least some training examples produce a positive input to a ReLU, learning will happen in that neuron. However, we still find that the following local normalization(LRN) scheme aids generalization. This sort of response normalization implements a form of lateral inhibition \todo{wtf is that?} inspired by the type found in real neurons, creating competition for big activities amongst neuron outputs computed using different kernels\cite{krizhevsky2012imagenet}.
+ReLU have the desirable property that they do not require input normalization to prevent them from saturating. If at least some training examples produce a positive input to a ReLU, learning will happen in that neuron. However, we still find that \textit{local response normalization}(LRN) scheme aids generalization. This sort of response normalization implements a form of lateral inhibition ( the capacity of an excited neuron to reduce the activity of its neighbors) inspired by the type found in real neurons, creating competition for big activities amongst neuron outputs computed using different kernels\cite{krizhevsky2012imagenet}. 
 
-\indent This scheme bears some resemblance to the local contrast normalization scheme proposed by \citeauthor{jarrett2009best} in \cite{jarrett2009best} without mean activity subtraction \todo{`mean activity subtraction' -- ??} which has led to error rate reduction in \cite{krizhevsky2012imagenet} and \cite{hinton2012improving}. 
+In other words, we can think of it as helping sharpening the response. Instead of carrying multiple ambiguous representation of a patch, it pushes the network to commit more towards a specific representation, freeing resources to analyze it better.
+
+\indent This scheme bears some resemblance to the local contrast normalization scheme proposed by \citeauthor{jarrett2009best} in \cite{jarrett2009best} which has led to error rate reduction in \cite{krizhevsky2012imagenet} and \cite{hinton2012improving}. 
 
 \subsection{Fully connected/Inner product layer}
 
