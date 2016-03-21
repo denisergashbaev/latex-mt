@@ -20,7 +20,7 @@ In the task of object object detection, deep architectures have been widely used
 
 \section{Artificial Neural Networks}
 
-Artificial Neural Networks are mathematical models that use a collection of simple computational units, called Neurons, interlinked in a network. These models are used in a variety of pattern recognition tasks, such as speech recognition, object detection, identification of cancerous cells, among others \cite{hertz1991introduction}. Artificial Neural Networks date back to 1943, with work by \citeauthor{mcculloch1943logical} \cite{mcculloch1943logical}. The motivation for studying neural networks was the fact that the human brain was superior to a computer at many tasks, a statement that holds true even today for tasks such as recognizing objects and faces, in spite of the huge advances in the processing speed in modern computers.
+Artificial Neural Networks are mathematical models that use a collection of simple computational units, called Neurons, interlinked in a network. These models are used in a variety of pattern recognition tasks, such as speech recognition, object detection, identification of cancerous cells, among others \cite{hertz1991introduction}. Artificial Neural Networks date back to 1943, with work by McCulloch \cite{mcculloch1943logical}. The motivation for studying neural networks was the fact that the human brain was superior to a computer at many tasks, a statement that holds true even today for tasks such as recognizing objects and faces, in spite of the huge advances in the processing speed in modern computers.
 
 The neuron is the basic unit on Artificial Neural Networks, and it is used to construct more powerful models. A typical set of equations to describe Neural Networks is provided in \cite{williams1986learning}, and is also listed below for completeness. A single neuron implements a mathematical function given its inputs, to provide an output, as described in equation ~\ref{eq:neuron} and illustrated in figure~\ref{fig:neuron}.
 
@@ -142,7 +142,7 @@ Convolutional Neural Networks are a specialized kind of neural network for proce
 Essentially, CNNs combine three architectural ideas to ensure some degree of shift and distortion invariance of local receptive fields, shared weights (or weight replication), and, sometimes, spatial or temporal sub-sampling\cite{lecun2010convolutional}. we are going to explain these basic ideas of CNN while introducing the main components that compose the main body of any CNN architecture.
 
 \subsection{Convolutional layer} 
-
+\label{convlayer}
 Each unit of a convolutional layer receives inputs from a set of units located in a small neighborhood in the previous layer. With local receptive fields, neurons can extract elementary visual features such as oriented edges, end-points and corners. These features are then combined by the higher layers\cite{lecun2010convolutional}. In addition, elementary feature detectors that are useful on one part of the image are likely to be useful across the entire image. This knowledge can be applied by forcing a set of units, whose receptive fields are located at different places on the image, to have identical weight vectors\cite{williams1986learning}. The outputs of such a set of neurons constitutes a \textit{feature map}. At each position, different types of units in various feature maps compute distinct types of features. Figure~\ref{fig:cnnsample} presents a convolutional layer functionality during forward propagation. 
 
 \begin{figure}[H]
@@ -176,6 +176,7 @@ Weight sharing refers to having several connections controlled by a single param
 
 
 \subsection{Pooling/Sub-sampling layer}
+\label{poolinglayer}
 Once a feature is detected, its' exact position becomes less important as long as its' approximate position relative to other features is preserved. Furthermore, as the dimensionality of applying a filter is equal to the input dimensionality, we would not be gaining any translation invariance with these additional filters, we would be stuck doing pixel-wise analysis on increasingly abstract features. In order to solve this problem, a \textit{sub-sampling} layer is introduced.
 
  Sub-sampling, or down-sampling, refers to reducing the overall size of a signal. In many cases, such as audio compression for music files, sub-sampling is done simply for size reduction \cite{sub}. But in the domain of 2D filter outputs, sub-sampling  can also be thought of as reducing the sensitivity of the output to shifts and distortions.
@@ -202,7 +203,7 @@ This involves splitting up the matrix of filter outputs into small non-overlappi
 
 
 \subsection{Local Response Normalization}
-
+\label{lrnlayer}
 ReLU have the desirable property that they do not require input normalization to prevent them from saturating. If at least some training examples produce a positive input to a ReLU, learning will happen in that neuron. However, we still find that \textit{local response normalization}(LRN) scheme aids generalization. This sort of response normalization implements a form of lateral inhibition ( the capacity of an excited neuron to reduce the activity of its neighbors) inspired by the type found in real neurons, creating competition for big activities amongst neuron outputs computed using different kernels\cite{krizhevsky2012imagenet}. 
 
 In other words, we can think of it as helping sharpening the response. Instead of carrying multiple ambiguous representation of a patch, it pushes the network to commit more towards a specific representation, freeing resources to analyze it better.
