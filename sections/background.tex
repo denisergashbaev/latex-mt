@@ -113,6 +113,40 @@ Specifically, BP computes how fast the error changes as we adjust a hidden activ
 %\end{equation}
 %\indent Where $y_i$ is the output of the neuron, $z_h$ is the output before applying the activation function, and $w_{hj}$ ’s are the weights. It is as if the error propagates from the output y back to the inputs.
 %
+\subsection{Training algorithm}
+\label{subsec:sgd}
+Training the network consists in minimizing the error function (by updating the weights and biases), often using the \textit{Stochastic Gradient Descent} algorithm (SGD). 
+
+Stochastic gradient descent has often been proposed to minimize the \textit{empirical risk} (training set performance measure. For more detailed description, see \cite{vapnik1998statistical}) using \textit{gradient descent}(GD) \cite{bottou2010large}. The standard gradient descent algorithm updates the parameter $\theta$ of the objective \textit{J($\theta$)} with \textit{learning rate} $\alpha$\footnote{The learning rate $\alpha$ is the weight of the negative gradient (will be described fully in section~\ref{learning rate}).} as:
+\begin{equation}
+\centering \theta = \theta - \alpha \bigtriangledown_\theta E[(J(\theta)]
+\end{equation}
+
+where the expectation in the above equation is approximated by evaluating the cost and gradient over the full training set (Empirical Risk Minimization\footnote{Empirical risk minimization defines a family of learning algorithms and is used to give theoretical bounds on the performance of learning algorithms.}~(ERM)). Stochastic Gradient Descent~(SGD) simply does away the expectation in the update and computes the gradient of the parameters using only a single or a few training examples. The new update is given by:
+\begin{equation}
+\centering \theta = \theta - \alpha \bigtriangledown_\theta J(\theta; x^{(i)}, y^{(i)})
+\end{equation}
+with a pair $(x^{(i)}, y^{(i)})$ from the training set \cite{sgd}. 
+
+The SGD algorithm, as defined in \cite{duda2012pattern}, is described below at a high-level. The inputs
+are: \textit{W} - the weights and biases of the network, (X, y) - the dataset, batch size - the number of training examples that are used in each iteration, and $\alpha$, the learning rate. For notation simplicity, all the model parameters are represented in \textit{W}. In practice, each
+layer usually defines a 2-dimensional weight matrix and a 1-dimensional bias vector.
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=1\textwidth]{images/sgd}}
+	\label{fig:sgd}
+\end{figure}
+In summary, SGD iterates over mini-batches of the dataset, performing forward-propagation followed by a back-propagation to calculate the error derivatives with respect to the parameters. The weights are updated using these derivatives and a new mini-batch is used. This procedure is repeated until a convergence criterion is reached. Common convergence criteria are: a maximum number of epochs (number of times that the whole training set was used); a desired value for the cost function is reached; or training until the cost function shows no improvement in a number of iterations.
+
+Generally, each parameter update in SGD is computed with respect to a few training examples or a mini-batch as opposed to a single example. The reasons for this are threefold \cite{sgd}:
+\begin{enumerate}
+	\item The variance in the parameter update is reduced, potentially leading to a more stable convergence. 
+	\item It allows the computation to take advantage of highly optimized matrix operations that should be used in a well vectorized computation of the cost and gradient.  A typical mini-batch size is 256, although the optimal size of the mini-batch can vary for different applications and architectures.
+	\item One final but important point regarding SGD is the order in which we present the data to the algorithm. If the data is given in some meaningful order, this can bias the gradient and lead to poor convergence. Generally, a good method to avoid this is to randomly shuffle the data prior to each epoch of training.
+\end{enumerate}
+
+
 \section{Deep Neural Networks}
 \label{sec:deepcnn}
 As mentioned, standard neural network (NN) consists of many simple neurons, each producing a sequence of real-valued activations\cite{deepnn}. The depth of an architecture refers to the number of non-linear operations that are composed on the network. While many of the early successful applications of neural networks used shallow architectures (up to 3 levels), the mammal brain is organized in a deep architecture. The brain appears to process information through multiple stages, which is particularly clear in the primate visual system \cite{bengio2009learning}.
@@ -204,7 +238,20 @@ This involves splitting up the matrix of filter outputs into small non-overlappi
 
 \subsection{Local Response Normalization}
 \label{lrnlayer}
-ReLU have the desirable property that they do not require input normalization to prevent them from saturating. If at least some training examples produce a positive input to a ReLU, learning will happen in that neuron. However, we still find that \textit{local response normalization}(LRN) scheme aids generalization. This sort of response normalization implements a form of lateral inhibition ( the capacity of an excited neuron to reduce the activity of its neighbors) inspired by the type found in real neurons, creating competition for big activities amongst neuron outputs computed using different kernels\cite{krizhevsky2012imagenet}. 
+ReLU have the desirable property that they do not require input normalization to prevent them from saturating. If at least some training examples produce a positive input to a ReLU, learning will happen in that neuron. However, we still find that \textit{local response normalization}(LRN) scheme aids generalization. This sort of response normalization implements a form of lateral inhibition ( the capacity of an excited neuron to reduce the activity of its neighbors) inspired by the type found in real neurons, creating competition for big activities amongst neuron outputs computed using different kernels\cite{krizhevsky2012imagenet}. Figure~\ref{fig:lrns} illustrates local response normalization in a CNN. 
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=0.6\textwidth]{images/lrn}}
+	\caption{Local response normalization in a CNN after the convolution layer.}
+	\label{fig:lrns}
+\end{figure}
+
+More formally, the activity $a_{x,y}^{i}$ of a neuron in bank \textit{i} at position \textit{(x,y)} in the topographic organization\footnote{The cerebral cortex of mammals primarily consists of a set of brain areas organized as topographic maps. These maps contain systematic two-dimensional representations of features relevant to sensory, motor, and/or associative processing, such as retinal position, sound frequency, line orientation, or sensory or motor motion direction \cite{patel2014topographic}.} is divided by:
+\begin{equation}
+\centering
+\Bigg( 1+ \alpha \sum_{j=i-N/2}^{i+N/2} (a_{x,y}^{j})^{2} \Bigg)
+\end{equation}
+where the sum runs over \textit{N} " adjacent " banks of neurons at the \textit{same position in the topographic organization}. The ordering of the bank is arbitrary and determined before training begins. The constants \textit{N}, $\alpha$ and $\beta$ are hyper-parameters whose values are determined using a validation set.
 
 In other words, we can think of it as helping sharpening the response. Instead of carrying multiple ambiguous representation of a patch, it pushes the network to commit more towards a specific representation, freeing resources to analyze it better.
 
