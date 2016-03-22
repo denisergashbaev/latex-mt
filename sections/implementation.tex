@@ -205,7 +205,33 @@ In our dataset, we constrained each image by having up to 29 pedestrians in the 
 \end{figure}
 
 
-\item \textbf{Pedestrian extraction:} Subtracting each image from the mean background, we were able to label the connected regions of the subtraction using morphological labeling methods. Then, properties of labeled regions are measured and bound-boxed (see \cite{van2014scikit} for more detailed explanation). Boxes of people are center-based annotated. These labeled boxes shape our initial list of pedestrians with masks of the same size of each box.
+\item \textbf{Pedestrian extraction:} Subtracting each image from the mean background, we were able to label the connected regions of the subtraction using morphological labeling methods. Figure~\ref{nobg} shows how images look like after background subtraction. 
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=0.9\textwidth]{images/nobg}}
+	\caption{Images after background subtraction.}
+	\label{fig:nobg}
+\end{figure}
+ 
+Then, properties of labeled regions are measured and bound-boxed (see \cite{van2014scikit} for more detailed explanation). Boxes of people are center-based annotated. These labeled boxes shape our initial list of pedestrians with masks of the same size of each box. Below figure demonstrates a selection of extracted pedestrians and pedestrians' masks.
+
+\begin{figure*}[h!]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        {\includegraphics[width=0.6\textwidth]{images/peds}}
+        \caption{Extracted pedestrians from different video frames.}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        {\includegraphics[width=0.6\textwidth]{images/masks}}
+        \caption{created masks corresponding to the extracted pedestrians.}
+    \end{subfigure}
+    \caption{Pedestrians and their corresponding masks.}
+    \label{backback}
+\end{figure*}
+
 
 \item \textbf{Background generation:} In this step, we tried to make the backgrounds of images as realistic as we could, by first, make a sparse combination of median backgrounds, secondly, changing the global illumination of the images randomly and at last, adding some \textit{Gaussian noise} to the backgrounds. As you may notice, in the figure~\ref{backback}, the generated background happened to be brighter and noisier than the extracted one. 
 
@@ -329,9 +355,9 @@ To verify and validate our model, we used UCSD crowd counting dataset created by
 
 \begin{figure}[H]
 	\centering
-	{\includegraphics[width=1\textwidth]{images/normalucsd}}
+	{\includegraphics[width=1\textwidth]{images/testucsd}}
 	\caption{Real UCSD images after being masked and resized.}
-	\label{fig:filtereducsd}
+	\label{fig:testucsd}
 \end{figure}
 
 
