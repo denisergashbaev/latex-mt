@@ -316,8 +316,23 @@ As you may see, considering perspective in the images, the images and people's p
 
 \subsection{UCSD crowd counting dataset}
 \label{subsec:datareal2}
-To verify and validate our model, we used UCSD crowd counting dataset created by \citeauthor*{chan2008privacy} and used in \cite{chan2008privacy,chan2009bayesian,chan2012counting}. The dataset contains video of pedestrians on UCSD walkways, taken from a stationary camera. There are currently two  viewpoints available among which we used \textit{vidf} videos. All videos are 8-bit gray-scale, each video file has 200 video frames, with dimensions $238\times158$. In our experiment, the first 20 videos which are labeled with the number of pedestrians were incorporated. The center point of each pedestrian defines its' location in the image. 
+To verify and validate our model, we used UCSD crowd counting dataset created by \citeauthor*{chan2008privacy} and used in \cite{chan2008privacy,chan2009bayesian,chan2012counting}. The dataset contains video of pedestrians on UCSD walkways, taken from a stationary camera. There are currently two  viewpoints available among which we used \textit{vidf} videos. All videos are 8-bit gray-scale, each video file has 200 video frames, with dimensions $238\times158$. In our experiment, the first 20 videos which are labeled with the number of pedestrians were incorporated. The center point of each pedestrian defines its' location in the image. A selection of UCSD crowd counting images are shown in figure~\ref{ucsdorg}.
 
-\indent Among the labeled images, we selected the ones in which the number of pedestrians do not exceed 29. Then, images were resized to  $158\times158$ pixels and normalized between 0 and 255. Hence, in total we have a dataset of 3375 real images which are masked with the same filter we used for synthetic pedestrians dataset. 
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=1\textwidth]{images/normalucsd}}
+	\caption{Normal UCSD crowd counting dataset images.}
+	\label{fig:pers}
+\end{figure}
+
+\indent Among the labeled images, we selected the ones in which the number of pedestrians do not exceed 29. Then, images were resized to  $158\times158$ pixels and normalized between 0 and 255. Hence, in total we have a dataset of 3375 real images which are masked with the same filter we used for synthetic pedestrians dataset. At last, the images look like the following images.
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=1\textwidth]{images/normalucsd}}
+	\caption{Real UCSD images after being masked and resized.}
+	\label{fig:filtereducsd}
+\end{figure}
+
 
 \indent We will use to first, validate the performance of our model trained with synthetic data, on a real dataset, and also to comparison between work done in \cite{chan2008privacy} and our approach. 
