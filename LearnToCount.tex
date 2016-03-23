@@ -23,7 +23,7 @@
 \usepackage{calligra}
 \usepackage{float}
 \usepackage{wrapfig}
-\usepackage[acronym]{glossaries}
+
 \usepackage[table]{xcolor}
 \usepackage{lipsum}
 \usepackage{caption}
@@ -120,6 +120,15 @@
 \usepackage{pifont}
 %\algdisablelines
 
+
+% ACRONYMS AND GLOSSARIES
+\usepackage[acronym]{glossaries}
+\makeglossaries
+\newacronym{lfs}{LFS}{Labour Force Survey}
+% ACRONYMS AND GLOSSARIES
+
+
+
 \setlength{\arrayrulewidth}{1mm}
 \setlength{\tabcolsep}{18pt}
 \renewcommand{\arraystretch}{1.5}
@@ -174,13 +183,15 @@ Another special acknowledgment must be made to my friends in the master: Denis, 
 \pagenumbering{roman} % Roman numerals
 \chapter*{Abstract}
 \thispagestyle{empty}
-NOT YET
+The main purpose of this master thesis is to enhance feature detection and learning process by the use of deep learning algorithms as well as mitigating data annotation efforts by training deep Convolutional Neural networks with synthetically created dataset. 
 
 \tableofcontents
 
 \listoffigures
 
 \listoftables
+
+
 
 \newpage
 \pagenumbering{arabic} % Normal numerals
@@ -213,6 +224,7 @@ NOT YET
 %\noindent If any, the appendix should appear directly after the
 %references without numbering, and not on a new page. To do so please use the following command:
 %\textit{$\backslash$section*\{APPENDIX\}}
-\printglossary[type=\acronymtype]
+\printglossaries %[type=\acronymtype]
+
 \vfill
 \end{document}
