@@ -29,7 +29,7 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{graphicx}
-
+\usepackage{todonotes}
  % % % REFERENCES
 %
 \usepackage[numbers]{natbib}
@@ -169,7 +169,7 @@ I would like to sincerely thank my supervisors Oriol Pujol and Santi Segui for t
 
 Furthermore I would also like to dedicate this master thesis to my beloved parents and sister for their unsparing supports. My gratitude knows no bounds.
 
-Another special acknowledgment must be made to my friends in the master: Denis, Jeroni, Philipp, Pablo, Lorenzo, Iosu, Ferran and many others for the endless studying hours, morning coffees after crunching the brutal assignments all night long, valuable and constructive discussions which allowed me carry out this program. 
+Another special acknowledgment must be made to my friends in the master: Jeroni, Philipp, Pablo, Lorenzo, Denis, Iosu, Ferran and many others for the endless studying hours, morning coffees after crunching the brutal assignments all night long, valuable and constructive discussions which allowed me carry out this program. 
  
 
 
@@ -184,11 +184,11 @@ Another special acknowledgment must be made to my friends in the master: Denis, 
 \chapter*{Abstract}
 \thispagestyle{empty}
 
-The main purpose of this master thesis is to enhance feature detection in learning to count problems by the use of deep learning algorithms as well as mitigating data annotation efforts by incorporating synthetically created datasets in the learning process. 
+This master's thesis endeavors to enhance feature detection in learning to count problems by the use of deep learning algorithms as well as mitigating data annotation efforts by incorporating synthetically created datasets in the learning process. 
 
-In this framework, we propose convolutional deep neural networks to approach two tasks, learning to count even-digits and counting the number of pedestrians in a walkway, along with introducing their corresponding synthetically created datasets. In the former case, we analyze the applicability of deep features as a surrogate to hand-crafted features for understanding the underlying representations. Subsequently in the latter task, the features learned by training the deep CNN on synthetic images, are tested on a small real-world dataset of pedestrians to prevail the inefficiency of deep learning algorithms when facing lack of data.
+In this framework\todo{in which framework?}, we propose convolutional deep neural networks to approach two tasks: learning to count even-digits and counting the number of pedestrians in a walkway, along with introducing the supporting synthetically created datasets. In the former case, we analyze the applicability of deep features as a surrogate to hand-crafted features for understanding the underlying representations. Subsequently in the latter task, the features learned by training the deep CNN on synthetic images, are tested on a small real-world dataset of pedestrians to prevail over\todo{it's `prevail OVER' but wrong in this context} the inefficiency of deep learning algorithms when facing lack of data.
 
-To evaluate our methodology, we present an empirical experiment followed by comparison to state-of-the-art. Improving the cutting-edge solutions, the results demonstrate the suitability of deep models for learning objects features in vision tasks such as learning to count. Furthermore, obtaining noticeable results on real-word problems compare to previous highly specialized approaches, suggests synthetic data as a workaround for applying DL for problems with small datasets. 
+To evaluate our methodology, we present an empirical experiment followed by comparison to the state-of-the-art methods. Improving the cutting-edge solutions, our results demonstrate the suitability of deep models for learning objects features in vision tasks such as learning to count. Furthermore, obtaining notable results on real-word problems compared to previous highly specialized approaches, suggests synthetic data as a workaround for applying DL for problems with small datasets. 
 
  
 

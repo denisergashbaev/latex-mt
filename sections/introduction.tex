@@ -1,20 +1,20 @@
 %\part{title}
 \chapter{Introduction}
 \label{sec:introduction}
-\section{Motivations}
+\section{Motivation}
 %2. What is the background, the context, in which the research took place? 
-The concept of learning to count is an important educational/developmental milestone  which constitutes the most fundamental idea of mathematics. In Computer Vision\cite{umbaugh1997computer}, the counting problem is the estimation of number of objects in a still image or video frame. Learning to count visual objects is a new approach towards dealing with detecting object in the images and video, which has been recently proffered in the literature\cite{viola2005detecting, rabaud2006counting, kong2005counting, chan2008privacy, segui2015learning}. It arises in many real-world applications, including cell counting in microscopic images\cite{flaccavento2011learning}, monitoring crowds in surveillance systems\cite{rahmalan2006crowd, valera2005intelligent}, and performing wildlife census or counting the number of trees in an aerial image of a forest\cite{brandtberg1998automated, pollock1996automatic,NIPS2010_4043}. 
+The concept of learning to count is an important educational/developmental milestone \todo{again, it's not a `milestone' as i believe. you need a different wording here} which constitutes the most fundamental idea of mathematics. In Computer Vision\cite{umbaugh1997computer}, the counting problem is the estimation of number of objects in a still image or video frame. Learning to count visual objects is a new approach towards dealing with detecting object in the images and video, which has been recently proffered in the literature\cite{viola2005detecting, rabaud2006counting, kong2005counting, chan2008privacy, segui2015learning}. It arises in many real-world applications, including cell counting in microscopic images\cite{flaccavento2011learning}, monitoring crowds in surveillance systems\cite{rahmalan2006crowd, valera2005intelligent}, and performing wildlife census or counting the number of trees in an aerial image of a forest\cite{brandtberg1998automated, pollock1996automatic,NIPS2010_4043}. 
 
 Artificial intelligence and computer vision share topics such as pattern recognition and machine learning\cite{michalski2013machine, mitchell1997machine} techniques. Consequently, computer vision is sometimes seen as a part of the artificial intelligence field or the computer science field in general. Recent machine learning methods applied for computer vision tasks, require large number of data for the learning process. To learn to count the object of interest in an image or video, various object features need to be designed, extracted or detected during the learning phase. The complexity of feature detection process in vision tasks, restrict their usage in large-scale computer vision applications thus demanding more efficient solutions to alleviate, expedite and improve this process. 
 
 \indent One recent and commonly used method to facilitate feature detection process is application of deep Convolutional Neural Networks(CNN)\cite{szegedy2015going, krizhevsky2012imagenet, lecun1995convolutional, sermanet2013overfeat, ji20133d, taylor2010convolutional}. One of the promises of deep CNN is replacing handcrafted features with efficient algorithms for unsupervised or semi-supervised feature learning and hierarchical feature extraction\cite{song2013hierarchical}. CNNs have been claimed and practically proven to achieve the most assuring performance in different vision benchmark problems concerning feature detection and classification\cite{ciresan2011flexible, szegedy2015going, ciresan2012multi}. 
 
 \section{Objectives}
-This work sets forward several objectives:
+This work puts forward several objectives:
 \begin{enumerate}
 
 \item To apply deep CNN for feature detection and classification in learning to count problems where the concept of interest will be counted by no given explicit information about what we are counting to the system, except for its multiplicity in the image.
-\item To demonstrate that deep features learned by deep CNN can be an appropriate surrogate for hand-crafted feature descriptors.In addition, tzo synthetically create datasets of images, as realistic as possible, and completely automatically annotated for CNN to train with.
+\item To demonstrate that deep features learned by deep CNN can be an appropriate surrogate for hand-crafted feature descriptors. In addition, tzo \todo{what?} synthetically create datasets of images, as realistic as possible, and completely automatically annotated for CNN to train with.
 \item To explore the behavior of proposed algorithm on synthetic datasets of different types and compare the performance with a state-of-the-art outcomes\cite{segui2015learning}.   
 \item To analyze the performance of designed system on real world crowd counting problem and compare the results with state-of-the-art \cite{chan2008privacy}.   
 
@@ -26,21 +26,22 @@ This work sets forward several objectives:
 
 \end{enumerate}
 \section{Contributions}
+\todo{one sentense is a bit meager. you need to relate the objectives to contributions somehow. what obj have been achieved and which not}
 This thesis contains the following contributions:
 \begin{enumerate}
 	\item It proposes the problem of object representation as an indirect learning problem casted as learning to count strategy. The devised algorithm is capable of counting the number of pedestrians in the image that does not depend on object detection or feature tracking. The model is also privacy-preserving in a sense that it can be implemented with hardware that does not produce a visual record of the individuals in the scene. 
 
-	\item It provides a synthetically generated and automatically labeled dataset of pedestrians using unlabeled University of California San Diego(UCSD) pedestrian dataset used in \cite{mahadevan2010anomaly}, to train a counting deep convolutional neural network which is adequate for apprehending the underlying representations of the learned features. To this end, we describe a counting problem for MNIST dataset to demonstrate the capability of the internal representation of the network for classifying digits with no direct supervising while training. 
+	\item It provides a synthetically generated and automatically labeled dataset of pedestrians using unlabeled University of California San Diego(UCSD) pedestrian dataset used in \cite{mahadevan2010anomaly}, to train a counting deep convolutional neural network which is adequate for apprehending the underlying representations of the learned features. To this end, we describe a counting problem for MNIST \todo{what is a MNIST dataset, cite the source} dataset to demonstrate the capability of the internal representation of the network for classifying digits with no direct supervising while training. 
 	\item The proposed model is able to count the number of people in the real and unseen dataset using the features learned by training the network on synthetic training set. To our knowledge, this is the first crowd counting system trained by synthetic data that successfully operates on real data. 
 
 	\item It provides a synthetically generated and automatically labeled dataset of pedestrians using unlabeled University of California San Diego~(UCSD) pedestrian dataset used in \cite{mahadevan2010anomaly}, to train a counting deep convolutional neural network which is adequate for apprehending the underlying representations of the learned features. To this end, we describe a counting problem for MNIST dataset to demonstrate the capability of the internal representation of the network for classifying digits with no direct supervising while training. 
 	\item The proposed model is able to count the number of people in the real and unseen dataset using the features learned by training the network on synthetic training set. To our knowledge, this is the first crowd counting system trained by synthetic data that successfully operates continuously on real data. 
 
-	\item Along with the validation of our proposal in the following ways:
+	\item Along with the validation of our proposal in the following ways \todo{this is not a valid sentence in english: subject/verb/object missing}:
 	\begin{itemize}
 		\item First, we learn to count even hand-written digits using MNIST dataset. 
 		\item Second, we validate a more complex model  quantitatively on a large synthetic dataset of pedestrians, containing 100,000 images with maximum 30 pedestrians in each image. 
-		\item Last but not least, we count the number of pedestrians in a manually labeled dataset of images provided by~\citealt{chan2013ground}. 
+		\item Last but not least\todo{replace this `last but not the least shit' -- use it only in oral presentations}, we count the number of pedestrians in a manually labeled dataset of images provided by~\citealt{chan2013ground}. 
 	\end{itemize}
 	
 \end{enumerate}
@@ -50,12 +51,12 @@ This thesis contains the following contributions:
 This report takes off with the review of Deep Learning(DL) (chapter~\ref{sec:dl}) as a branch of Artificial Intelligence (AI) which deep convolutional neural networks belong to, and moves on to introduce a deep CNN's basic architecture and components in details (chapter~\ref{sec:deepcnn}). 
 
 
-Chapter ~\ref{sec:stateoftheart} presents a review of state-of-the-art of feature detection and learning to count. 
+Chapter ~\ref{sec:stateoftheart} reviews state-of-the-art of feature detection and learning to count problems. 
 
-In section ~\ref{sec:proposal}, we describe our proposal for constructing a deep neural network to tackle feature detection issue learning to count problems. 
+In section~\ref{sec:proposal} \todo{do you call them sections or chapters -- be consistent}, we describe our proposal for constructing a deep neural network to tackle feature detection issue learning to count problems. 
 
 Chapter ~\ref{sec:implementation} introduces the applied platform to implement our methodology  along with the peculiarities of proposed data creation process and network modeling. 
 
-Section ~\ref{sec:experiments} revolves around the empirical experiments and analysis. Obtained results and comparisons drawn to state-of-the-art also is placed in this section.  
+Section ~\ref{sec:experiments} deals with the empirical experiments and analysis. Obtained results and comparisons drawn to state-of-the-art also is placed in this section \todo{`drawn to' / `placed in' -- wtf, change plz}.  
 
-Lastly, in Chapter ~\ref{sec:conclusions}, we conclude the report with a short summary of the scope of work conducted and the new areas of research that this master thesis has opened.
+Lastly, in Chapter~\ref{sec:conclusions} \todo{ok, do you capitalize or not capitalize the word chapter/section -- decide and be consistent. I prefer a capitalized version}, we conclude the report with a short summary of the scope of work conducted and the new areas of research that this master thesis has opened.
