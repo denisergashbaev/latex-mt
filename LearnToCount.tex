@@ -23,7 +23,7 @@
 \usepackage{calligra}
 \usepackage{float}
 \usepackage{wrapfig}
-\usepackage[acronym]{glossaries}
+
 \usepackage[table]{xcolor}
 \usepackage{lipsum}
 \usepackage{caption}
@@ -121,6 +121,15 @@
 \usepackage{pifont}
 %\algdisablelines
 
+
+% ACRONYMS AND GLOSSARIES
+\usepackage[acronym]{glossaries}
+\makeglossaries
+\newacronym{lfs}{LFS}{Labour Force Survey}
+% ACRONYMS AND GLOSSARIES
+
+
+
 \setlength{\arrayrulewidth}{1mm}
 \setlength{\tabcolsep}{18pt}
 \renewcommand{\arraystretch}{1.5}
@@ -175,13 +184,31 @@ Another special acknowledgment must be made to my friends in the master: Denis, 
 \pagenumbering{roman} % Roman numerals
 \chapter*{Abstract}
 \thispagestyle{empty}
-NOT YET
+
+The main purpose of this master thesis is to enhance feature detection in learning to count problems by the use of deep learning algorithms as well as mitigating data annotation efforts by incorporating synthetically created datasets in the learning process. 
+
+In this framework, we propose convolutional deep neural networks to approach two tasks, learning to count even-digits and counting the number of pedestrians in a walkway, along with introducing their corresponding synthetically created datasets. In the former case, we analyze the applicability of deep features as a surrogate to hand-crafted features for understanding the underlying representations. Subsequently in the latter task, the features learned by training the deep CNN on synthetic images, are tested on a small real-world dataset of pedestrians to prevail the inefficiency of deep learning algorithms when facing lack of data.
+
+To evaluate our methodology, we present an empirical experiment followed by comparison to state-of-the-art. Improving the cutting-edge solutions, the results demonstrate the suitability of deep models for learning objects features in vision tasks such as learning to count. Furthermore, obtaining noticeable results on real-word problems compare to previous highly specialized approaches, suggests synthetic data as a workaround for applying DL for problems with small datasets. 
+
+ 
+
+
+
+     
+
+
+
+ 
+
 
 \tableofcontents
 
 \listoffigures
 
 \listoftables
+
+
 
 \newpage
 \pagenumbering{arabic} % Normal numerals
@@ -214,6 +241,7 @@ NOT YET
 %\noindent If any, the appendix should appear directly after the
 %references without numbering, and not on a new page. To do so please use the following command:
 %\textit{$\backslash$section*\{APPENDIX\}}
-\printglossary[type=\acronymtype]
+\printglossaries %[type=\acronymtype]
+
 \vfill
 \end{document}
