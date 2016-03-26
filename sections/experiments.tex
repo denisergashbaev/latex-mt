@@ -12,7 +12,7 @@ We intend to explore the features learned when training a deep CNN, in order to 
 \item Sufficiently representative to be applied for the digit recognition tasks. 
 \end{enumerate}
 
-In this experiment, we feed images of digits into a deep convolutional neural network. Images are labeled with the number of even digits in each image. We apply a regression strategy to tackle this problem\todo{what does it mean?}. Therefore, the output of the network is a single number determining the model's prediction for the amount of even digits present in the images. 
+In this experiment, we feed images of digits into a deep convolutional neural network. Images are labeled with the number of even digits in each image. We took a regression analysis to tackle this problem. Therefore, the output of the network is a single number determining the model's prediction for the amount of even digits present in the images. 
  
 
 \subsection{Dataset} 
@@ -31,7 +31,7 @@ Since we use Caffe platform to perform our experiments, we convert the images in
 
 As discussed in chapter~\ref{subsubsec:digitarch}, for learning to count the number of even digits, we designed a deep CNN. Table~\ref{fig:digitnet} shows a review of the network's specification and architecture.
 
-\todo{tables are ugly, can't you please style them up (whith finer borders)}
+
 \begin{table}[H]
 	\centering
 			\caption{The deep CNN with 2 convolution layers to count the number of even digits.}
@@ -238,7 +238,8 @@ Hence, we propose a crowd counting problem using synthetic dataset in order to e
 
 \subsection{Datasets} 
 
-As fully discussed in chapter~\ref{subsec:synped}, for the particular case study, we synthetically created a dataset of 1 million images. To recap, the dataset specifications are the following\todo{no need to repeat the information, but i like the description of the dataset here better}:
+As fully discussed in chapter~\ref{subsec:synped}, for the particular case study, we synthetically created a dataset of 1 million images. To recap, the dataset specifications are the following:
+%\todo{no need to repeat the information, but i like the description of the dataset here better}, DONT UNDERSTAND WHAT YOU MEAN??!!!!
 \begin{itemize}
 \item Each image is in gray-scale, $158\times158$ pixels, normalized, and contains up to 29 pedestrians in a walkway. Images are labeled with the number of pedestrians present in the image.  
 \item Pedestrians' location in the images are center-based. A mask (region of interest) has been applied to images that defines the area in which the pedestrians are counted. Thus, the person is labeled if it's center is put in the region of interest.   

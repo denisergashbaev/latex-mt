@@ -6,17 +6,17 @@ In this section, we go over the preliminarily concepts that help understand the 
 \section{Deep Learning}
 \label{sec:dl}
 %Today, \textit{Artiﬁcial Intelligence(AI)} is a thriving field with many practical applications and active research topics. We look to intelligent software to automate routine labor, understand speech or images, make diagnoses in medicine and support basic scientific research. 
-One of the central challenges of Artificial Intelligence (AI) is solving the tasks that are easy for people to perform but hard for them to describe formally -- problems that we solve intuitively, that feel automatic, like recognizing spoken words or faces in images. One approach to that challenge is to allow computers to learn from experience and understand the world in terms of a hierarchy of concepts, where each concept is defined in terms of its relation to simpler concepts. This hierarchy of concepts allows the computer to learn complex notions by building them out of simpler ones. If we draw a graph showing how these concepts are built on top of each other, it would be a deep graph with many layers. For this reason, we call this approach \textit{Deep Learning}\cite{Goodfellow-et-al-2016-Book}.
+One of the central challenges of Artificial Intelligence (AI) is solving the tasks that are easy for people to perform but hard for them to describe formally -- problems that we solve intuitively, that feel automatic, like recognizing spoken words or faces in images. One approach to that challenge is to allow computers to learn from experience and understand the world in terms of a hierarchy of concepts, where each concept is defined in terms of its relation to simpler concepts. This hierarchy of concepts allows the computer to learn complex notions by building them out of simpler ones. If we draw a graph showing how these concepts are built on top of each other, it would be a deep graph with many layers. For this reason, we call this approach \textit{Deep Learning} \cite{Goodfellow-et-al-2016-Book}.
 
-Modern deep learning provides a very powerful framework for specially for supervised learning. By adding more layers and more units within a layer, a deep network can represent functions of increasing complexity. Most tasks that consist of mapping an input vector to an output vector, and that are easy for a human-being to perform quickly, can be accomplished via deep learning, given sufficiently large models and datasets of labeled training examples. Other tasks that cannot be described as associating one vector to another, or that are difficult enough such that a person would require time to think and reflect in order to accomplish the task, remain beyond the scope of deep learning for now\cite{Goodfellow-et-al-2016-Book}.
+Modern deep learning provides a very powerful framework for specially for supervised learning. By adding more layers and more units within a layer, a deep network can represent functions of increasing complexity. Most tasks that consist of mapping an input vector to an output vector, and that are easy for a human-being to perform quickly, can be accomplished via deep learning, given sufficiently large models and datasets of labeled training examples. Other tasks that cannot be described as associating one vector to another, or that are difficult enough such that a person would require time to think and reflect in order to accomplish the task, remain beyond the scope of deep learning for now \cite{Goodfellow-et-al-2016-Book}.
 
-In other words,  Deep Learning is a new area of Machine Learning (ML) research, which has been introduced with the objective of moving ML closer to one of its original goals: Artificial Intelligence. Deep Learning is about learning multiple levels of representation and abstraction that help to make sense of data such as images, sound and text\cite{tutorial2014lisa}.  
+In other words,  Deep Learning is a new area of Machine Learning (ML) research, which has been introduced with the objective of moving ML closer to one of its original goals: Artificial Intelligence. Deep Learning is about learning multiple levels of representation and abstraction that help to make sense of data such as images, sound and text \cite{tutorial2014lisa}.  
 
 Various deep learning architectures involves Artificial Neural Networks (ANN). Networks such as \textit{deep neural networks}, \textit{deep convolutional neural networks},\textit{ deep belief networks} and \textit{recurrent neural networks} have been applied to fields like computer vision, automatic speech recognition or natural language processing where they have set the state-of-the-art in recent years, as reviewed by \citeauthor{bengio2009learning} in \cite{bengio2009learning, bengio2013deep}. 
 
 Besides improving the accuracy on different pattern recognition problems, one of the fundamental goals of Deep Learning is to move machine learning towards the automatic discovery of multiple levels of representation, reducing the need for feature extractors developed by domain experts \cite{bengio2013deep}. This is especially important, as noted by \citeauthor{bengio2009learning} in \cite{bengio2009learning}, for domains where the features are hard to formalize, such as for object recognition and detection tasks.
 
-In the task of object object detection, deep architectures have been widely used to achieve state-of-the-art results as in\cite{krizhevsky2009learning,krizhevsky2012imagenet}, where the top published results use Convolutional Neural Networks \cite{ciresan2012multi}. Among all deep learning techniques, we will apply deep convolutional neural networks to tackle a specific vision problem. However, prior to delving into deep CNN, we intend to allude the basic concept of Neural networks and deep NN briefly, in order to help understand the proposed method in this Master thesis.
+In the task of object object detection, deep architectures have been widely used to achieve state-of-the-art results as in \cite{krizhevsky2009learning,krizhevsky2012imagenet}, where the top published results use Convolutional Neural Networks \cite{ciresan2012multi}. Among all deep learning techniques, we will apply deep convolutional neural networks to tackle a specific vision problem. However, prior to delving into deep CNN, we intend to allude the basic concept of Neural networks and deep NN briefly, in order to help understand the proposed method in this Master thesis.
 
 \section{Artificial Neural Networks}
 
@@ -38,11 +38,11 @@ f(x) = \sigma(\sum\limits_{i=1}^{n}x_iw_i + b)
 
 In this equation, $x_i$ is the input i, $w_i$ is the weight associated with input i, b is a bias term and $\sigma$ is a non-linear function. Common non-linear functions are Rectified Linear Unit non-linearity, and sigmoid function.
 
-\subsection{Activation functions}
+\subsection{Activation Functions}
 \label{sec:actfun}
-To go from one layer to the next in a NN, units compute a weighted sum of their inputs from the previous layer and pass the result through a non-linear activation function\cite{lecun2015deep}. There are many possible choices for the non-linear activation functions in a multi-layered network, and the choice of activation functions for the hidden units may often be different from that for the output units. This is a consequence of the fact the hidden and output units perform different roles\cite{bishop1995neural}. 
+To go from one layer to the next in a NN, units compute a weighted sum of their inputs from the previous layer and pass the result through a non-linear activation function \cite{lecun2015deep}. There are many possible choices for the non-linear activation functions in a multi-layered network, and the choice of activation functions for the hidden units may often be different from that for the output units. This is a consequence of the fact the hidden and output units perform different roles \cite{bishop1995neural}. 
 
-\indent At present, the most popular non-linear function is the Rectified Linear Units (ReLU), which is simply the half-wave rectifier $f(z) = max(z, 0)$. In the past decades, neural nets used smoother non-linearities, such as $tanh(z)$ or $1/(1+ exp(-z))$, but ReLU typically learns much faster in networks with many layers, allowing training of a deep supervised network without unsupervised pre-training\cite{lecun2015deep}. A rectified linear unit has been illustrated in figure~\ref{fig:relu}
+\indent At present, the most popular non-linear function is the Rectified Linear Units (ReLU), which is simply the half-wave rectifier $f(z) = max(z, 0)$. In the past decades, neural nets used smoother non-linearities, such as $tanh(z)$ or $1/(1+ exp(-z))$, but ReLU typically learns much faster in networks with many layers, allowing training of a deep supervised network without unsupervised pre-training \cite{lecun2015deep}. A rectified linear unit has been illustrated in figure~\ref{fig:relu}
 
 \begin{figure}[H]
 	\centering
@@ -51,10 +51,10 @@ To go from one layer to the next in a NN, units compute a weighted sum of their 
 	\label{fig:relu}
 \end{figure}
 
-\indent The rectifier activation function allows a network to easily obtain sparse representations. For example, after uniform initialization of the weights, around 50\% of hidden units continuous output values are real zeros, and this fraction can easily increase with sparsity-including regularization. Apart from being more biologically plausible, sparsity also leads to mathematical advantages. On the other hand, one may hypothesize that the hard saturation at 0 may hurt optimization by blocking gradient back-propagation. However, experimental results done by\citeauthor{glorot2011deep} suggest that hard zeros can actually help supervised training\cite{glorot2011deep}.  
+\indent The rectifier activation function allows a network to easily obtain sparse representations. For example, after uniform initialization of the weights, around 50\% of hidden units continuous output values are real zeros, and this fraction can easily increase with sparsity-including regularization. Apart from being more biologically plausible, sparsity also leads to mathematical advantages. On the other hand, one may hypothesize that the hard saturation at 0 may hurt optimization by blocking gradient back-propagation. However, experimental results done by \citeauthor{glorot2011deep} suggest that hard zeros can actually help supervised training \cite{glorot2011deep}.  
 
 
-\subsection{Multi-layer Neural network}
+\subsection{Multi-layer Neural Network}
 
 Models based on a single neuron, also called Perceptrons, have severe limitations. As noted by \citeauthor{preparata2012computational}, a perceptron cannot model data that is not linearly separable, such as modeling a simple XOR operator. On the other hand, as shown by \citealt{hornik1989multilayer}, Multi-layer Neural Networks are universal approximators, that is: they can approximate any measurable function to any desired degree of accuracy.
 
@@ -74,7 +74,7 @@ y^{l} = \sigma(W^{l}y^{l-1}+ b^{l})
 	\label{fig:multi}
 \end{figure}
 
-\subsubsection{Training objective} 
+\subsubsection{Training Objective} 
 In order to train the model, an error function, also called \textit{loss function}, is defined. This function calculates the error of the model predictions with respect to a dataset. The objective of the training is to minimize the sum (or, equivalently, minimize the mean) of this error function applied to all examples in the dataset. 
 
 \indent Commonly used loss functions are the Squared Error function (SE), described in equation ~\ref{eq:SE}, and the Cross-Entropy error function (CE), described in equation ~\ref{eq:CE} (both equations describe the error for a single example in the dataset). As analyzed by \citealt{golik2013cross}, it can be shown that the true posterior probability is a global minimum for both functions, and therefore a Neural Network can be trained by minimizing either. 
@@ -113,7 +113,7 @@ Specifically, BP computes how fast the error changes as we adjust a hidden activ
 %\end{equation}
 %\indent Where $y_i$ is the output of the neuron, $z_h$ is the output before applying the activation function, and $w_{hj}$ ’s are the weights. It is as if the error propagates from the output y back to the inputs.
 %
-\subsection{Training algorithm}\todo{so, please capitalize EACH word in ALL sections and subsections}
+\subsection{Training Algorithm}
 \label{subsec:sgd}
 Training the network consists in minimizing the error function (by updating the weights and biases), often using the \textit{Stochastic Gradient Descent} algorithm (SGD). 
 
@@ -129,10 +129,9 @@ where the expectation in the above equation is approximated by evaluating the co
 with a pair $(x^{(i)}, y^{(i)})$ from the training set \cite{sgd}. 
 
 The SGD algorithm, as defined in \cite{duda2012pattern}, is described below at a high-level. The inputs
-are: \textit{W} \todo{use dollar signs for all variables instead of textit -- i think} -\todo{use two dashes instead: --, it looks better} the weights and biases of the network, (X, y) - the dataset, batch size - the number of training examples that are used in each iteration, and $\alpha$, the learning rate. For notation simplicity, all the model parameters are represented in \textit{W}. In practice, each
+are: \textit{W} --the weights and biases of the network, (X, y) -- the dataset, batch size -- the number of training examples that are used in each iteration, and $\alpha$, the learning rate. For notation simplicity, all the model parameters are represented in \textit{W}. In practice, each
 layer usually defines a 2-dimensional weight matrix and a 1-dimensional bias vector.
 
-\todo{you should be using the algorithmx package -- look it up in my latex -- to write out an algorithm. leave it as the latest thing}
 \begin{figure}[H]
 	\centering
 	{\includegraphics[width=1\textwidth]{images/sgd}}
@@ -154,7 +153,6 @@ As mentioned, standard neural network (NN) consists of many simple neurons, each
 
 Moreover, theoretical results strongly suggest that in order to learn the kind of complicated functions that can represent high-level abstractions (e.g. in vision, language, and other AI-level tasks), one needs deep architectures. Deep Neural Networks are composed of multiple levels of non-linear operations, such as those present in neural nets with many hidden layers\cite{bengio2009learning}. Figure~\ref{fig:deepl} demonstrates a deep neural network. 
 
-\todo{you have to quote ALL the picture sources (and actually obtain the permission for their use unless it's from wikipedia)!!!}
 \begin{figure}[H]
 	\centering
 	{\includegraphics[width=0.7\textwidth]{images/deepnn}}
@@ -166,7 +164,7 @@ Deep Neural Networks have been investigated for decades, but training deep netwo
 
 It was discovered, however, that better results could be achieved by pre-training each layer with an unsupervised learning algorithm \cite{hinton2006fast}. In 2006, \citeauthor{hinton2006fast} obtained good results using Restricted Boltzmann Machines (a generative model) to perform unsupervised training of the layers \cite{hinton2006fast}. The goal of this training was to obtain a model that could capture patterns in the data, similarly to a feature descriptor, not using the dataset labels. The weights learned by this unsupervised training were then used to initialize neural networks. 
 
-\indent Similar results were reported using auto-encoders for training each layer \cite{bengio2007greedy}. These experiments identified that layers could be pre-trained one at a time, in a greedy layer-wise format. After the layers are pre-trained, the learned weights are used to initialize the neural network, and then the standard back-propagation algorithm (explained in \todo{`Section'?}~\ref{subsec:bp}) is used for fine-tuning the network. The advantage of unsupervised pre-training was demonstrated in several statistical comparisons \cite{bengio2007greedy,larochelle2007empirical,erhan2009difficulty}, until recently, when deep neural networks trained only with supervised learning started to register similar results in some tasks (like object recognition). \citealt{ciresan2012multi} demonstrate that properly trained deep neural networks (with only supervised learning) are able to achieve top results in many tasks, although not denying that pre-training might help, especially in cases were little data is available for training, or when there are massive amounts of unlabeled data. On the task of image classification, the best published results use a particular type of architecture called Convolutional Neural Network, which is described ~\ref{sec:cnn}.
+\indent Similar results were reported using auto-encoders for training each layer \cite{bengio2007greedy}. These experiments identified that layers could be pre-trained one at a time, in a greedy layer-wise format. After the layers are pre-trained, the learned weights are used to initialize the neural network, and then the standard back-propagation algorithm (explained in Section~\ref{subsec:bp}) is used for fine-tuning the network. The advantage of unsupervised pre-training was demonstrated in several statistical comparisons \cite{bengio2007greedy,larochelle2007empirical,erhan2009difficulty}, until recently, when deep neural networks trained only with supervised learning started to register similar results in some tasks (like object recognition). \citealt{ciresan2012multi} demonstrate that properly trained deep neural networks (with only supervised learning) are able to achieve top results in many tasks, although not denying that pre-training might help, especially in cases were little data is available for training, or when there are massive amounts of unlabeled data. On the task of image classification, the best published results use a particular type of architecture called Convolutional Neural Network, which is described ~\ref{sec:cnn}.
 
 
 
@@ -177,7 +175,7 @@ Convolutional Neural Networks are a specialized kind of neural network for proce
 
 Essentially, CNNs combine three architectural ideas to ensure some degree of shift and distortion invariance of local receptive fields, shared weights (or weight replication), and, sometimes, spatial or temporal sub-sampling\cite{lecun2010convolutional}. We are going to explain these basic ideas of CNN while introducing the main components that compose the main body of any CNN architecture.
 
-\subsection{Convolutional layer} 
+\subsection{Convolutional Layer} 
 \label{convlayer}
 Each unit of a convolutional layer receives inputs from a set of units located in a small neighborhood in the previous layer. With local receptive fields, neurons can extract elementary visual features such as oriented edges, end-points and corners. These features are then combined by the higher layers\cite{lecun2010convolutional}. In addition, elementary feature detectors that are useful on one part of the image are likely to be useful across the entire image. This knowledge can be applied by forcing a set of units, whose receptive fields are located at different places on the image, to have identical weight vectors\cite{williams1986learning}. The outputs of such a set of neurons constitutes a \textit{feature map}. At each position, different types of units in various feature maps compute distinct types of features. Figure~\ref{fig:cnnsample} presents a convolutional layer functionality during forward propagation. 
 
@@ -203,7 +201,7 @@ In this equation, $y_{rc}^{l}$ is the output unit at \{r, c\}, $F_r$ and $F_c$ a
 
 The equation above is defined for all possible applications of the filter, that is, for $r~\in \{1, ..., X_r - F_r + 1\}$ and $c \in \{1, ..., X_c - F_c + 1\}$, where $X_r$ and $X_c$ are the number of rows and columns in the input to this layer. The convolutional layer can either apply the filters for all possible inputs, or use a different strategy. Mainly to reduce computation time, instead of applying the filter for all possible \{r, c\} pairs, only the pairs with distances are used, which is called the \textit{stride}. A stride, s = 1, is equivalent to apply the convolution for all possible pairs, as defined above. 
 
-\noindent The inspiration for convolutional layers originated from models of the mammal visual system. Modern research in the physiology of the visual system found it consistent with the processing mechanism of convolutional neural networks, at least for quick recognition of objects \cite{bengio2009learning}. Although being a biological plausible model, the theoretical reasons for the success of convolutional networks are not yet fully understood. One hypothesis \todo{reference?} is that the small fan-in of the neurons (i.e. the number or input connections to the neurons) helps the derivatives to propagate through many layers - instead of being diffused in a large number of input neurons.
+\noindent The inspiration for convolutional layers originated from models of the mammal visual system. Modern research in the physiology of the visual system found it consistent with the processing mechanism of convolutional neural networks, at least for quick recognition of objects \cite{bengio2009learning}. Although being a biological plausible model, the theoretical reasons for the success of convolutional networks are not yet fully understood. One hypothesis is that the small fan-in of the neurons (i.e. the number or input connections to the neurons) helps the derivatives to propagate through many layers - instead of being diffused in a large number of input neurons \cite{nips}.
 
 \subsubsection{Weight Sharing}
 
@@ -211,7 +209,7 @@ Weight sharing refers to having several connections controlled by a single param
 
 
 
-\subsection{Pooling/Sub-sampling layer}
+\subsection{Pooling/Sub-sampling Layer}
 \label{poolinglayer}
 Once a feature is detected, its' exact position becomes less important as long as its' approximate position relative to other features is preserved. Furthermore, as the dimensionality of applying a filter is equal to the input dimensionality, we would not be gaining any translation invariance with these additional filters, we would be stuck doing pixel-wise analysis on increasingly abstract features. In order to solve this problem, a \textit{sub-sampling} layer is introduced.
 
