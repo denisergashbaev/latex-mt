@@ -3,7 +3,7 @@
 \label{sec:implementation}
 \noindent
 
-\noindent In this chapter, we provide a detailed implementation of our proposed methodology. We start with presenting the software platform we incorporated to shape and design. Then we demonstrate our network's architecture in detail. Finally, we attempt to give insight into the datasets we used to train and test our model. 
+\noindent In this chapter, we provide a detailed implementation of our proposed methodology. We start with presenting the software platform we incorporated to shape and design our models. Then we demonstrate our network's architecture in detail. Finally, we attempt to give insight into the datasets we used to train and test our model. 
 
 \section{Caffe deep learning platform}
 
@@ -25,9 +25,9 @@ The main components of Caffe architecture are outlined below:
 
 
 Caffe supports some data sources such as LevelDB or LMDB (Lightning Memory-Mapped Database), HDF5, MemoryData, ImageData, etc. However, large-scale data is stored in LevelDB databases since it reads the data directly from memory \cite{caffe}. 
-\item \textbf{Layers:} A caffe layer takes blobs as input and yields one or more as output. In a network(as described in chapter~\ref{subsec:bp}), each layer plays two important roles: a forward pass that takes the inputs and produces the outputs, and a backward pass that takes the gradient with respect to the output, and computes the gradients with respect to the parameters and to the inputs, which are in turn back-propagated to earlier layers \cite{jia2014caffe}.
+\item \textbf{Layers:} A caffe layer takes blobs as input and yields one or more as output. In a network (as described in chapter~\ref{subsec:bp}), each layer plays two important roles: a forward pass that takes the inputs and produces the outputs, and a backward pass that takes the gradient with respect to the output, and computes the gradients with respect to the parameters and to the inputs, which are in turn back-propagated to earlier layers \cite{jia2014caffe}.
 
-\indent Caffe supports an exhaustive set of layers, including the followings\cite{jia2014caffe}: 
+\indent Caffe supports an exhaustive set of layers, including the followings \cite{jia2014caffe}: 
 \begin{enumerate}
 	\item Convolution, pooling, fully connected, 
 	\item Nonlinearities like rectified
@@ -52,7 +52,7 @@ Caffe supports some data sources such as LevelDB or LMDB (Lightning Memory-Mappe
 
 \subsection{Model Optimization}
 
-Our work in general is an optimization problem since we project the results as loss function we try to minimize. For this reason, model optimization methods have a critical impact on the performance of the model. Since Caffe provides several optimization methods, in this section we briefly describe merely optimization methods and hyper-parameters incorporated in our proposed algorithm.  
+Our work in general is an optimization problem since we project the results as loss functions we try to minimize. For this reason, model optimization methods have a critical impact on the performance of the model. Since Caffe provides several optimization methods, in this section we briefly describe merely optimization methods and \textit{hyper-parameters}\footnote{Hyper-parameters govern the underlying system on a "higher level" than the primary parameters of interest. They are not model parameters that are learned during training phase and instead, they are set by the designer a priori.} incorporated in our proposed algorithm.  
 
 \indent In Caffe, \textit{Solver} file  orchestrates model optimization by coordinating the network's forward inference and backward gradients to form parameter updates that attempt to improve the loss. 
 %short description about sgd with ref 
@@ -61,7 +61,7 @@ Our work in general is an optimization problem since we project the results as l
 
 Since Caffe is trained using stochastic gradient descent, at each iteration, it computes the (stochastic) gradient of the parameters with respect to the training data and updates the parameters in the direction of the gradient. On the other hand, to compute the gradient w.r.t the input data, we need to evaluate all training samples at each iteration which is prohibitively time-consuming, specially when we are dealing with a great amount of data. 
 
-\indent In order to overcome this, SGD approximates the exact gradient, in a stochastic manner, by sampling only a small portion of the training data at each iteration. This small portion is the batch. In other words, the batch size defines the amount of training data we feed the network at each iteration. The larger the batch size, the more accurate the gradient estimate at each iteration will be. 
+\indent In order to overcome this issue, SGD approximates the exact gradient, in a stochastic manner, by sampling only a small portion of the training data at each iteration. This small portion is the batch. In other words, the batch size defines the amount of training data we feed to the network at each iteration. The larger the batch size, the more accurate the gradient estimate at each iteration will be. 
 
 \subsubsection{Learning rate}
 \label{learning rate}
@@ -100,7 +100,7 @@ One of the potential problems with stochastic gradient descent is having oscilla
 \end{equation}
 where $\alpha > 0$ is the learning rate, $\mu \in [0,1]$ is the momentum coefficient, and $\bigtriangledown f(\theta_t)$ is the gradient at $\theta_t$ \cite{sutskever2013importance}. 
 
-For example, if the objective has a form of a long shallow ravine leading to the optimum and steep walls on the sides, standard SGD will tend to oscillate across the narrow ravine since the negative gradient will point down one of the steep sides rather than along the ravine towards the optimum\cite{sgd}. The objectives of deep architectures have this form near local optima and thus standard SGD can lead to very slow convergence particularly after the initial steep gains. 
+For example, if the objective has a form of a long shallow ravine leading to the optimum and steep walls on the sides, standard SGD will tend to oscillate across the narrow ravine since the negative gradient will point down one of the steep sides rather than along the ravine towards the optimum \cite{sgd}. The objectives of deep architectures have this form near local optima and thus standard SGD can lead to very slow convergence particularly after the initial steep gains. 
 
 Momentum, by taking the running average of the derivatives, by incorporating the previous update in the update for the current iteration, is one method for pushing the objective more quickly along the shallow ravine \cite{sgd}. 
 
@@ -114,25 +114,34 @@ The number of iterations plays an important role in the training process. iterat
 \section{The architecture}
 \label{imparch}
 %\todo{this part appears out of nowhere: no transition(IS IT BETTER NOW?!). also it mentions caffe, which was introduced a while ago. HAVING CAFFE INTRODUCED= BY/WITH/AFTER INTRODUCING CAFFE }
-Having Caffe platform introduced, we propose the designed network for two experiments we did regarding learning to count problems.
+Having Caffe platform introduced, we propose the designed networks for two experiments we did regarding learning to count problems.
 
 In learning object features or representations for vision tasks and by the use of CNN, the depth of network plays a crucial role. The deeper the model, the better it learns. However, issues like overfitting\footnote{Overfitting occurs when a statistical model describes random error or noise instead of the underlying relationship, and vice versa for underfitting. } and underfitting should not be left neglected.   
-Therefore, in this section, networks' settings and architectures for even digit recognition and crowd counting problems will be described separately. 
+Therefore, in this section, networks' settings and architectures for even-digits and crowd counting problems will be described separately. 
 
 \subsection{Even digit counting}
 \label{subsubsec:digitarch}
-For learning to count even digits problem, since we used MNIST dataset to generate our dataset, we decided to start with an architecture similar to the classic MNIST hand-written digit recognition problem \cite{lecun1995comparison}. From there, we modified the architecture to optimize the performance of the network.
 
-\indent In our network, the data layer fetches the images and labels from the disk, passes it through the first convolutional layer with 20 filters, each of size $15\times15$ followed by a ReLU non-linearity and LRN normalization layer. Then the output is max-pooled by the  kernel size of $2\times2$. This process repeats again but this time with the second convolutional layer having 50 filters of size $3\times3$. In all convolution and pooling layers, the \textit{stride} = 1 and \textit{padding}\footnote{Zero padding is a simple concept; it simply refers to adding zeros to end of an image to increase its length.} = 1 are considered (see section~\ref{convlayer} for more explanation regarding padding and stride). 
+For learning to count even digits problem, since we used MNIST dataset to generate our images, we considered the architecture proposed by \citeauthor{lecun1995comparison} for classic MNIST hand-written digit recognition problem \cite{lecun1995comparison}, as the base of our design. In addition, we took into account the architecture used in state-of-the-art \cite{segui2015learning}. From there, we modified the architecture to optimize the performance of the network. 
+ 
 
-\noindent the output of the second pooling layer is fed to two fully connected (inner product) layers with respectively 64 and 1 number of outputs (since the problem is approached as a regression task). Also the first fully connected layer is followed by ReLU non-linearity. The networks' parameters are set as below:
+\noindent In a similar experiment with maximum 5 digits in images, \citeauthor{segui2015learning} in \cite{segui2015learning} defined a four layers CNN with two convolutional layers for classifying even digits present in images. Each convolutional layer consist of several elements: a set of convolutional filters, ReLU non-linearities, max pooling layers and normalization layers. The first convolutional layer outputs 10 filters of dimensions $15\times15$, and the second convolution layer has 10 filters, each of size $3\times3$. Each convolution layer is followed by a max-pooling layer with a $2\times2$ kernel. The output of last pooling layer is fed to two fully-connected layers with respectively 32 and 6 number of outputs. They also used Softmax loss layer on top of their architecture to compute the multinomial logistic loss layer\footnote{This function displays a similar convergence rate to the hinge loss function, and since it is continuous, gradient descent methods can be utilized. Also, functions which correctly classify points with high confidence are penalized less. This structure is highly sensitive to outliers in the data.}. 
+
+
+\noindent However, in our implementation, due to more complexity of the images (holding almost three times more digits and of sizes $18\times18$ instead of $28\times28$ pixels), we decided to apply a deeper CNN with more parameters. Therefore, 
+
+In our network, the data layer fetches the images and labels from the disk, passes it through the first convolutional layer with 20 filters, each of size $15\times15$ followed by a ReLU non-linearity and LRN normalization layer. Then the output is max-pooled by the  kernel size of $2\times2$. This process repeats again but this time with the second convolutional layer having 50 filters of size $3\times3$. In all convolution and pooling layers, the \textit{stride} = 1 and \textit{padding}\footnote{Zero padding is a simple concept; it simply refers to adding zeros to end of an image to increase its length.} = 1 are considered (see section~\ref{convlayer} for more explanation regarding padding and stride). 
+
+\noindent the output of the second pooling layer is fed to two fully connected (inner product) layers with respectively 64 and 1 number of outputs (since the problem is approached as a regression task). Also the first fully connected layer is followed by ReLU non-linearity. 
+
+Furthermore, to optimize the model performance, the networks' hyper-parameters are set as below:
 \begin{itemize}
 \item \textbf{Learning rate:} The basic learning rate is 0.0001. However, for our experiment we chose \textit{multi-step} learning policy in which, after each \textit{stepsize}=40000 iterations, the learning rate drops by the rate of Gamma $\gamma = 0.1$. This initialization is based on rule of thumbs used in \cite{krizhevsky2012imagenet}.
 \item \textbf{Momentum:} We use momentum $\mu = 0.9$. This selection also is based on trial and error. As momentum value $\mu$ effectively multiplies the size of our updates by a factor of $\frac{1}{1-\mu}$. Hence, changes in momentum and learning rate ought to be accompanied with an inverse correlation. When momentum $\mu = 0.9$, we have an effective update size of 10 since we also drop the learning rate by the factor of Gamma $\gamma= 0.1$.
 \item \textbf{Weight decay:} Weight decay as a penalty term to the error function, has a constant value of 0.0005. This decay constant is multiplied to the sum of squared weights.
 \end{itemize}
 
-\noindent We should also mention that at the top layer of the network, we used Euclidean Loss layer to compute  the euclidean distance between the predictions and the ground truth.  Figure~\ref{fig:l2cNet} shows a scheme of the architecture.
+\noindent We should also mention that at the top layer of the network, we used Euclidean Loss layer to compute the euclidean distance between the predictions and the ground truth.  Figure~\ref{fig:l2cNet} shows a scheme of the architecture.
 \begin{figure}[H]
   \centering
    {\includegraphics[width=0.8\textwidth]{images/model2}}
@@ -141,16 +150,20 @@ For learning to count even digits problem, since we used MNIST dataset to genera
 	\label{fig:l2cNet}
 \end{figure}
 
-The architecture has been designed intuitively and based on a heuristic approach. Hence, one may be able to improve the performance by implementing a different architecture. 
+The architecture has been designed intuitively and based on a heuristic approach. Hence, one may be able to improve the performance by implementing a different architecture or with another settings for the hyper-parameters of the network. 
 
 \subsection{Crowd counting}
 \label{subsec:ucsdarch}
-For the task of counting pedestrians, we applied the same settings to a different architecture. This time, due to the more complex images than the previous task, we considered a deeper network. Here the data blobs pass through 4 convolutional layers. First convolutional layer has 4 filters, each with $5\times5$ kernel and the other 3 layers have again 4 filters but each of size $3\times3$. Similar to the previous model, each convolutional layer is followed by ReLU non-linearity layer and LRN normalization layer. Also the stride and padding values for all the convolutional layers are respectively equal to 1 and 0. 
 
+For the task of counting pedestrians, we applied the same settings of hyper-parameters to a different architecture. This time, due to the more complex images than the previous task, we decided to make the network even deeper.
+
+As a baseline, we considered state-of-the-art architecture designed by \citealt*{segui2015learning} for counting the number of pedestrians in the images. In their work, they used a five layer architecture CNN with two convolutional layers followed by three fully connected layers. Convolutional layers contain their main elements (ReLU and LRN layers), and each outputs 8 filters with kernel sizes $9\times9$ and $5\times5$ respectively. Despite the previous architectures, they applied only one max-pooling layer after the first convolutional layer in their design. Finally, three fully connected layers with number of outputs 128, 128 and 25 classify the output of the network into 25 classes (maximum pedestrians in the images) of number of people in the image. Similar to the previous task, a softmax loss layer projects the performance of the model.   
+
+\noindent However, since up to 30 pedestrians are present in our images with high amount of overlapping, we added one convolutional layer along with increasing the number of parameters in the network. In our architecture, the data blobs pass through 4 convolutional layers. First convolutional layer has 4 filters, each with $5\times5$ kernel and the other 3 layers have again 4 filters but each of size $3\times3$. Similar to the previous model, each convolutional layer is followed by ReLU non-linearity layer and LRN normalization layer. Also the stride and padding values for all the convolutional layers are respectively equal to 1 and 0. 
 
 \indent In order to not lose information, we used merely two pooling layers for the first two convolutional layers. Each pooling layer has a kernel size of $2\times2$ with $stride = 1$  and $padding = 0$. 
 
-There are three fully connected layers to regress the number of pedestrians in images. The first two fully connected layers have 16 outputs each and are connected to ReLU non-linearity layers. The last layer however, with solely one output, passes the models' prediction of the number of pedestrians to the Euclidean loss layer to calculate the sum of squares of differences of its two inputs, the true labels and predictions. In figure~\ref{fig:ucsdnet}, an illustration of this architecture has been presented.
+There are three fully connected layers to regress the number of pedestrians in images. The first two fully connected layers have 16 outputs each, and are connected to ReLU non-linearity layers. The last layer however, with solely one output, passes the models' prediction of the number of pedestrians to the Euclidean loss layer to calculate the sum of squares of differences of its two inputs, the true labels and predictions. In figure~\ref{fig:ucsdnet}, an illustration of this architecture has been presented.
 
 To the best of our knowledge and experience, the designed architectures outperform other architectures by which we examined models' performance (a different range of architectures starting from 1 up to 5 convolutional layers with different settings), while also fastening the training phase . However, apart from the basic knowledge about network architectures, hyper-parameters initialization and some rules of thumb of successful experiences in similar works, the rest of design has been done intuitively. Therefore, there would be many other ways to improve the architecture and performance of the model.  
 
