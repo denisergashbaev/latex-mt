@@ -2,7 +2,7 @@
 \chapter{Experiments and results}
 \label{sec:experiments}
 
-Prior to jumping to the final results obtained with our algorithm, this chapter will attempt to give insight into the experiments we designed to verify our hypothesis. We examine our proposed methodology on two different but related scenarios. In the former scenario, we tackle the learning to count even hand-written digits, and for the latter one, crowd counting problem is considered. This chapter gives full particulars of the experiment, presents obtained results as compared to similar works.
+Prior to jumping to the final results obtained with our algorithm, this chapter will attempt to give insight into the experiments we designed to verify our hypothesis. We examine our proposed methodology on two different but related scenarios. In the former scenario, we tackle the learning to count even hand-written digits, and for the latter one, crowd counting problem is considered. This chapter gives full particulars of the experiments, and presents obtained results as compared to similar works.
 
 \section{Learning to count Even-odd hand-written digits}
 
@@ -34,7 +34,6 @@ As discussed in chapter~\ref{subsubsec:digitarch}, for learning to count the num
 
 \begin{table}[H]
 	\centering
-			\caption{The deep CNN with 2 convolution layers to count the number of even digits.}
 	\begin{tabular}{ |p{2cm}|p{2cm}| }
 	\hline 
 	\multicolumn{2}{|c|}{\textbf{Network parameters}} \\
@@ -65,6 +64,7 @@ As discussed in chapter~\ref{subsubsec:digitarch}, for learning to count the num
 	IP2 & 1 outputs \\
 	\hline
 	\end{tabular}
+		\caption{The deep CNN with 2 convolution layers to count the number of even digits.}
 		\label{fig:digitnet}
 \end{table}
 
@@ -77,7 +77,6 @@ Among Caffe solvers, As described in section~\ref{subsec:sgd}, we use Stochastic
 
 \begin{table}[H]
 	\centering
-			\caption{The solver parameters settings for even digit counting problem.}
 	\begin{tabular}{ |p{2cm}|p{2cm}| }
 	\hline 
 	\multicolumn{2}{|c|}{\textbf{Optimization parameters}} \\
@@ -100,21 +99,21 @@ Among Caffe solvers, As described in section~\ref{subsec:sgd}, we use Stochastic
 	iterations & 1,600,000\\
 	\hline
 	\end{tabular}
-
+		\caption{The solver parameters settings for even digit counting problem.}
 		\label{tab:digitsolver}
 \end{table}
 
 
 \begin{itemize}
 \label{solv:param}
-\item \textbf{Learning rate:} The basic learning rate is 0.0001. However, for our experiment we chose \textit{multi-step} learning policy in which, after each \textit{stepsize}=40000 iterations, the learning rate drops by the rate of $\gamma = 0.1$. This initialization is based on rules of thumb used in \cite{krizhevsky2012imagenet}.
+\item \textbf{Learning rate:} After trying different initial values in range of $(10^{-6}, 1)$, we set the basic learning rate to $\alpha = 0.0001$. However, for our experiment we chose \textit{multi-step} learning policy in which, after each \textit{stepsize}=40000 iterations, the learning rate drops by the rate of Gamma $\gamma = 0.1$. This initialization is based on rules of thumb used in \cite{krizhevsky2012imagenet}.
 \item \textbf{Batch size:} Due to the non-complex and low-resolution dataset we are training on, we were able to use batches of size 256 for our training and testing phases.
-\item \textbf{Momentum:} We use momentum $\mu = 0.9$. This selection also is based one rules of thumb. Because, momentum setting $\mu$ effectively multiplies the size of our updates by a factor of $\frac{1}{1-\mu}$. Hence, changes in momentum and learning rate ought to be accompanied with an inverse correlation. When momentum $\mu = 0.9$, we have an effective update size of 10 since we also drop the learning rate by the factor of $\gamma= 0.1$.
+\item \textbf{Momentum:} We use momentum $\mu = 0.9$. Because, momentum setting $\mu$ effectively multiplies the size of our updates by a factor of $\frac{1}{1-\mu}$. Hence, changes in momentum and learning rate ought to be accompanied with an inverse correlation. When momentum $\mu = 0.9$, we have an effective update size of 10 since we also drop the learning rate by the factor of $\gamma= 0.1$.
 \item \textbf{Weight decay:} Weight decay as a penalty term to the error function, has a constant value of 0.0005. This decay constant is multiplied to the sum of squared weights.
-\item \textbf{Iterations:} Given the time and hardware we had, we managed to let the system train for 1,600,000 iterations
+\item \textbf{Iterations:} Given the time and hardware we had, we managed to let the system train for 1,600,000 iterations.
 \end{itemize}
 
-\noindent The algorithm trained on a GPU NVIDIA \cite{kirk2007nvidia} Tesla K40 \cite{lindholm2008nvidia}.It took almost 4 days to train 800,000 samples and test over 200,000 images. The learning curves of this process are shown in the figure~\ref{fig:curve}
+\noindent The algorithm trained on a GPU NVIDIA \cite{kirk2007nvidia} Tesla K40 \cite{lindholm2008nvidia}. It took almost 4 days to train 800,000 samples and test over 200,000 images. The learning curves of this process are shown in the figure~\ref{fig:curve}.
 
 \begin{figure}[H]
 	\centering
@@ -125,18 +124,48 @@ Among Caffe solvers, As described in section~\ref{subsec:sgd}, we use Stochastic
 
 \textbf{ADD EXPLANATION OF THE LEARNING CURVES}
 
-\noindent Moreover, figure~\ref{fig:feat} illustrates the features learned from one input sample at each convolutional layer in the network.
+\noindent Moreover, figure~\ref{fig:conv1tot} illustrates the filters and the output (rectified responses of the shown filters) of the first convolutional layer for one input sample in the network.
 
+\begin{figure*}[h!]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        {\includegraphics[width=0.8\textwidth]{images/conv2feat}}
+        \caption{The obtained filters.}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        {\includegraphics[width=0.8\textwidth]{images/conv1out}}
+        \caption{The output correspondent to the filters.}
+    \end{subfigure}
+    \caption{Filters and output of the first convolutional layer in the network.}
+    \label{fig:conv1tot}
+\end{figure*}
 
-\begin{figure}[H]
-	\centering
-	{\includegraphics[width=0.7\textwidth]{images/1}}
-	\caption{}
-	\label{fig:feat}
-\end{figure}
+A SHORT EXPLANATION ABOUT THE FIGURES
 
-\textbf{ADD EXPLANATION OF THE FEATURES}
+Accordingly, figure below demonstrates the filters and their corresponding output after the second convolutional layer. 
+
+\begin{figure*}[h!]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        {\includegraphics[width=0.8\textwidth]{images/conv2feat}}
+        \caption{The obtained filters.}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        {\includegraphics[width=0.8\textwidth]{images/conv2out}}
+        \caption{The output correspondent to the filters.}
+    \end{subfigure}
+    \caption{Filters and output of the second convolutional layer in the network.}
+    \label{fig:conv2tot}
+\end{figure*}
+
  
+
 %Moreover, a schematic of the model with the output of each layer is depicted in figure~\ref{fig:digitnet}.
 %%\begin{figure}[H]
 %%	\centering
