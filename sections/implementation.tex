@@ -9,14 +9,14 @@
 
 Caffe is a clean and modifiable framework for state-of-the-art deep learning algorithms and a collection of reference models. The framework is a BSD-licensed C++ library with Python and MATLAB bindings for training and deployment of general-purpose convolutional neural networks and other deep models on commodity architectures \cite{jia2014caffe}. It powers on-going research projects and large-scale industrial applications in vision, speech and multimedia by CUDA \footnote{CUDA is a parallel computing platform and application programming interface (API) model created by NVIDIA \cite{cuda}, processing over 40 million images a day on a single K40 or Titan GPU \cite{jia2014caffe}.}  GPU computation.
 
-Caffe is composed of two main components: models' architecture and design, and model optimization. In the rest of this section, we present the main components and parameters of both model implementation and optimization.
+Caffe is composed of two main components, models' architecture and design, and model optimization. In the rest of this section, we present the main components and parameters of both model implementation and optimization.
 \subsection{Model implementation and design}
 The main components of Caffe architecture are outlined below:
 \begin{enumerate}
 
 \item \textbf{Data storage:} Caffe stores and communicates data in 4-dimensional arrays called \textit{blobs}. Blobs provide a unified memory interface, holding batches of data, parameters, or parameter updates. Blobs conceal the computational overhead by synchronizing from the CPU host to the GPU device as needed. Figure~\ref{fig:blob} shows the blobs connected to a convolution layer implemented by Caffe.
 
-\todo{why top and bottom are not capitalized? source}
+
 \begin{figure}[H]
 	\centering
 	{\includegraphics[width=0.3\textwidth]{images/blob}}
@@ -42,7 +42,7 @@ Caffe supports some data sources such as LevelDB or LMDB (Lightning Memory-Mappe
 \indent Finetuning, the adaptation of an existing model to new architectures or data, is a standard method in Caffe. Caffe  finetunes the old model weights for the new task and initializes new weights as needed. This capability is essential for tasks such as knowledge transfer \cite{donahue2013decaf}, object detection \cite{girshick2014rich}, and object retrieval \cite{guadarrama2014open}, \cite{jia2014caffe}.  
 \end{enumerate}
 
-\todo{if you place image like this it's actually useless, noone is gonna read it or be able to distinguish what's written in there}
+
 \begin{figure}[H]
 	\centering
 	{\includegraphics[width=1\textwidth]{images/caffe}}
@@ -50,13 +50,13 @@ Caffe supports some data sources such as LevelDB or LMDB (Lightning Memory-Mappe
 	\label{fig:caffe}
 \end{figure}
 
-\textbf{Justification}: We decided to use Caffe as  it addresses computation efficiency problems (as likely the fastest available implementation of deep learning frameworks at the time of performing this study), adheres to software engineering best practices, providing unit tests for correctness and experimental rigor and speed for deployment. It is also a good fit for research use, due to the well-implemented modularity of the code, and the clean separation of network definition (usually the novel part of deep learning research) from actual implementation\cite{jia2014caffe}. In addition, it provides a python wrapper which exposes the solver module for easy prototyping of new training procedures. 
+\textbf{Justification}: We decided to use Caffe because, it addresses computation efficiency problems (as likely the fastest available implementation of deep learning frameworks at the time of performing this study, adheres to software engineering best practices, providing unit tests for correctness and experimental rigor and speed for deployment. It is also well-suiteda gr research use, due to the well-implemented modularity of the code, and the clean separation of network definition (usually the novel part of deep learning research) from actual implementation\cite{jia2014caffe}. In addition, it provides a python wrapper which exposes the solver module for easy prototyping of new training procedures. 
 
 \subsection{Model Optimization}
 
 Our work in general is an optimization problem since we project the results as loss functions we try to minimize. For this reason, model optimization methods have a critical impact on the performance of the model. Since Caffe provides several optimization methods, in this section we briefly describe merely optimization methods and \textit{hyper-parameters}\footnote{Hyper-parameters govern the underlying system on a "higher level" than the primary parameters of interest. They are not model parameters that are learned during training phase and instead, they are set by the designer a priori.} incorporated in our proposed algorithm.  
 
-\indent In Caffe, the \textit{Solver} file \todo{is it a file?} orchestrates model optimization by coordinating the network's forward inference and backward gradients to form parameter updates that attempt to improve the loss. 
+\indent In Caffe, \textit{Solver} file ptimization by coordinating the network's forward inference and backward gradients to form parameter updates that attempt to improve the loss. 
 %short description about sgd with ref 
 
 \subsubsection{Batch size}
@@ -70,9 +70,10 @@ Since Caffe is trained using stochastic gradient descent, at each iteration, it 
 Learning rate is a decreasing function of time. It's a common practice to decrease the base learning rate (base\_lr) as the optimization/learning process progresses. In Caffe, different learning policies exist among which we tried the followings:
 \begin{itemize}
 \item \textit{\textbf{Fixed}:} which always returns the base learning rate.
-\item \textit{\textbf{inv}:} which returns $$base\_lr \times (1 + \gamma \times iteration) ^ {(-Power)}$$ where:\\\textit{$\gamma$}: the factor learning rate drops by.\\\textit{power}: another parameter to compute the learning rate.
 
-\item \textit{\textbf{step}:} that returns $$base\_lr \times \gamma ^ {floor(\frac{iteration}{step})}$$ where:\\ \textit{$\gamma$}: the factor learning rate drops by.\\\textit{step}: the number of iteration at which the learning rate drops. 
+\item \textit{\textbf{inv}:} which returns $$base\_lr \times (1 + \gamma \times iteration) ^ {(-Power)}$$ where:\\\textit{ $\gamma$: the factor learning rate drops by.}\\\textit{power: another parameter to compute the learning rate.}
+
+\item \textit{\textbf{step}:} that returns $$base\_lr \times \gamma ^ {floor(\frac{iteration}{step})}$$ where:\\ \textit{$\gamma$: the factor learning rate drops by.}\\\textit{step: the number of iteration at which the learning rate drops.} 
 \item \textit{\textbf{multi-step}:} similar to step but it allows non uniform steps defined by step value.
 \end{itemize}
 Although there are numerous empirical studies and rules of thumb to treat learning rate \cite{senior2013empirical,yu1995dynamic,minai1990acceleration}, basic learning rate and learning policy are highly problem-dependent.  
@@ -80,7 +81,7 @@ Although there are numerous empirical studies and rules of thumb to treat learni
 \subsubsection{Weight Decay}
 
 
-As a part of BP \todo{need to abbreviate?} algorithm and a subset of regularization methods, \textit{weight decay} adds a penalty term to the error function by multiplying weights to a factor slightly less than 1 after each update. 
+As a part of Bac a subset of regularization methods, \textit{weight decay} adds a penalty term to the error function by multiplying weights to a factor slightly less than 1 after each update. 
 
  It has been observed in numerical simulations that a weight decay can improve generalization in a feed-forward neural network. It is proven that a weight decay has two effects in a linear network. Firstly, it suppresses any irrelevant components of the weight vector by choosing the smallest vector that solves the learning problem. Secondly, if the size is chosen correctly, a weight decay can suppress some of the effects of static noise on the targets, which improves generalization significantly \cite{moody1995simple}. 
 
@@ -114,25 +115,50 @@ The number of iterations plays an important role in the training process. iterat
 
 \section{The architecture}
 \label{imparch}
-Having Caffe platform introduced, we propose the designed networks for two \todo{only two? you prob mean not the small experiments -- specify}experiments we did regarding learning to count problems.
 
+Having Caffe platform introduced, we propose the designed networks for two 
 In learning object features or representations for vision tasks and by the use of CNN, the depth of network plays a crucial role. The deeper the model, the better it learns. However, issues like overfitting\footnote{Overfitting occurs when a statistical model describes random error or noise instead of the underlying relationship, and vice versa for underfitting. } and underfitting should not be left neglected.   
 Therefore, in this section, networks' settings and architectures for even-digits and crowd counting problems will be described separately. 
 
 \subsection{Even digit counting}
 \label{subsubsec:digitarch}
 
-For learning to count even digits problem, since we used MNIST dataset to generate our images, we considered the architecture proposed by \citeauthor{lecun1995comparison} for classic MNIST hand-written digit recognition problem \cite{lecun1995comparison}, as the base of our design.\todo{since you take as a base, you should describe it in detail, also an image. actually a comparative table between all 3 base architectures would be nice i think} In addition, we took into account the architecture used in state-of-the-art \cite{segui2015learning}. From there, we modified the architecture to optimize the performance of the network. 
+For learning to count even digits problem, since we used MNIST dataset to generate our images, we considered the architecture proposed by \citeauthor{lecun1995comparison} for classic MNIST hand-written digit recognition problem \cite{lecun1995comparison}, as the base of our design. In addition, we took into account the architecture used in state-of-the-art \cite{segui2015learning}. From there, we modified the architecture to optimize the performance of the network. 
  
 
-\noindent In a similar experiment with maximum 5 digits in images, \citeauthor{segui2015learning} in \cite{segui2015learning} defined a four layers CNN with two convolutional layers for classifying even digits present in images. Each convolutional layer consist of several elements: a set of convolutional filters, ReLU non-linearities, max pooling layers and normalization layers. The first convolutional layer outputs 10 filters of dimensions $15\times15$, and the second convolution layer has 10 filters, each of size $3\times3$. Each convolution layer is followed by a max-pooling layer with a $2\times2$ kernel. The output of last pooling layer is fed to two fully-connected layers with respectively 32 and 6 number of outputs. They also used Softmax loss layer on top of their architecture to compute the multinomial logistic loss layer\footnote{This function displays a similar convergence rate to the hinge loss function, and since it is continuous, gradient descent methods can be utilized. Also, functions which correctly classify points with high confidence are penalized less. This structure is highly sensitive to outliers in the data.}. 
+\noindent In a similar experiment with maximum 5 digits in images, \citeauthor{segui2015learning} in \cite{segui2015learning} defined a four layers CNN with two convolutional layers for classifying even digits present in images. Each convolutional layer consist of several elements: a set of convolutional filters, ReLU non-linearities, max pooling layers and normalization layers. The first convolutional layer outputs 10 filters of dimensions $15\times15$, and the second convolution layer has 10 filters, each of size $3\times3$. Each convolution layer is followed by a max-pooling layer with a $2\times2$ kernel. The output of last pooling layer is fed to two fully-connected layers with respectively 32 and 6 number of outputs. They also used Softmax loss layer on top of their architecture to compute the multinomial logistic loss layer\footnote{This function displays a similar convergence rate to the hinge loss function, and since it is continuous, gradient descent methods can be utilized. Also, functions which correctly classify points with high confidence are penalized less. This structure is highly sensitive to outliers in the data.}. Table~\ref{santil2c} presents the main components of the network designed by \cite{segui2015learning}. 
 
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ |p{2cm}|p{2cm}| }
+	\hline 
+	\multicolumn{2}{|c|}{\textbf{Network parameters}} \\
+	\hline
+	\hline
+	\textbf{Layers} & \textbf{setting }\\
+	\hline
+	Conv1 & $10\times15\times15$\\
+	\hline
+	Pool1    & $max(2\times2)$ \\
+	\hline
+	Conv2 & $10\times3\times3$\\
+	\hline
+	Pool2 &    $max(2\times2)$ \\
+	\hline
+	FC1 & 32 outputs \\
+	\hline
+	FC2 & 6 outputs \\
+	\hline
+	\end{tabular}
+		\caption{The deep CNN proposed by \cite{segui2015learning} for learning the number of even digits present in the images.}
+		\label{santil2c}
+\end{table}
+ 
 
-\noindent However, in our implementation, due to higher complexity \todo{due to `more complexity' is wrong -- because complexity is a noun not adj in this case}of the images (holding almost three times more digits and of sizes $18\times18$ instead of $28\times28$ pixels), we decided to apply a deeper CNN with more parameters. Therefore, \todo{just `Therefore?'}
-
+\noindent However, in our implementation, due to higher complexits), we decided to apply a deeper CNN with more parameters. 
 In our network, the data layer fetches the images and labels from the disk, passes it through the first convolutional layer with 20 filters, each of size $15\times15$ followed by a ReLU non-linearity and LRN normalization layer. Then the output is max-pooled by the  kernel size of $2\times2$. This process repeats again but this time with the second convolutional layer having 50 filters of size $3\times3$. In all convolution and pooling layers, the \textit{stride} = 1 and \textit{padding}\footnote{Zero padding is a simple concept; it simply refers to adding zeros to end of an image to increase its length.} = 1 are considered (see section~\ref{convlayer} for more explanation regarding padding and stride). 
 
-\noindent The output of the second pooling layer is fed to two fully connected (inner product) layers with respectively 64 and 1 number of outputs (since the problem is approached as a regression task). Also the first fully connected layer is followed by ReLU non-linearity. 
+\noindent the output of the second pooling layer is fed to two fully connected (inner product) layers with respectively 64 and 1 number of outputs (since the problem is approached as a regression task). Also the first fully connected layer is followed by ReLU non-linearity. 
 
 Furthermore, to optimize the model performance, the networks' hyper-parameters are set as below:
 \begin{itemize}
@@ -142,7 +168,6 @@ Furthermore, to optimize the model performance, the networks' hyper-parameters a
 \end{itemize}
 
 \noindent We should also mention that at the top layer of the network, we used Euclidean Loss layer to compute the euclidean distance between the predictions and the ground truth.  Figure~\ref{fig:l2cNet} shows a scheme of the architecture.
-\todo{wow, that's a very shitty quality of image ;). do it yourself in google drawings, for instance}
 \begin{figure}[H]
   \centering
    {\includegraphics[width=0.8\textwidth]{images/model2}}
@@ -158,7 +183,34 @@ The architecture has been designed intuitively and based on a heuristic approach
 
 For the task of counting pedestrians, we applied the same settings of hyper-parameters to a different architecture. This time, due to the more complex images than the previous task, we decided to make the network even deeper.
 
-As a baseline, we considered state-of-the-art architecture designed by \citealt*{segui2015learning} for counting the number of pedestrians in the images. In their work, they used a five layer architecture CNN with two convolutional layers followed by three fully connected layers. Convolutional layers contain their main elements (ReLU and LRN layers), and each outputs 8 filters with kernel sizes $9\times9$ and $5\times5$ respectively. Despite the previous architectures, they applied only one max-pooling layer after the first convolutional layer in their design. Finally, three fully connected layers with number of outputs 128, 128 and 25 classify the output of the network into 25 classes (maximum pedestrians in the images) of number of people in the image. Similar to the previous task, a softmax loss layer projects the performance of the model.   
+As a baseline, we considered state-of-the-art architecture designed by \citealt*{segui2015learning} for counting the number of pedestrians in the images. In their work, they used a five layer architecture CNN with two convolutional layers followed by three fully connected layers. Convolutional layers contain their main elements (ReLU and LRN layers), and each outputs 8 filters with kernel sizes $9\times9$ and $5\times5$ respectively. Despite the previous architectures, they applied only one max-pooling layer after the first convolutional layer in their design. Finally, three fully connected layers with number of outputs 128, 128 and 25 classify the output of the network into 25 classes (maximum pedestrians in the images) of number of people in the image. Similar to the previous task, a softmax loss layer projects the performance of the model. Table~\ref{santiarch} describes a summary of their network.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ |p{2cm}|p{2cm}| }
+	\hline 
+	\multicolumn{2}{|c|}{\textbf{Network parameters}} \\
+	\hline
+	\hline
+	\textbf{Layers} & \textbf{setting }\\
+	\hline
+	Conv1 & $8\times9\times9$\\
+	\hline
+	Pool1    & $max(2\times2)$ \\
+	\hline
+	Conv2 & $8\times5\times5$\\
+	\hline
+	FC1 & 128 outputs \\
+	\hline
+	FC2 & 128 outputs \\
+	\hline
+	FC3 & 25 outputs \\
+	\hline
+	\end{tabular}
+		\caption{The deep CNN proposed by \citealt{segui2015learning} for learning the number of pedestrians in a walkway.}
+		\label{santiarch}
+\end{table}
+ 
 
 \noindent However, since up to 30 pedestrians are present in our images with high amount of overlapping, we added one convolutional layer along with increasing the number of parameters in the network. In our architecture, the data blobs pass through 4 convolutional layers. First convolutional layer has 4 filters, each with $5\times5$ kernel and the other 3 layers have again 4 filters but each of size $3\times3$. Similar to the previous model, each convolutional layer is followed by ReLU non-linearity layer and LRN normalization layer. Also the stride and padding values for all the convolutional layers are respectively equal to 1 and 0. 
 
