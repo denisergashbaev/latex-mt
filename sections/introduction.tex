@@ -13,7 +13,8 @@ Artificial intelligence and computer vision share topics such as pattern recogni
 This work puts forward several objectives:
 \begin{enumerate}
 
-\item To abate extensive highly-specialized feature detection efforts by substituting deep CNN for learning features in problems concerning counting object of interest where no explicit information about what we are counting is given to the system, except for the object's multiplicity in the image.\todo{this first objective just too long and not readable. abate is is too fancy and i think not appropriate in the context}
+\item To abate extensive highly-specialized feature detection efforts, by substituting deep CNN for learning features in problems concerning counting object of interest, where no explicit information about what we are counting is given to the system, except for the object's multiplicity in the image.
+%\todo{this first objective just too long and not readable. abate is is too fancy and i think not appropriate in the context}
 
 \item To prevail over exhaustive data annotation required for fully supervised learning to count tasks (when using DL algorithms), by introducing synthetically created and fully automatically annotated datasets for training deep CNNs.   
 
@@ -24,21 +25,23 @@ This work puts forward several objectives:
 
 \end{enumerate}
 \section{Contributions}
-Following the course of achieving fore-mentioned objectives, this dissertation contains the following contributions: \todo{really? please improve it -- fore-mentioned  doesn't even exist as a word. More of a transition here needed... how you've achieved that, what you've desined...}
+Following the course of achieving aforementioned objectives, we created and designed different datasets and algorithms to provide an exhaustive analysis. Hence, this dissertation contains the following contributions: 
+%\todo{really? please improve it -- fore-mentioned  doesn't even exist as a word. More of a transition here needed... how you've achieved that, what you've desined...}
 
 \begin{enumerate}
 	\item It proposes the problem of object representation as an indirect learning problem casted as learning to count strategy. The devised algorithm is capable of counting the number of even hand-written digits in images. Moreover, the model is able to be applied for different but related tasks such as even-odd digit recognition, to demonstrate the capability of the learned features of the network for classifying digits with no direct supervision while training. 
 	
-	\item It provides \todo{who `it', why provides and not proposes/devises, suggests an architecture...}a deep convolutional neural network for counting the number of pedestrians in a walkway that does not depend on object detection or feature tracking. The model is privacy-preserving in a sense that instead of tracking people, it learns the individual's features.
-	
-	\item It provides \todo{`it provides' again??} two synthetically created datasets for the proposed counting problems. The first set of images contains hand-written digits for counting the number of even digits in the images. The second dataset consists of pedestrians in a walkway, to train a counting deep convolutional neural network which is adequate for apprehending the underlying representations.
+	%\todo{who `it'? THE DISSERTATION, why provides and not proposes/devises, suggests an architecture...}
+	\item It suggests a deep convolutional neural network for counting the number of pedestrians in a walkway that does not depend on object detection or feature tracking. The model is privacy-preserving in a sense that instead of tracking people, it learns the individual's features.
+	%\todo{`it provides' again?? CHILL BITCH SORRY MY BAD XD}
+	\item It provides two synthetically created datasets for the proposed counting problems. The first set of images contains hand-written digits for counting the number of even digits in the images. The second dataset consists of pedestrians in a walkway, to train a counting deep convolutional neural network which is adequate for apprehending the underlying representations.
 	 
 
 	%\item It provides a synthetically generated and automatically labeled dataset of pedestrians using unlabeled University of California San Diego(UCSD) pedestrian dataset used in \cite{mahadevan2010anomaly}, to train a counting deep convolutional neural network which is adequate for apprehending the underlying representations of the learned features. To this end, we describe a counting problem for a synthetically created dataset of hand-written digits to demonstrate the capability of the internal representation of the network for classifying digits with no direct supervising while training. 
 	\item The proposed model is able to count the number of people in the real and unseen dataset using the features learned by training the network on synthetic dataset. To our knowledge, this is the first crowd counting system trained by synthetic data that successfully operates on real data. 
 
-	\todo{you are not a robot. put more sentences in here... like we devised a new validation system since none exists blah-blah. does it even belong in here?}
-	\item Validation of our proposal is done in the following steps:
+	%\todo{you are not a robot. put more sentences in here... like we devised a new validation system since none exists blah-blah. does it even belong in here?}
+	\item Finally, we evaluate our proposal in different aspects regarding our objectives. In addition, fair comparisons between our methodology and different state-of-the-arts will demonstrate our improvements. In general, the validation of our proposal is done in the following steps:
 
 	\begin{itemize}
 		\item First, we learn to count even hand-written digits in images. Then, we evaluate the learned features of the proposed model on an even-odd digits recognition task. 
