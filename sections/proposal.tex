@@ -2,19 +2,61 @@
 \chapter{Proposal}
 \label{sec:proposal}
 \noindent
-This master thesis proposes an application of deep CNNs to the task of counting objects in the image. The developed systems will address some of the issues common to other object detection algorithms. These issues include:
+
+This master thesis presents an analysis on the synthetic data generation procedure as a feasible alternative for lacking or missing real data, as well as proposes an application of deep convolutional neural networks for the task of counting objects in the images. The developed systems will address some of the issues common to other object detection algorithms. These issues include: 
+
+%This master thesis proposes an application of deep CNNs to the task of counting objects in the image. The developed systems will address some of the issues common to other object detection algorithms. These issues include:
 \begin{itemize}
-	\item Being prone to error in noisy or crowded scenes with a noticeable occlusion. 
-	\item Establishing the viability of a privacy-preserving approach. 
+	
+	\item Obtaining poor results due to lack of data. 
 	\item Painstaking hand-crafted image features which are highly dependent on the object class. 
 	\item Scrupulous data annotation for manifold data. 
+	\item Establishing the viability of a privacy-preserving approach. 
+	\item Being prone to error in noisy or crowded scenes with a noticeable occlusion. 
+
 \end{itemize} 
 In addition, the state-of-the-art \cite{segui2015learning} technology lacks applicability for real-world counting problems due to being tested only on synthetic dataset.
 
 The novelty of our approach compared to the state-of-the-art is that we hypothesize that features learned by training a  deep CNN with synthetic dataset, are representative enough to count the number of object of interest in a real dataset. We tackle this task as a regression problem. 
 To the best of our knowledge, the proposed work would be the first one in which a counting system trained with synthetic images is able to be incorporated in real-world similar counting problems.
 
-Henceforth, in the rest of this chapter, we justify our methodology along with a comparison to state-of-the-art from different aspects including method selection, architecture, dataset and its application.   
+Henceforth, in the rest of this chapter, we justify both our synthetic data generation process and our proposed methodology along with a comparison to state-of-the-art from different aspects including method selection and architecture.   
+
+%Henceforth, in the rest of this chapter, we justify our methodology along with a comparison to state-of-the-art from different aspects including method selection, architecture, dataset and its application.   
+
+\section{Datasets} 
+
+In this section, starting with a short review of data for DCNN in computer vision, we express a succinct reasoning on the benefit of synthetically generated datasets we used in our experiments. Later on, in the implementation section, the specifications and preprocessing phases regarding each dataset will be described in details. 
+
+%In this section, starting with a short review of data for DCNN in computer vision, we express a succinct reasoning about the datasets we used in our experiments. Later on, in the implementation section, the specifications and preprocessing phases regarding each dataset will be described in detail. 
+
+In spite of remarkable  performance of DCNN in some simple recognition benchmarks \cite{cirecsan2011convolutional, ciresan2015multi, wan2013regularization, cirecsan2012multi}, until recently the models' performances were poor at more complex datasets  \cite{griffin2007caltech} due to lack of labeled input samples to train the network parameters with. It was with the creation of ImageNet \cite{deng2009imagenet} and GPU implementation \cite{krizhevsky2012imagenet} ($50\times$ speedup over CPU) that efficiency of deep CNN in vision tasks became crystal clear.
+
+However, there are still many areas such as crowd counting in which large training set is either missing or not publicly available due to privacy-preserving policies. In these types of problems, synthetic data generation can be a well-suited surrogate for the missing actual data.  Access to unsupervised images and also the existence of powerful image processing tools enable us to create highly realistic images. Hence, in this work we propose two synthetically created datasets related to proposed learning to count problems for the application of deep convolutional neural networks. First learning to count even-digits dataset and then a set of images for counting the number of pedestrians present in the images.   
+
+The proposed synthetic datasets enable us to apply deep convolutional neural networks for problems concerning learning to count the number of object of interest. Moreover, in the case of counting the number of pedestrians, it preserves the individuals' privacy since the data is synthetic and not real. Consequently, the application of DCNNs lead to easier feature detection process and improvement of the system's performance. 
+
+\subsection{Learning to Count Even-digits Dataset}
+
+In this study, we introduce a synthetic dataset using MNIST dataset. The MNIST database of handwritten digits, has a training set of 60,000 examples, and a test set of 10,000 examples. The digits have been size-normalized and centered in a fixed-size image \cite{lecun1999mnist}. In the MNIST dataset, each image contains one hand-written digit of dimension $28\times28$. Figure~\ref{fig:mnistimages} shows a selection of MNIST dataset images.
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=0.7\textwidth]{images/1}}
+	\caption{A selection of MNIST images of hand-written digits.}
+	\label{fig:mnistimages}
+\end{figure}
+
+
+\noindent For the first empirical experience in our work, we created a large set of images each containing up to 15 MNIST digits. Images are automatically labeled with the number of even digits in each image. Using this dataset, we can examine the digits' representations learned by our deep CNN are not dependent on the specific task we are dealing with. It is done by using our model's learned features for other tasks and analyze the results. 
+
+\subsection{Synthetic crowd counting dataset}
+
+As we needed a large dataset to train all the parameters of our model for the second task,counting the number of pedestrians, we synthetically created a large dataset of pedestrians in a walkway with maximum 29 people in each image. Achieving success on crowd counting system using CNN on our synthetic dataset, we save enormous amount of time for data annotation and feature detection. 
+
+\subsection{UCSD crowd counting dataset}
+
+However, we need our model to perform well in practice rather than in theoretical experiments. Therefore, we used UCSD crowd counting dataset \cite{chan2008privacy} to validate the performance of our model on it and also make a comparison with their system in \cite{chan2008privacy} to see if we can obtain better results while decreasing feature extraction and labeling efforts. In addition, if we succeed to attain reasonable results on the real UCSD dataset, we have overcome one of the main restrictions of deep learning algorithms usage, which is the necessity for the existence of large amount of data.     
 
 
 \section{Method selection}
@@ -65,55 +107,3 @@ And finally on top of the model, we put fully connected layers in order to do ei
 \end{figure}
 
 The above explanation describes the reasons behind the selected architecture and how it can help us to overcome the deficiencies of previous related works. However, the most important fact regarding CNNs' capability to learn features is the deepness and settings of the architecture which will be attentively addressed later on (chapter~\ref{imparch}).  
-
-\section{Datasets} 
-
-In this section, starting with a short review of data for CNN in computer vision, we express a succinct reasoning about the datasets we used in our experiments. Later on, in the implementation section, the specifications and preprocessing phases regarding each dataset will be described in detail. 
-
-In spite of remarkable  performance of CNN in some simple recognition benchmarks \cite{cirecsan2011convolutional, ciresan2015multi, wan2013regularization, cirecsan2012multi}, until recently the models' performances were poor at more complex datasets  \cite{griffin2007caltech} due to lack of labeled input samples to train the network parameters with. It was with the creation of ImageNet \cite{deng2009imagenet} and GPU implementation \cite{krizhevsky2012imagenet} ($50\times$ speedup over CPU) that efficiency of deep CNN in vision tasks became crystal clear.
-
-\subsection{MNIST pool of digits dataset}
-
-In this study, we introduce a synthetic dataset using MNIST dataset. The MNIST database of handwritten digits, has a training set of 60,000 examples, and a test set of 10,000 examples. The digits have been size-normalized and centered in a fixed-size image \cite{lecun1999mnist}. In the MNIST dataset, each image contains one hand-written digit of dimension $28\times28$. Figure~\ref{fig:mnistimages} shows a selection of MNIST dataset images.
-
-\begin{figure}[H]
-	\centering
-	{\includegraphics[width=0.7\textwidth]{images/1}}
-	\caption{A selection of MNIST images of hand-written digits.}
-	\label{fig:mnistimages}
-\end{figure}
-
-
-\noindent For the first empirical experience in our work, we created a large set of images each containing up to 15 MNIST digits. Images are automatically labeled with the number of even digits in each image. Using this dataset, we can examine the digits' representations learned by our deep CNN are not dependent on the specific task we are dealing with. It is done by using our model's learned features for other tasks and analyze the results. 
-
-\subsection{Synthetic crowd counting dataset}
-
-As we needed a large dataset to train all the parameters of our model for the second task,counting the number of pedestrians, we synthetically created a large dataset of pedestrians in a walkway with maximum 29 people in each image. Achieving success on crowd counting system using CNN on our synthetic dataset, we save enormous amount of time for data annotation and feature detection. 
-
-\subsection{UCSD crowd counting dataset}
-
-However, we need our model to perform well in practice rather than in theoretical experiments. Therefore, we used UCSD crowd counting dataset \cite{chan2008privacy} to validate the performance of our model on it and also make a comparison with their system in \cite{chan2008privacy} to see if we can obtain better results while decreasing feature extraction and labeling efforts. In addition, if we succeed to attain reasonable results on the real UCSD dataset, we have overcome one of the main restrictions of deep learning algorithms usage, which is the necessity for the existence of large amount of data.     
-
-
-%
-%\begin{equation} \label{eq:curvilinear_energy}
-%\begin{split}
-%I \colon & \mathbb{R}^{D} \phantomarrow{AAAA} {}\mathbb{S}^1\times\mathbb{R}^2\\
-%& \phantomarrow{AAA}{p} I(p) =(h,s,i)
-%\end{split}
-%\end{equation}
-%
-%\begin{figure}[h!]
-%	\centering
-%	\begin{minipage}{0.45\textwidth}
-%		\centering
-%		{\includegraphics[width=0.8\textwidth]{images/1}} % first figure itself
-%		\caption{First step of the iteration in the segmentation. The initial cage in blue, the contour in white and the next cage in green with ten times the learning rate of step 1.} \label{fig:image_in_question}
-%	\end{minipage}\hfill
-%	\begin{minipage}{0.5\textwidth}
-%		\centering
-%		{\includegraphics[width=1.\textwidth]{images/1}}
-%		\caption{Contribution of the points in a slice of image~\ref{fig:image_in_question} on the direction of the gradient with respect to $v_i$ of the x axis.}\label{fig:plot_in_question}
-%	\end{minipage}
-%	\centering}
-%\end{figure}
