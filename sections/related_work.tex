@@ -1,5 +1,4 @@
 \newpage
-<<<<<<< HEAD
 \chapter{State of the Art Review}
 \label{sec:stateoftheart}
 
@@ -7,34 +6,73 @@ In this chapter, we present a review of state-of-the-arts regarding synthetic da
 
 \section{Synthetic Data Generation} 
 
-The main purpose of generating synthetic datasets has been to protect the privacy and confidentiality of the actual data \cite{yao2015synthetic,phua2010comprehensive}, since it does not hold any personal information and cannot be traced back by any individual. In addition, synthetic data are used to meet specific needs or certain conditions that may not be found in the original, real data. This can be useful when designing any type of system because the synthetic data are used as a simulation or as a theoretical value, situation, etc. For example, in \cite{hofmeyr1998intrusion}, the authors introduce a method for detecting intrusions where the experiment is done using synthetic data. This data is a representation of the authentic data and may include intrusion instances that are not found in the authentic data. The synthetic data allows the software to recognize these situations and react accordingly.
+The main purpose of generating synthetic datasets has been to protect the privacy and confidentiality of the actual data \cite{yao2015synthetic,phua2010comprehensive}, since it does not hold any personal information and cannot be traced back by any individual. Problems such as fraud detection \cite{phua2010comprehensive}, or health care \cite{yao2015synthetic}, are normally tackled by the use of synthetic data. These datasets might seem to be "made up" data, however, there are certain algorithms and generators that are designed to create realistic data \cite{yao2015synthetic,arasu2012synthetic}. 
 
-Furthermore, synthetic data have been applied by recent learning algorithms as a viable alternative to complement the real data where the real data is not publicly available, or quite difficult to collect \cite{hu2016frankenstein}. These datasets are generated at a high realistic state and preserve high levels of accuracy compared to the original data. For instance, in \cite{gaur2015generation}, the authors improve the performance by creating additional synthetic training data due to the lack of real dataset. Moreover, \citealt*{jaderberg2014synthetic} introduces a framework for natural scene text recognition solely by training deep convolutional neural network with synthetically generated and labeled data.
+In addition, synthetic data are often used to meet specific needs or certain conditions that may not be found in the original, real data. This can be useful when designing any type of system because the synthetic data are used as a simulation or as a theoretical value, situation, etc. For example, in \cite{hofmeyr1998intrusion}, the authors introduce a method for detecting intrusions where the experiment is done using synthetic data. This data is a representation of the authentic data and may include intrusion instances that are not found in the authentic data. The synthetic data allows the software to recognize these situations and react accordingly.
 
-\noindent The use of synthetic data has a longstanding history in computer vision and more specifically for object detection problems. For example, \cite{shotton2013real} used synthetic dataset to propose a method for human pose prediction while In \cite{rematas2014image}, the author proposed a technique to improve novel-view synthesis for images using the structural information\footnote{Structural information theory (SIT) is a theory about human perception and in particular about visual perceptual organization, which is the neuro-cognitive process that enables us to perceive scenes as structured wholes consisting of objects arranged in space.} from 3D models. 
+Furthermore, in computer vision, the use of synthetic images has a longstanding history, as in \citeyear{cappelli2000synthetic}, \citealt*{cappelli2000synthetic} presents an approach to synthetic fingerprint generation on the basis of some mathematical models that describe the main features of real finger prints. The process of generating finger prints follows a simple course (as shown in Figure~\ref{finger}). First, a fingerprint shape, a directional map and a density map are generated separately; then these three features are combined to obtain a fingerprint pattern, which is finally more realistic by adding noise.
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=0.5\textwidth]{images/finger}}
+	\caption{The basic idea of the synthetic fingerprint generation approach \cite{cappelli2000synthetic}.}
+	\label{finger}
+\end{figure}
+
+
+More recently, after the success of deep convolutional neural networks in various vision tasks concerning object detection or classification, generation and use of synthetic datasets has been frequently considered. As a viable alternative to complement the real data, synthetically generated training sets can remarkably improve the performance of DCNNs when the real data is limited \cite{eggert2015benefit,hu2016frankenstein,jaderberg2014synthetic,gaur2015generation}. For example, in \cite{eggert2015benefit}, synthetic images are generated to be fed to a DCNN in order to learn how to detect company logo in the absence of a large training set. In order to generate the images, first they select a random perspective transform and warp both image and mask accordingly. Then, they modify the color of the warped image to provide a larger visual variety. Later, the logo is randomly blurred by convolution with a Gaussian kernel (with different $\sigma$ values) to simulate different scales. Finally, the background is removed of the logo and the warped and color-modified logo into a new image which contains no logo. This process is shown in figure~\ref{cocacola}.
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=0.9\textwidth]{images/cocacola}}
+	\caption{An example of synthetically generated images in \cite{eggert2015benefit}. Starting from a base image, a random perspective transform is applied,  followed by gaussian blur (not shown),  color augmentation (exaggerated for viewing purposes) and background replacement.}
+	\label{cocacola}
+\end{figure}
+
  
-After the success of deep learning algorithms in solving various problems in computer vision by obtaining cutting-edge results, generate and use of synthetic data has been considered for training different learning algorithms as a viable alternative to complement the real data \cite{gaur2015generation,jaderberg2014synthetic}. In particular, convolutional neural networks have been used to learn from synthetically created datasets \cite{rematas2014image,gaur2015generation,jaderberg2014synthetic}. As one of the most recent approaches, \citeauthor*{segui2015learning} in \cite{segui2015learning} proposed synthetic data generation to counter lack of data issue for learning to count the number of objects in images using deep convolutional neural networks. In their work, they took advantage of existent unlabeled and labeled datasets to generate realistic synthetic images representative of the actual images. The authors introduce two counting problems, counting number of even-digits in images, and counting the amount of pedestrians in a walkway. They do their experiment solely by training deep convolutional neural networks on synthetic datasets.  
+%Furthermore, synthetic data have been applied by recent learning algorithms as a viable alternative to complement the real data where the real data is not publicly available, or quite difficult to collect \cite{hu2016frankenstein}. These datasets are generated at a high realistic state and preserve high levels of accuracy compared to the original data. For instance, in \cite{gaur2015generation}, the authors improve the performance by creating additional synthetic training data due to the lack of real dataset. Moreover, \citealt*{jaderberg2014synthetic} introduces a framework for natural scene text recognition solely by training deep convolutional neural network with synthetically generated and labeled data.
+
+%\noindent The use of synthetic data has a longstanding history in computer vision and more specifically for object detection problems. For example, \cite{shotton2013real} used synthetic dataset to propose a method for human pose prediction while In \cite{rematas2014image}, the author proposed a technique to improve novel-view synthesis for images using the structural information\footnote{Structural information theory (SIT) is a theory about human perception and in particular about visual perceptual organization, which is the neuro-cognitive process that enables us to perceive scenes as structured wholes consisting of objects arranged in space.} from 3D models. 
+ 
+%After the success of deep learning algorithms in solving various problems in computer vision by obtaining cutting-edge results, generate and use of synthetic data has been considered for training different learning algorithms as a viable alternative to complement the real data \cite{gaur2015generation,jaderberg2014synthetic}. In particular, convolutional neural networks have been used to learn from synthetically created datasets \cite{rematas2014image,gaur2015generation,jaderberg2014synthetic}. 
+Moreover, As one of the most recent approaches, \citeauthor*{segui2015learning} in \cite{segui2015learning} proposed synthetic data generation to counter lack of data issue for learning to count the number of objects in images using deep convolutional neural networks. In their work, they took advantage of existent unlabeled and labeled datasets to generate realistic synthetic images representative of the actual images. The authors introduce two counting problems, counting number of even-digits in images, and counting the amount of pedestrians in a walkway. In the former problem, they incorporated real labeled hand-written digits to make images with up to five digits in the image. Figure~\ref{digped} depicts an example of generated images in \cite{segui2015learning}.
+
+
+\begin{figure*}[h!]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        {\includegraphics[width=0.6\textwidth]{images/digdigdig}}
+        \caption{Synthetic image for even digits counting problem.}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        {\includegraphics[width=0.6\textwidth]{images/pedpedped}}
+        \caption{Synthetic image for counting the number of pedestrians.}
+    \end{subfigure}
+    \caption{An example of synthetically generated images by \citealt*{segui2015learning}.}
+    \label{backback}
+\end{figure*}
+
+For the latter one, they used an unlabeled set of images (video frames) of pedestrians in a walkway. The creation of images is as follows: First, a simple background subtraction technique is used. Then a Gaussian filter is applied across the backgrounds to smooth out motion effects. Afterwards, the candidate pedestrians are extracted subtracting the background. Background noise and imperfect shapes are handled using mathematical morphology operators. At last, new artificial images are synthesized by means of a composition of backgrounds and pedestrians' sub-images. Each image contains up to 25 pedestrians \cite{segui2015learning}.     
+  
 % start with an intro about synthetic datasets
 % relate it to images and the way they generate it 
 % mention the works in dl and recent papers
 
 \section{Feature Detection Algorithms} 
 
-\noindent Counting the number of an object of interest in an image can be approached from two different perspectives, either training an object detector, or training an object counter \cite{segui2015learning}. In the field of object detection, numerous works have been previously proposed \cite{paragios2001mrf, cho1999neural, regazzoni1996distributed, davies1995crowd, kong2005counting, marana1998efficacy, viola2004robust}. Most of these research works follow a taxonomy which consists of three paradigms underneath to count the objects:
-=======
-\chapter{State of the art review}\todo{all caps}
-
-\label{sec:stateoftheart}
 Counting the number of an object of interest in an image can be approached from two different perspectives: either training an object detector, or training an object counter \cite{segui2015learning}. In the field of object detection, numerous works have been previously proposed \cite{paragios2001mrf, cho1999neural, regazzoni1996distributed, davies1995crowd, kong2005counting, marana1998efficacy, viola2004robust}. Most of these research works follow a taxonomy which consists of three paradigms underneath to count the objects:
->>>>>>> 1ba4fd7e2cd0ebd45e84cc79279732275a2d0373
+
 \begin{enumerate}
 	\item Object detection, which are \todo{not english} based on boosting appearance and motion features \cite{viola2005detecting, viola2004robust}, Bayesian model-based segmentation \cite{zhao2003bayesian}, integrated top-down and bottom-up processing \cite{leibe2005pedestrian, oliva2003top,chan2008privacy}.
 	\item Visual feature trajectory clustering. This paradigm counts objects by identifying and tracking visuals over a  time period. Feature trajectories with coherent motion are then clustered and the number of clusters is the estimate of the number of moving people \cite{rabaud2006counting, brostow2006unsupervised,chan2008privacy}. 
-<<<<<<< HEAD
+
 	\item feature-based regression. These methods usually work by first, subtracting the background, second, measuring various features of the foreground pixels such as total area \cite{paragios2001mrf, davies1995crowd}, edge count \cite{cho1999neural, regazzoni1996distributed}, or texture  \cite{marana1998efficacy}; and finally estimating the crowd density or crowd count by a regression function, e.g. linear \cite{paragios2001mrf, davies1995crowd}, piece-wise linear \cite{regazzoni1996distributed}, or neural networks \cite{cho1999neural, regazzoni1996distributed}. 
-=======
+
 	\item Feature-based regression. These methods usually work by first, subtracting the background, second, measuring various features of the foreground pixels such as total area \cite{paragios2001mrf, davies1995crowd}, edge count \cite{cho1999neural, regazzoni1996distributed}, or texture \cite{marana1998efficacy}; and finally estimating the crowd density or crowd count by a regression function, e.g. linear \cite{paragios2001mrf, davies1995crowd}, piece-wise linear \cite{regazzoni1996distributed}, or neural networks\cite{cho1999neural, regazzoni1996distributed}. 
->>>>>>> 1ba4fd7e2cd0ebd45e84cc79279732275a2d0373
+
 
 	\indent In recent years, feature-based regression has also been applied to outdoor scenes. For example, \citealt{kong2005counting} apply neural networks to the histograms of foreground segment areas and edge orientations. \citealt{dong2007fast} estimate \todo{http://english.stackexchange.com/questions/99886/is-et-al-used-as-a-singular-or-plural-subject} the number of people in each foreground segment by matching its shape to a database containing the silhouettes of possible people configurations, but it is \todo{r u lorenzo?? -- IT is} only applicable when the number of people in each segment is small (empirically, less than 6)\cite{chan2008privacy}.  
 \end{enumerate} 
