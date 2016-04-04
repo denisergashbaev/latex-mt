@@ -2,8 +2,254 @@
 \chapter{Implementation}
 \label{sec:implementation}
 \noindent
+In this chapter, we provide a detailed implementation of our proposed methodology. We start by giving insight into the introduced algorithms for generating the synthetic datasets to train and test our models. Then we present the software platform we incorporated to shape and design our architectures. Finally, we demonstrate our networks' architecture and settings in detail. 
 
-\noindent In this chapter, we provide a detailed implementation of our proposed methodology. We start with presenting the software platform we incorporated to shape and design our models. Then we demonstrate our network's architecture in detail. Finally, we attempt to give insight into the datasets we used to train and test our model. 
+%\noindent In this chapter, we provide a detailed implementation of our proposed methodology. We start with presenting the software platform we incorporated to shape and design our models. Then we demonstrate our network's architecture in detail. Finally, we attempt to give insight into the datasets we used to train and test our model. 
+
+
+
+\section{The datasets}
+\label{dataha}
+
+Here we delve into the data processing part of this work by introducing three different datasets we created or applied for our empirical experiments. To that end, we provide a detailed explanation for each step of synthetic data generation process along with approaches and methods used to improve each dataset.
+
+%Here we delve into the data processing part of this work by introducing three different datasets we generated or chose for our empirical experiments. To that end, we provide a detailed explanation of the approaches and methods used to generate and improve each dataset.
+
+\subsection{Even-odd digits dataset}
+\label{subsubsec:digit}
+
+Our Even-odd handwritten dataset contains images of size $100\times100$. Each image is filled with from 0 up to 15 randomly selected digits from MNIST hand-written digits dataset. The process of creating images follows the steps in below:
+\begin{enumerate}
+\item MNIST Digits are resized to $18\times18$ pixels.
+\item Up to 15 digits are randomly put in images of size $100\times100$ pixels.
+\item The images are created with controlled overlapping by ensuring that two different numbers are 18 pixels away from each other, i.e. the distance between two digits centers is larger than 18 pixels.
+\item Images are labeled with the number of even digits present in each image. 
+\item The images are created uniformly, meaning that for example, the number of images containing 0 even digits is equal to the number of images containing 15 even digits.
+\end{enumerate}
+ This dataset has in total 1 million images: 800,000 images for training set and 200,000 as the test. Figure~\ref{fig:l2cmnist} illustrates some examples of even-odd digits dataset with different number of even digits in images.
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=0.9\textwidth]{images/l2cmnist}}
+		\caption{An example of even-odd digits images. Form left to right, images contain 0, 5, 10 and 15 even digits.}
+	\label{fig:l2cmnist}
+\end{figure}
+
+%Digits are resized to $18\times18$ pixels and randomly put in the image. The images are created with controlled overlapping by ensuring that two different numbers are 18 pixels away from each other, i.e. the distance between two digits centers is larger than 18 pixels. For the training process, images are labeled with the number of even digits present in each image. Figure~\ref{fig:l2cmnist} illustrates some examples of even-odd digits dataset with different number of even digits in images.
+
+%Our Even-odd handwritten dataset contains images of size $100\times100$. Each image is filled with from 0 up to 15 randomly selected digits from MNIST hand-written digits dataset. Digits are resized to $18\times18$ pixels and randomly put in the image. The images are created with controlled overlapping by ensuring that two different numbers are 18 pixels away from each other, i.e. the distance between two digits centers is larger than 18 pixels. For the training process, images are labeled with the number of even digits present in each image. Figure~\ref{fig:l2cmnist} illustrates some examples of even-odd digits dataset with different number of even digits in images. 
+
+%\begin{figure}[H]
+%	\centering
+%	{\includegraphics[width=0.9\textwidth]{images/l2cmnist}}
+%		\caption{An example of even-odd digits images. Form left to right, images contain 0, 5, 10 and 15 even digits.}
+%	\label{fig:l2cmnist}
+%\end{figure}
+
+%\indent This dataset has in total 1 million images: 800,000 images for training set and 200,000 as the test. Also, the dataset is uniformly generated, meaning that for instance, the number of images containing 0 even digits is \todo{`the numer' is always `is'} equal to the number of images containing 15 even digits.  
+
+\subsection{Synthetic pedestrians dataset}
+\label{subsec:synped}
+
+Learning features using deep architectures requires a large amount of data. More importantly, for a fully supervised learning, this data should be annotated. Lack of data or its' high annotation cost prohibit the usage of deep learning methods for many problems including crowd counting. 
+
+\indent However, in order to lower this cost, in our research, we decided to create a synthetic dataset of pedestrians in a walkway. To do that, we used UCSD unlabeled Anomaly detection dataset of pedestrians collected by \citeauthor{chan2008privacy} and used in \cite{chan2009analysis, mahadevan2010anomaly, li2014anomaly}. UCSD Anomaly detection dataset contains clips of groups of people walking towards and away from the camera, and consists of 34 training video samples and 36 testing video samples. Each video has 200 frames of each $238\times158$ pixels. Figure~\ref{fig:anomaly} depicts some images of UCSD Anomaly dataset.
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=0.7\textwidth]{images/anomaly}}
+	\caption{Sample images of UCSD Anomaly detection dataset.}
+	\label{fig:anomaly}
+\end{figure}
+
+
+\indent In our study, we used all 70 training and testing video samples to generate the synthetic pedestrians dataset. To thoroughly demonstrate the generation process of our dataset, we divide this section into data generation and data improvement.
+
+  
+\subsubsection{Data generation}
+
+In our dataset, we constrained each image by having up to 29 pedestrians in the walkway. The process of generating the data includes the following steps:
+\begin{enumerate}
+
+\item \textbf{Background extraction:} Firstly, we simply subtract the background from each video frame. We extract two types of backgrounds: the median of all the backgrounds in each video (in total, 70 different backgrounds), and the median of all median backgrounds. An example of extracted backgrounds is shown below.
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=0.4\textwidth]{images/background}}
+	\caption{One background image extracted from UCSD dataset.}
+	\label{fig:bgim}
+\end{figure}
+
+
+\item \textbf{Pedestrian extraction:} Subtracting each image from the mean background, we were able to label the connected regions (each individual in case of our images) of the subtraction using morphological labeling methods. Figure~\ref{fig:nobg} shows how images look like after background subtraction. 
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=0.9\textwidth]{images/nobg}}
+	\caption{Images after background subtraction.}
+	\label{fig:nobg}
+\end{figure}
+ 
+Then, properties of labeled regions are measured and bound-boxed (see \cite{van2014scikit} for more detailed explanation). Boxes of people are center-based annotated. These labeled boxes shape our initial list of pedestrians with masks of the same size of each box. Figure~\ref{backback} in below demonstrates a selection of extracted pedestrians and pedestrians' masks.
+
+\begin{figure*}[h!]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        {\includegraphics[width=0.5\textwidth]{images/peds}}
+        \caption{Extracted pedestrians.}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        {\includegraphics[width=0.5\textwidth]{images/masks}}
+        \caption{created pedestrians' masks.}
+    \end{subfigure}
+    \caption{Pedestrians and their corresponding masks.}
+    \label{backback}
+\end{figure*}
+
+
+\item \textbf{Background generation:} In this step, we tried to make the backgrounds of images as realistic as possible by:
+\begin{enumerate}
+\item making a sparse combination of median backgrounds.
+\item changing the global illumination of the images randomly.
+\item adding some random Gaussian noise to the backgrounds.
+\end{enumerate}
+ As you may notice, in the figure~\ref{backback}, the generated background happened to be brighter and noisier than the extracted one.
+ 
+ 
+%1)~making a sparse combination of median backgrounds, 2)~changing the global illumination of the images randomly, and 3)~adding some \textit{Gaussian noise} to the backgrounds. As you may notice, in the figure~\ref{backback}, the generated background happened to be brighter and noisier than the extracted one. 
+
+\begin{figure*}[h!]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        {\includegraphics[width=0.8\textwidth]{images/background}}
+        \caption{Raw extracted background image.}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        {\includegraphics[width=0.8\textwidth]{images/background3}}
+        \caption{Generated background after a sparse combination, global illumination change and some noise.}
+    \end{subfigure}
+    \caption{A synthetically generated background image}
+    \label{backback}
+\end{figure*}
+
+\item \textbf{Generating the images:} Having backgrounds generated and pedestrians extracted and labeled, backgrounds are selected randomly. Then, for training and comparison purposes, images are masked with a filter of \textit{Region Of Interest}~(ROI). The mask and ROI is shown in below (figure~\ref{fig:roi}).
+
+\begin{figure*}[h!]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        {\includegraphics[width=0.8\textwidth]{images/catwalk}}
+        \caption{The mask to determine region of interest.}
+    \end{subfigure}%
+    ~ 
+    \begin{subfigure}[t]{0.5\textwidth}
+        \centering
+        {\includegraphics[width=0.8\textwidth]{images/roi}}
+        \caption{Region of interest (ROI). The pedestrians will only be put and counted in the non-zero pixels.}
+    \end{subfigure}
+    \caption{Applying the mask of region of interest on the background image.}
+    \label{fig:roi}
+\end{figure*}
+
+\item \textbf{Creating synthetic images:} Afterwards, pedestrians are added to the masked background in a way that the center of each person is placed inside white area of the mask. Finally images are normalized (between 0 and 255) and resized to $158\times158$ in order to be fed to convolution layers. A selection of created images are depicted in the figure underneath.
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=1\textwidth]{images/myped}}
+	\caption{created synthetic images for counting pedestrians problem.}
+	\label{fig:myped}
+\end{figure}
+
+\end{enumerate}
+
+\subsubsection{Data improvement}
+
+Although we managed to successfully create synthetic images of people in the street, the generated images were still quite distinguishable from the real dataset. Thus, in order to make images as highly realistic as possible, we improved the dataset as explained underneath:
+\begin{itemize}
+\item \textbf{Non-pedestrian objects:} Amongst the extracted boxes of pedestrians, there were some non-pedestrian boxes, some with objects instead of pedestrians, and yet others with more than one person inside the box. Therefore, we manually removed these outliers. After this edition, we ended with 426 samples of people. A few examples of incorrectly collected or labeled objects are shown in below.
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=0.6\textwidth]{images/nonped}}
+	\caption{A selection of non-human or incorrectly labeled objects. As you may see, there are some images with "half a person" and some others with more than just one person in the image.}
+	\label{fig:nonped}
+\end{figure}
+ 
+\item \textbf{Lack of pedestrians:} For the sake of generalization, we needed a decent variety of pedestrians in the images to train with. For this purpose, we created 2 versions of current pedestrians list, each darkened by the factor of 20\% from each other. 
+\item \textbf{Halos around the pedestrians:} Due to lack of accuracy of the region measuring method, a fine layer of the background that pedestrians were extracted from, still remained around the pedestrians. In the created images, depending on where the person was placed, these thin layers appeared like a halo around the person. Figure~\ref{fig:haloim} illustrates some images with halos around the pedestrians. 
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=1\textwidth]{images/halo}}
+	\caption{A few synthetic images with halos around the pedestrians in the walkway.}
+	\label{fig:haloim}
+\end{figure}
+ 
+To mitigate this issue, we tried two approaches:
+\begin{enumerate}
+\item \textbf{Morphological erosion:} Among morphological operations on image, we applied \textit{erosion} \cite{van2014scikit} to erode the pedestrians masks. In this way, the halos were ignored to some noticeable extent. 
+\item \textbf{Poisson image editing:} Poisson image editing is a technique for seamlessly blending two images together fully automatically  \cite{perez2003poisson}. In addition to erosion, we tried Poisson image editing tool to remove the halos. However, due to our gray-scale and low-resolution images, this tool did not have a great impact on our images.      
+\end{enumerate}
+Afterwards, the images look similar to the ones shown in figure~\ref{fig:nohalo}.
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=1\textwidth]{images/nohalo}}
+	\caption{Some examples of images with no or less halo around the people in the images.}
+	\label{fig:nohalo}
+\end{figure}
+ 
+\item \textbf{Image Perspective:} Since pedestrians of different sizes were put randomly in the images, we considered people's tallness perspective in the images. As you may observe, in the following figure, image perspective has not been applied in the images and hence, there are some pedestrians closer to the camera but really small and also some pedestrians quite tall at the end of walkway.
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=1\textwidth]{images/nopers}}
+	\caption{created images before considering image perspective.}
+	\label{fig:nopers}
+\end{figure}
+
+Human height almost follows a Gaussian distribution \cite{subramanian2011height}. Therefore, with respect to \cite{subramanian2011height, garcia2007evolution}, we mapped individual's heights with the length of the walkway in the image, considering a Gaussian noise with mean $\mu = 0$ and $\sigma = 3.5$. The resulting images are demonstrated as follows.
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=1\textwidth]{images/pers}}
+	\caption{Synthetic images considering image perspective based on the real distribution of people's height. As you may see, after applying perspective, the images look more realistic. }
+	\label{fig:pers}
+\end{figure}
+
+
+\end{itemize}
+
+\noindent Thusly, we created a set of 1 million images, each of size $158\times158$ pixels with up to 29 pedestrians. We assigned 800,000 images for training set and 200,000 instances as the test set. We believe the created synthetic dataset of pedestrians is realistic enough to be able to represent a real-world crowd counting scenario. However, the images can be improved in different aspects and by using diverse image editing and manipulation techniques. 
+
+\subsection{UCSD crowd counting dataset}
+\label{subsec:datareal2}
+To verify and validate our model, we used UCSD crowd counting dataset created by \citeauthor*{chan2008privacy} and used in \cite{chan2008privacy,chan2009bayesian,chan2012counting}. The dataset contains video of pedestrians on UCSD walkways, taken from a stationary camera. There are currently two  viewpoints available among which we used \textit{vidf} videos. All videos are 8-bit gray-scale, each video file has 200 video frames, with dimensions $238\times158$. In our experiment, the first 20 videos which are labeled with the number of pedestrians were incorporated. The center point of each pedestrian defines its' location in the image. A selection of UCSD crowd counting images is shown in figure~\ref{fig:ucsdorg}.
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=1\textwidth]{images/normalucsd}}
+	\caption{Normal UCSD crowd counting dataset images.}
+	\label{fig:ucsdorg}
+\end{figure}
+
+\indent Among the labeled images, we selected the ones in which the number of pedestrians does not exceed 29. Then, images were resized to  $158\times158$ pixels and normalized between 0 and 255. Hence, in total we have a dataset of 3375 real images which are masked with the same filter we used for synthetic pedestrians dataset (shown in figure~\ref{fig:roi}). At last, the images look like the following images.
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=1\textwidth]{images/testucsd}}
+	\caption{Real UCSD images after being masked and resized.}
+	\label{fig:testucsd}
+\end{figure}
+
+
+\indent We will use this dataset to first, validate the performance of our model trained with synthetic data, on a real dataset, and also to comparison between work done in \cite{chan2008privacy} and our approach.
+
+
 
 \section{Caffe deep learning platform}
 
@@ -19,8 +265,8 @@ The main components of Caffe architecture are outlined below:
 
 \begin{figure}[H]
 	\centering
-	{\includegraphics[width=0.3\textwidth]{images/blob}}
-	\caption{Input and output blobs of a convolution layer in a CNN implemented in Caffe.}
+	{\includegraphics[width=0.8\textwidth]{images/caffeconvlayer}}
+	\caption{Input (data) and output (conv1) blobs of a convolution layer in a CNN implemented in Caffe.}
 	\label{fig:blob}
 \end{figure}
 
@@ -45,25 +291,25 @@ Caffe supports some data sources such as LevelDB or LMDB (Lightning Memory-Mappe
 
 \begin{figure}[H]
 	\centering
-	{\includegraphics[width=1\textwidth]{images/caffe}}
-	\caption{An MNIST digit classification example of a Caffe network, where blue boxes represent layers and yellow octagons represent data blobs produced by or fed into the layers \cite{jia2014caffe}.}
+	{\includegraphics[width=1.\textwidth]{images/le2col}}
+	\caption{From bottom-left to top-right, Lenet architecture for MNIST digit classification example of a Caffe network, where boxes represent layers and octagons represent data blobs produced by or fed into the layers \cite{jia2014caffe}.}
 	\label{fig:caffe}
 \end{figure}
 
-\textbf{Justification}: We decided to use Caffe because, it addresses computation efficiency problems (as likely the fastest available implementation of deep learning frameworks at the time of performing this study, adheres to software engineering best practices, providing unit tests for correctness and experimental rigor and speed for deployment. It is also well-suiteda gr research use, due to the well-implemented modularity of the code, and the clean separation of network definition (usually the novel part of deep learning research) from actual implementation\cite{jia2014caffe}. In addition, it provides a python wrapper which exposes the solver module for easy prototyping of new training procedures. 
+\textbf{Justification}: We decided to use Caffe because, it addresses computation efficiency problems (as likely the fastest available implementation of deep learning frameworks at the time of performing this study, adheres to software engineering best practices, providing unit tests for correctness and experimental rigor and speed for deployment. It is also well-suited for research use, due to the well-implemented modularity of the code, and the clean separation of network definition (usually the novel part of deep learning research) from actual implementation\cite{jia2014caffe}. In addition, it provides a python wrapper which exposes the solver module for easy prototyping of new training procedures. 
 
 \subsection{Model Optimization}
 
-Our work in general is an optimization problem since we project the results as loss functions we try to minimize. For this reason, model optimization methods have a critical impact on the performance of the model. Since Caffe provides several optimization methods, in this section we briefly describe merely optimization methods and \textit{hyper-parameters}\footnote{Hyper-parameters govern the underlying system on a "higher level" than the primary parameters of interest. They are not model parameters that are learned during training phase and instead, they are set by the designer a priori.} incorporated in our proposed algorithm.  
+Our work in general is an optimization problem since we project the results as loss functions we try to minimize. For this reason, model optimization methods have a critical impact on the performance of the model. In Caffe, \textit{Solver} file orchestrates optimization by coordinating the network's forward inference and backward gradients to form parameter updates that attempt to improve the loss. Among Caffe solver methods, we use stochastic gradient descent (explained in chapter~\ref{subsec:sgd}). The use of SGD in deep convolutional neural network setting is motivated by the high cost of running back propagation over the full training set. SGD can overcome this cost and still lead to fast convergence. 
 
-\indent In Caffe, \textit{Solver} file ptimization by coordinating the network's forward inference and backward gradients to form parameter updates that attempt to improve the loss. 
-%short description about sgd with ref 
+Since Caffe provides several optimization methods, in this section we briefly describe merely optimization methods and \textit{hyper-parameters}\footnote{Hyper-parameters govern the underlying system on a "higher level" than the primary parameters of interest. They are not model parameters that are learned during training phase and instead, they are set by the designer a priori.} incorporated in our proposed algorithms.
+
 
 \subsubsection{Batch size}
 
 Since Caffe is trained using stochastic gradient descent, at each iteration, it computes the (stochastic) gradient of the parameters with respect to the training data and updates the parameters in the direction of the gradient. On the other hand, to compute the gradient w.r.t the input data, we need to evaluate all training samples at each iteration which is prohibitively time-consuming, specially when we are dealing with a great amount of data. 
 
-\indent In order to overcome this issue, SGD approximates the exact gradient, in a stochastic manner, by sampling only a small portion of the training data at each iteration. This small portion is the batch. In other words, the batch size defines the amount of training data we feed to the network at each iteration. The larger the batch size, the more accurate the gradient estimate at each iteration will be. 
+\indent In order to overcome this issue, SGD approximates the exact gradient, in a stochastic manner, by sampling only a small portion of the training data at each iteration. This small portion is the \textit{batch}. In other words, the batch size defines the amount of training data we feed to the network at each iteration. The larger the batch size, the more accurate the gradient estimate at each iteration will be. 
 
 \subsubsection{Learning rate}
 \label{learning rate}
@@ -81,9 +327,9 @@ Although there are numerous empirical studies and rules of thumb to treat learni
 \subsubsection{Weight Decay}
 
 
-As a part of Bac a subset of regularization methods, \textit{weight decay} adds a penalty term to the error function by multiplying weights to a factor slightly less than 1 after each update. 
+As a part of Back Propagation and a subset of regularization methods, \textit{weight decay} adds a penalty term to the error function by multiplying weights to a factor slightly less than 1 after each update. 
 
- It has been observed in numerical simulations that a weight decay can improve generalization in a feed-forward neural network. It is proven that a weight decay has two effects in a linear network. Firstly, it suppresses any irrelevant components of the weight vector by choosing the smallest vector that solves the learning problem. Secondly, if the size is chosen correctly, a weight decay can suppress some of the effects of static noise on the targets, which improves generalization significantly \cite{moody1995simple}. 
+ It has been observed in numerical simulations that a weight decay can improve generalization in a feed-forward neural network. It is proven that weight decay has two effects in a linear network. Firstly, it suppresses any irrelevant components of the weight vector by choosing the smallest vector that solves the learning problem. Secondly, if the size is chosen correctly, a weight decay can suppress some of the effects of static noise on the targets, which improves generalization significantly \cite{moody1995simple}. 
 
 \subsubsection{Momentum}
 %\todo{doesn't it belong to state-of-the art / implementation??cant put it in implementation cuz its built-in caffe and I just set the value. Hence, I thought they are better off here since they belong also to model optimization?}
@@ -116,15 +362,22 @@ The number of iterations plays an important role in the training process. iterat
 \section{The architecture}
 \label{imparch}
 
-Having Caffe platform introduced, we propose the designed networks for two 
-In learning object features or representations for vision tasks and by the use of CNN, the depth of network plays a crucial role. The deeper the model, the better it learns. However, issues like overfitting\footnote{Overfitting occurs when a statistical model describes random error or noise instead of the underlying relationship, and vice versa for underfitting. } and underfitting should not be left neglected.   
+Having Caffe platform introduced, we propose two CNN-based architectures for the analysis we did regarding two learning to count problems, counting the number of even-digits and the number of pedestrians in an image.  
+In learning object features for vision tasks and by the use of DCNN, the depth of network plays a crucial role. The deeper the model, the better it learns. However, issues like overfitting\footnote{Overfitting occurs when a statistical model describes random error or noise instead of the underlying relationship, and vice versa for underfitting. } and underfitting should not be left neglected.   
 Therefore, in this section, networks' settings and architectures for even-digits and crowd counting problems will be described separately. 
 
 \subsection{Even digit counting}
 \label{subsubsec:digitarch}
 
-For learning to count even digits problem, since we used MNIST dataset to generate our images, we considered the architecture proposed by \citeauthor{lecun1995comparison} for classic MNIST hand-written digit recognition problem \cite{lecun1995comparison}, as the base of our design. In addition, we took into account the architecture used in state-of-the-art \cite{segui2015learning}. From there, we modified the architecture to optimize the performance of the network. 
+For learning to count even digits problem, since we used MNIST dataset to generate our images, we considered the architecture proposed by \citeauthor{lecun1995comparison} for classic MNIST hand-written digit recognition problem \cite{lecun1995comparison} (shown in figure~\ref{fig:caffe}), as the base of our design. In addition, we took into account the architecture used in state-of-the-art \cite{segui2015learning}. Figure~\ref{santil2cfull} demonstrates this architecture. From there, we modified the architecture to optimize the performance of the network. 
  
+\begin{figure}[H]
+  \centering
+   {\includegraphics[width=1.\textwidth]{images/santil2cfull}}
+  %\end{center}
+	\caption{From top-left to bottom-right, the network proposed in \cite{segui2015learning} for Even digits recognition task.}
+	\label{santil2cfull}
+\end{figure}
 
 \noindent In a similar experiment with maximum 5 digits in images, \citeauthor{segui2015learning} in \cite{segui2015learning} defined a four layers CNN with two convolutional layers for classifying even digits present in images. Each convolutional layer consist of several elements: a set of convolutional filters, ReLU non-linearities, max pooling layers and normalization layers. The first convolutional layer outputs 10 filters of dimensions $15\times15$, and the second convolution layer has 10 filters, each of size $3\times3$. Each convolution layer is followed by a max-pooling layer with a $2\times2$ kernel. The output of last pooling layer is fed to two fully-connected layers with respectively 32 and 6 number of outputs. They also used Softmax loss layer on top of their architecture to compute the multinomial logistic loss layer\footnote{This function displays a similar convergence rate to the hinge loss function, and since it is continuous, gradient descent methods can be utilized. Also, functions which correctly classify points with high confidence are penalized less. This structure is highly sensitive to outliers in the data.}. Table~\ref{santil2c} presents the main components of the network designed by \cite{segui2015learning}. 
 
@@ -150,40 +403,103 @@ For learning to count even digits problem, since we used MNIST dataset to genera
 	FC2 & 6 outputs \\
 	\hline
 	\end{tabular}
-		\caption{The deep CNN proposed by \cite{segui2015learning} for learning the number of even digits present in the images.}
+		\caption{The DCNN proposed by \cite{segui2015learning} for learning the number of even digits present in the images.}
 		\label{santil2c}
 \end{table}
  
 
-\noindent However, in our implementation, due to higher complexits), we decided to apply a deeper CNN with more parameters. 
-In our network, the data layer fetches the images and labels from the disk, passes it through the first convolutional layer with 20 filters, each of size $15\times15$ followed by a ReLU non-linearity and LRN normalization layer. Then the output is max-pooled by the  kernel size of $2\times2$. This process repeats again but this time with the second convolutional layer having 50 filters of size $3\times3$. In all convolution and pooling layers, the \textit{stride} = 1 and \textit{padding}\footnote{Zero padding is a simple concept; it simply refers to adding zeros to end of an image to increase its length.} = 1 are considered (see section~\ref{convlayer} for more explanation regarding padding and stride). 
+\noindent However, in our implementation, due to higher complexity, we decided to apply a deeper CNN with more parameters. In our network, the data layer fetches the images and labels from the disk, passes it through the first convolutional layer with 20 filters, each of size $15\times15$ followed by a ReLU non-linearity and LRN normalization layer. Then the output is max-pooled by the  kernel size of $2\times2$. This process repeats again but this time with the second convolutional layer having 50 filters of size $3\times3$. In all convolution and pooling layers, the \textit{stride} = 1 and \textit{padding}\footnote{Zero padding is a simple concept; it simply refers to adding zeros to end of an image to increase its length.} = 1 are considered (see section~\ref{convlayer} for more explanation regarding padding and stride). 
 
 \noindent the output of the second pooling layer is fed to two fully connected (inner product) layers with respectively 64 and 1 number of outputs (since the problem is approached as a regression task). Also the first fully connected layer is followed by ReLU non-linearity. 
 
-Furthermore, to optimize the model performance, the networks' hyper-parameters are set as below:
+Furthermore, to optimize the model performance, the networks' hyper-parameters are set as below while table~\ref{hypers} provides a summary of the hyper-parameters' settings. 
 \begin{itemize}
 \item \textbf{Learning rate:} The basic learning rate is 0.0001. However, for our experiment we chose \textit{multi-step} learning policy in which, after each \textit{stepsize}=40000 iterations, the learning rate drops by the rate of Gamma $\gamma = 0.1$. This initialization is based on rule of thumbs used in \cite{krizhevsky2012imagenet}.
 \item \textbf{Momentum:} We use momentum $\mu = 0.9$. This selection also is based on trial and error. As momentum value $\mu$ effectively multiplies the size of our updates by a factor of $\frac{1}{1-\mu}$. Hence, changes in momentum and learning rate ought to be accompanied with an inverse correlation. When momentum $\mu = 0.9$, we have an effective update size of 10 since we also drop the learning rate by the factor of Gamma $\gamma= 0.1$.
 \item \textbf{Weight decay:} Weight decay as a penalty term to the error function, has a constant value of 0.0005. This decay constant is multiplied to the sum of squared weights.
 \end{itemize}
 
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ |p{3.8cm}|p{1.7cm}| }
+	\hline 
+	\multicolumn{2}{|c|}{\textbf{Network hyper-parameters}} \\
+	\hline
+	\hline
+	\textbf{Hyper-parameters} & \textbf{setting }\\
+	\hline
+	Learning rate & 0.0001\\
+	\hline
+	Learning policy    & \textit{Multi\_step} \\
+	\hline
+	Momentum & $\mu = 0.9$\\
+	\hline
+	Weight decay & 0.0005 \\
+	\hline
+	Batch size & 256 \\
+	\hline
+	Iterations & 1600000 \\
+	\hline
+	\end{tabular}
+		\caption{Proposed settings for network's hyper-parameters for counting number of even digits task.}
+		\label{hypers}
+\end{table}
+ 
+
 \noindent We should also mention that at the top layer of the network, we used Euclidean Loss layer to compute the euclidean distance between the predictions and the ground truth.  Figure~\ref{fig:l2cNet} shows a scheme of the architecture.
 \begin{figure}[H]
   \centering
-   {\includegraphics[width=0.8\textwidth]{images/model2}}
+   {\includegraphics[width=0.7\textwidth]{images/model2}}
   %\end{center}
-	\caption{Proposed network architecture for Even digits recognition task}
+	\caption{Proposed network architecture for Even digits counting task}
 	\label{fig:l2cNet}
 \end{figure}
 
-The architecture has been designed intuitively and based on a heuristic approach\todo{this is a useless statement, unless you go into detail what heuristics you've used. justification needed for your choise. so beef it up here between these two sentences}. Hence, one may be able to improve the performance by implementing a different architecture or with another settings for the hyper-parameters of the network. 
+%\todo{this is a useless statement, unless you go into detail what heuristics you've used. justification needed for your choise. so beef it up here between these two sentences}
+The architecture has been designed intuitively and based on a heuristic approach where we tried different values for each hyper-parameter at a time and selected the values that provided us with an improvement in the performance of the network. Hence, one may be able to improve the performance by implementing a different architecture or with another settings for the hyper-parameters of the network. 
 
 \subsection{Crowd counting}
 \label{subsec:ucsdarch}
 
-For the task of counting pedestrians, we applied the same settings of hyper-parameters to a different architecture. This time, due to the more complex images than the previous task, we decided to make the network even deeper \todo{`event deeper' sounds unprofessional}.
+For the task of counting pedestrians, due to the more complex images than the previous task, we designed a deeper architecture. Moreover, we applied the same settings of hyper-parameters to a different architecture. However, as a reminder, table~\ref{hypar2} summarizes the network's settings for the hyper-parameters.
 
-As a baseline, we considered state-of-the-art architecture designed by \citealt*{segui2015learning} for counting the number of pedestrians in the images. In their work, they used a five layer architecture CNN with two convolutional layers followed by three fully connected layers. Convolutional layers contain their main elements (ReLU and LRN layers), and each outputs 8 filters with kernel sizes $9\times9$ and $5\times5$ respectively. Despite the previous architectures \todo{what? not english}, they applied only one max-pooling layer after the first convolutional layer in their design. Finally, three fully connected layers with number of outputs 128, 128 and 25 classify the output of the network into 25 classes (maximum pedestrians in the images) of the number of people in the image. Similar to the previous task, a softmax loss layer projects the performance of the model.   
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ |p{3.8cm}|p{1.7cm}| }
+	\hline 
+	\multicolumn{2}{|c|}{\textbf{Network hyper-parameters}} \\
+	\hline
+	\hline
+	\textbf{Hyper-parameters} & \textbf{setting }\\
+	\hline
+	Learning rate & 0.0001\\
+	\hline
+	Learning policy    & \textit{Multi\_step} \\
+	\hline
+	Momentum & $\mu = 0.9$\\
+	\hline
+	Weight decay & 0.0005 \\
+	\hline
+	Batch size & 256 \\
+	\hline
+	Iterations & 1600000 \\
+	\hline
+	\end{tabular}
+		\caption{Proposed settings for network's hyper-parameters for counting pedestrians.}
+		\label{hypar2}
+\end{table} 
+
+As a baseline, we considered state-of-the-art architecture designed by \citealt*{segui2015learning} for counting the number of pedestrians in the images. As shown in figure~\ref{santiucsdnet}, in their work, they used a five layer architecture CNN with two convolutional layers followed by three fully connected layers. Convolutional layers contain their main elements (ReLU and LRN layers), and each outputs 8 filters with kernel sizes $9\times9$ and $5\times5$ respectively. 
+
+\begin{figure}[H]
+  \centering
+   {\includegraphics[width=1.00\textwidth]{images/santiucsd}}
+  %\end{center}
+	\caption{From top-left to bottom-right, the DCNN proposed by \cite{segui2015learning} for learning to count the number of pedestrians in a walkway.}
+	\label{santiucsdnet}
+\end{figure}
+
+Contrary to the previous architectures they proposed for counting even-digits, they applied only one max-pooling layer after the first convolutional layer in their design. Finally, three fully connected layers with number of outputs 128, 128 and 25 classify the output of the network into 25 classes (maximum pedestrians in the images) of the number of people in the image. Similar to the previous task, a softmax loss layer projects the performance of the model.   
 Table~\ref{santiarch} describes a summary of their network.
 
 \begin{table}[H]
@@ -213,229 +529,21 @@ Table~\ref{santiarch} describes a summary of their network.
 \end{table}
 
 
-\noindent However, since up to 30 pedestrians are present in our images with high amount of overlapping, we added one convolutional layer along with increasing the number of parameters in the network. In our architecture, the data blobs pass through 4 convolutional layers. The first convolutional layer has 4 filters, each with $5\times5$ kernel and the other 3 layers have again 4 filters but each of size $3\times3$. Similar to the previous model, each convolutional layer is followed by ReLU non-linearity layer and LRN normalization layer. Also the stride and padding values for all the convolutional layers are respectively equal to 1 and 0. \todo{ok, i really want a figure showing the architecture of the network you've designed. it should show the layers, kernels, ... a zoom-in, no full-scale representation needed, just a cutout}
+\noindent However, since up to 30 pedestrians are present in our images with high amount of overlapping, in our design we added one convolutional layer to the base architecture. We also increased the number of parameters in the network. In our architecture, the data blobs pass through 4 convolutional layers. The first convolutional layer has 4 filters, each with $5\times5$ kernel and the other 3 layers have again 4 filters but each of size $3\times3$. Similar to the previous model, each convolutional layer is followed by ReLU non-linearity layer and LRN normalization layer. Also the stride and padding values for all the convolutional layers are respectively equal to 1 and 0. 
+%\todo{ok, i really want a figure showing the architecture of the network you've designed. it should show the layers, kernels, ... a zoom-in, no full-scale representation needed, just a cutout}
 
-\indent In order to not lose information, we used merely two pooling layers for the first two convolutional layers. Each pooling layer has a kernel size of $2\times2$ with $stride = 1$  and $padding = 0$. 
+\indent In order to not lose information, we used merely two pooling layers for the first two convolutional layers. Each pooling layer has a kernel size of $2\times2$ with $stride = 1$  and $padding = 0$. Figure~\ref{fig:ucsdnet} illustrates the proposed architecture. 
 
-There are three fully connected layers to regress the number of pedestrians in images. The first two fully connected layers have 16 outputs each, and are connected to ReLU non-linearity layers. The last layer however, with solely one output, passes the models' prediction of the number of pedestrians to the Euclidean loss layer to calculate the sum of squares of differences of its two inputs, the true labels and predictions. In figure~\ref{fig:ucsdnet} \todo{this is a wrong reference to a figure}, an illustration of this architecture has been presented.
-
-To the best of our knowledge, the designed architectures outperform other architectures by which we examined models' performance \todo{what? `by which we examined models' performance' -- not english}(a different range of architectures starting from 1 up to 5 convolutional layers with different settings), while also fastening the training phase . However, apart from the basic knowledge about network architectures, hyper-parameters initialization and some rules of thumb of successful experiences in similar works, the rest of design has been done intuitively. Therefore, there would be many other ways to improve the architecture and performance of the model.\todo{you've already said before that there would be many other ways...can't you unite these two thoughts/paragraphs in one?}
-
-\todo{ok, shitty image again}
 \begin{figure}[H]
   \centering
-   {\includegraphics[width=0.8\textwidth]{images/model2}}
+   {\includegraphics[width=0.7\textwidth]{images/1}}
   %\end{center}
-	\caption{Proposed network architecture for Even digits recognition task}
+	\caption{Proposed network architecture for learning the number of pedestrians in the image.}
 	\label{fig:ucsdnet}
 \end{figure}
 
-\section{The datasets}
-\label{dataha}
-Now,\todo{`now' -- seriously? is it a presentation?} we delve into the data processing part of this work by introducing three different datasets we generated or chose for our empirical experiments. To that end, we provide a detailed explanation of the approaches and methods used to generate and improve each dataset.
+As you may see in the figure above, there are three fully connected layers to regress the number of pedestrians in images. The first two fully connected layers have 16 outputs each, and are connected to ReLU non-linearity layers. The last layer however, with solely one output, passes the models' prediction of the number of pedestrians to the Euclidean loss layer to calculate the sum of squares of differences of its two inputs, the true labels and predictions. In figure~\ref{fig:ucsdnet}, an illustration of this architecture has been presented.
 
-\subsection{Even-odd digits dataset}
-\label{subsubsec:digit}
-
-Our Even-odd handwritten dataset contains images of size $100\times100$. Each image is filled with from 0 up to 15 randomly selected digits from MNIST dataset. Digits are resized to $18\times18$ pixels and randomly put in the image. The images are created with controlled overlapping by ensuring that two different numbers are 18 pixels away from each other, i.e. the distance between two digits centers is larger than 18 pixels. For the training process, images are labeled with the number of even digits present in each image. Figure~\ref{fig:l2cmnist} illustrates some examples of even-odd digits dataset with different number of even digits in images. 
-
-\begin{figure}[H]
-	\centering
-	{\includegraphics[width=0.9\textwidth]{images/l2cmnist}}
-		\caption{An example of even-odd digits images. Form left to right, images contain 0, 5, 10 and 15 even digits.}
-	\label{fig:l2cmnist}
-\end{figure}
-
-\indent This dataset has in total 1 million images: 800,000 images for training set and 200,000 as the test. Also, the dataset is uniformly generated, meaning that for instance, the number of images containing 0 even digits is \todo{`the numer' is always `is'} equal to the number of images containing 15 even digits.  
-
-\subsection{Synthetic pedestrians dataset}
-\label{subsec:synped}
-Learning features using deep architectures requires a large amount of data. More importantly, for a fully supervised learning, this data should be annotated. Lack of data or its' high annotation cost prohibit the usage of deep learning methods for many problems including crowd counting. 
-
-\indent However, in order to lower this cost, in our research, we decided to synthetically create a dataset of pedestrians in a walkway. To do that, we used UCSD unlabeled Anomaly detection dataset of pedestrians collected by \citeauthor{chan2008privacy} and used in \cite{chan2009analysis, mahadevan2010anomaly, li2014anomaly}. UCSD Anomaly detection dataset contains clips of groups of people walking towards and away from the camera, and some amount of perspective distortion. Contains \todo{what?} 34 training video samples and 36 testing video samples. Each video has 200 frames of each $238\times158$ pixels. Figure~\ref{fig:anomaly} depicts some images of UCSD Anomaly dataset.
-
-\begin{figure}[H]
-	\centering
-	{\includegraphics[width=0.7\textwidth]{images/anomaly}}
-	\caption{Sample images of UCSD Anomaly detection dataset.}
-	\label{fig:anomaly}
-\end{figure}
+To the best of our knowledge, the designed architectures outperform other architectures we tried previously (a different range of architectures starting from 1 up to 5 convolutional layers with different settings), while also fastening the training phase . However, apart from the basic knowledge about network architectures, hyper-parameters initialization and some rules of thumb of successful experiences in similar works, the rest of design has been done intuitively. Therefore, similar to the first architecture (problem of counting even digits), there would be other ways to improve the architecture and performance of the model.
 
 
-\indent In our study, we used all 70 training and testing video samples to generate the synthetic pedestrians dataset. To pore over \todo{look up the definition of `To pore over' -- i believe it's wrong in this context} the generation of our dataset, we divide this process into data generation and data improvement.
-
-  
-\subsubsection{Data generation}
-
-In our dataset, we constrained each image by having up to 29 pedestrians in the walkway. The process of generating the data includes the following steps:
-\begin{enumerate}
-
-\item \textbf{Background extraction:} Firstly, we simply subtract the background from each video frame. We extract two types of backgrounds: the median of all the backgrounds in each video (in total, 70 different backgrounds), and the median of all median backgrounds. An example of extracted backgrounds is shown below.
-
-\begin{figure}[H]
-	\centering
-	{\includegraphics[width=0.4\textwidth]{images/background}}
-	\caption{One background image extracted from UCSD dataset.}
-	\label{fig:bgim}
-\end{figure}
-
-
-\item \textbf{Pedestrian extraction:} Subtracting each image from the mean background, we were able to label the connected regions of the subtraction using morphological labeling methods. Figure~\ref{nobg} \todo{faulty reference} shows how images look like after background subtraction. 
-\begin{figure}[H]
-	\centering
-	{\includegraphics[width=0.9\textwidth]{images/nobg}}
-	\caption{Images after background subtraction.}
-	\label{fig:nobg}
-\end{figure}
- 
-Then, properties of labeled regions are measured and bound-boxed (see \cite{van2014scikit} for more detailed explanation). Boxes of people are center-based annotated. These labeled boxes shape our initial list of pedestrians with masks of the same size of each box. The figure below \todo{refence it} demonstrates a selection of extracted pedestrians and pedestrians' masks.
-
-\todo{margins of the subfigures messed up-- see texts that overflow}
-\begin{figure*}[h!]
-    \centering
-    \begin{subfigure}[t]{0.5\textwidth}
-        \centering
-        {\includegraphics[width=0.6\textwidth]{images/peds}}
-        \caption{Extracted pedestrians from different video frames.}
-    \end{subfigure}%
-    ~ 
-    \begin{subfigure}[t]{0.5\textwidth}
-        \centering
-        {\includegraphics[width=0.6\textwidth]{images/masks}}
-        \caption{created masks corresponding to the extracted pedestrians.}
-    \end{subfigure}
-    \caption{Pedestrians and their corresponding masks.}
-    \label{backback}
-\end{figure*}
-
-
-\item \textbf{Background generation:} In this step, we tried to make the backgrounds of images as realistic as we could, 1)~making a sparse combination of median backgrounds, 2)~changing the global illumination of the images randomly, and 3)~adding some \textit{Gaussian noise} to the backgrounds. As you may notice, in the figure~\ref{backback}, the generated background happened to be brighter and noisier than the extracted one. 
-
-\begin{figure*}[h!]
-    \centering
-    \begin{subfigure}[t]{0.5\textwidth}
-        \centering
-        {\includegraphics[width=0.8\textwidth]{images/background}}
-        \caption{Raw extracted background image from the previous step.}
-    \end{subfigure}%
-    ~ 
-    \begin{subfigure}[t]{0.5\textwidth}
-        \centering
-        {\includegraphics[width=0.8\textwidth]{images/background3}}
-        \caption{Generated background after a sparse combination, global illumination change and some noise.}
-    \end{subfigure}
-    \caption{A synthetically generated background image}
-    \label{backback}
-\end{figure*}
-
-\item \textbf{Generating the images:} Having backgrounds generated and pedestrians extracted and labeled, backgrounds are selected randomly. Then, for training and comparison purposes, images are masked with a filter of \textit{Region Of Interest}~(ROI). The mask and ROI is shown in below.
-
-\begin{figure*}[h!]
-    \centering
-    \begin{subfigure}[t]{0.5\textwidth}
-        \centering
-        {\includegraphics[width=0.8\textwidth]{images/catwalk}}
-        \caption{The mask to obtain region of interest.}
-    \end{subfigure}%
-    ~ 
-    \begin{subfigure}[t]{0.5\textwidth}
-        \centering
-        {\includegraphics[width=0.8\textwidth]{images/roi}}
-        \caption{Region of interest (ROI). The pedestrians will only be put and counted in the non-zero pixels.}
-    \end{subfigure}
-    \caption{Applying the mask of region of interest on the background image.}
-    \label{fig:roi}
-\end{figure*}
-
-Afterwards, pedestrians are added to the masked background in a way that the center of each person is placed inside white area of the mask. Finally images are normalized and resized to $158\times158$ in order to be fed to convolution layers. A selection of created images are depicted in the figure underneath.
-
-\begin{figure}[H]
-	\centering
-	{\includegraphics[width=1\textwidth]{images/myped}}
-	\caption{created synthetic images for counting pedestrians problem.}
-	\label{fig:myped}
-\end{figure}
-
-\end{enumerate}
-
-\subsubsection{Data improvement}
-\todo{this is how i like it -- well structured! perfect}
-Although we managed to successfully create synthetic images of people in the street, the generated images were still quite distinguishable from the real dataset. Thus, in order to better \todo{what does `to better' mean?} and enrich images, we improved the dataset as explained underneath:
-\begin{itemize}
-\item \textbf{Non-pedestrian objects:} Amongst the extracted boxes of pedestrians, there were some non-pedestrian boxes, some with objects instead of pedestrians, and yet others with more than one person inside the box. Therefore, we manually removed these outliers. After this edition, we ended with 426 samples of people. A few examples of incorrectly collected or labeled objects are shown in below.
-
-\begin{figure}[H]
-	\centering
-	{\includegraphics[width=0.6\textwidth]{images/nonped}}
-	\caption{A selection of non-human or incorrectly labeled objects.}
-	\label{fig:nonped}
-\end{figure}
- 
-\item \textbf{Lack of pedestrians:} For the sake of generalization, we needed a decent variety of pedestrians in the images to train with. For this purpose, we created 2 versions of current pedestrians list, each darkened by the factor of 20\% from each other. 
-\item \textbf{Halos around the pedestrians:} Due to lack of accuracy of the region measuring method, a fine layer of the background the pedestrians were extracted from, still remained around the pedestrians. In the new images, depending on where the person was placed, these thin layers appeared like a halo around the person. Figure~\ref{haloim} illustrates some images with halos around the pedestrians. 
-\begin{figure}[H]
-	\centering
-	{\includegraphics[width=1\textwidth]{images/halo}}
-	\caption{A few synthetic images with halos around the pedestrians in the walkway.}
-	\label{fig:haloim}
-\end{figure}
- 
-To mitigate this issue, we tried two approaches:
-\begin{enumerate}
-\item \textbf{Morphological erosion:} Among morphological operations on image, we applied \textit{erosion} \cite{van2014scikit} to erode the pedestrians masks. In this way, the halos were ignored to some noticeable extent. 
-\item \textbf{Poisson image editing:} Poisson image editing is a technique for seamlessly blending two images together fully automatically  \cite{perez2003poisson}. In addition to erosion, we tried Poisson image editing tool to remove the halos. However, due to our gray-scale and low-resolution images, this tool did not have a great impact on our images.      
-\end{enumerate}
-Afterwards, the images look similar to the ones shown in figure~\ref{nohalo}.
-
-\begin{figure}[H]
-	\centering
-	{\includegraphics[width=1\textwidth]{images/nohalo}}
-	\caption{Some examples of images with no or less halo around the people in the images.}
-	\label{fig:nohalo}
-\end{figure}
- 
-\item \textbf{Image Perspective:} Since pedestrians of different sizes were put randomly in the images, we considered people's tallness perspective in the images. As you may observe, in the following figure, image perspective has not been applied in the images and hence, there are some pedestrians closer to the camera but really small and also some pedestrians quite tall at the end of walkway.
-
-\begin{figure}[H]
-	\centering
-	{\includegraphics[width=1\textwidth]{images/nopers}}
-	\caption{created images before considering image perspective.}
-	\label{fig:nopers}
-\end{figure}
-
-Human height almost follows a Gaussian distribution \cite{subramanian2011height}. Therefore, with respect to \cite{subramanian2011height, garcia2007evolution}, we mapped individual's heights with the length of the walkway in the image, considering a Gaussian noise with mean $\mu = 0$ and $\sigma = 3.5$. The resulting images are demonstrated as follows.
-
-\begin{figure}[H]
-	\centering
-	{\includegraphics[width=1\textwidth]{images/pers}}
-	\caption{Synthetic images considering image perspective based on the real distribution of people's height.}
-	\label{fig:pers}
-\end{figure}
-
-As you may see, considering perspective in the images, the images and people's position in the images look more realistic. \todo{what? }
-\end{itemize}
-
-\noindent Thusly\todo{thusly -- ???}, we created a set of 1 million images, each of size $158\times158$ pixels with up to 29 pedestrians. We assigned 800,000 images for training set and 200,000 instances as the test set. We believe the created synthetic dataset of pedestrians is realistic enough to be able to represent a real-world crowd counting scenario. However, the images can be improved in different aspects and by using diverse image editing and manipulation techniques. 
-
-\subsection{UCSD crowd counting dataset}
-\label{subsec:datareal2}
-To verify and validate our model, we used UCSD crowd counting dataset created by \citeauthor*{chan2008privacy} and used in \cite{chan2008privacy,chan2009bayesian,chan2012counting}. The dataset contains video of pedestrians on UCSD walkways, taken from a stationary camera. There are currently two  viewpoints available among which we used \textit{vidf} videos. All videos are 8-bit gray-scale, each video file has 200 video frames, with dimensions $238\times158$. In our experiment, the first 20 videos which are labeled with the number of pedestrians were incorporated. The center point of each pedestrian defines its' location in the image. A selection of UCSD crowd counting images is shown in figure~\ref{ucsdorg} \todo{figure missing}.
-
-\begin{figure}[H]
-	\centering
-	{\includegraphics[width=1\textwidth]{images/normalucsd}}
-	\caption{Normal UCSD crowd counting dataset images.}
-	\label{fig:pers}
-\end{figure}
-
-\indent Among the labeled images, we selected the ones in which the number of pedestrians does not exceed 29. Then, images were resized to  $158\times158$ pixels and normalized between 0 and 255. Hence, in total we have a dataset of 3375 real images which are masked with the same filter we used for synthetic pedestrians dataset. At last, the images look like the following images.
-
-\begin{figure}[H]
-	\centering
-	{\includegraphics[width=1\textwidth]{images/testucsd}}
-	\caption{Real UCSD images after being masked and resized.}
-	\label{fig:testucsd}
-\end{figure}
-
-
-\indent We will use \todo{use what?} to first, validate the performance of our model trained with synthetic data, on a real dataset, and also to comparison between work done in \cite{chan2008privacy} and our approach. 
