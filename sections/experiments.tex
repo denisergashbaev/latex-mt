@@ -2,7 +2,7 @@
 \chapter{Experiments and results}
 \label{sec:experiments}
 
-Prior to jumping to the final results obtained with our algorithm, this chapter will attempt to give insight into the experiments we designed to verify our hypothesis. We examine our proposed methodology on two different but related scenarios. In the former scenario, we tackle the learning to count even hand-written digits, and for the latter one, crowd counting problem is considered. This chapter gives full particulars of the experiments, and presents obtained results as compared to similar works.
+Prior to jumping to the final results obtained with our algorithm, this chapter will attempt to give insight into the experiments we designed to verify our hypothesis. We examine our proposed methodology on two different but related scenarios. In the former scenario, we tackle the learning to count even hand-written digits, and for the latter one, crowd counting problem is considered. The findings of the experiments will determine to what extent synthetic data generation could help deep convolutional networks to learn when dealing little amount of data. Hence, this chapter gives full particulars of each experiment, and presents obtained results as compared to similar works.
 
 \section{Learning to count Even-odd hand-written digits}
 
@@ -19,7 +19,7 @@ In this experiment, we feed images of digits into a deep convolutional neural ne
 As it was meticulously described in section ~\ref{subsubsec:digit}, we synthetically generated Even-odd digits dataset to use for this task. the dataset holds the following properties:
 \begin{itemize}
 \item Images of MNIST hand-written digits where each image contains up to 15 digits. Also the images are made in gray-scale.
-\item Each image has a dimension of $100\times100$. And each digit in the image is $18\times18$ pixels.  
+\item Each image has a dimension of $100\times100$ and each digit in the image is $18\times18$ pixels.  
 \item A minimum distance of 18 pixels is considered between each two digits (from center to center) in an image to prevent overlapping.
 \item The dataset is generated uniformly. It means that there are equal number of images for each amount of even digits in the image. For instance, the number of images with 5 even digits is the same as number of images containing 10 even digits.
 \item The dataset of 1,000,000 samples is divided into a training set of 800,000 and a test set of 200,000. 
@@ -29,89 +29,121 @@ Since we use Caffe platform to perform our experiments, we convert the images in
 
 \subsection{Learning process}
 
-As discussed in chapter~\ref{subsubsec:digitarch}, for learning to count the number of even digits, we designed a deep CNN. Table~\ref{fig:digitnet} shows a review of the network's specification and architecture.
+As discussed in chapter~\ref{subsubsec:digitarch}, for learning to count the number of even digits, we designed a deep CNN. Table~\ref{fig:digitnet} shows a review of the network's specification and architecture while table~\ref{hypar3} recaps the settings for the hyper-parameters.
 
 
-\begin{table}[H]
-	\centering
-	\begin{tabular}{ |p{2cm}|p{2cm}| }
-	\hline 
-	\multicolumn{2}{|c|}{\textbf{Network parameters}} \\
-	\hline
-	\hline
-	\textbf{Layers} & \textbf{setting }\\
-	\hline
-	Conv1 & $20\times15\times15$\\
-	\hline
-	ReLU1 & max(x,0)  \\
-	\hline
-	LRN1 & $\alpha$=0.0001, $\beta$=0.75\\
-	\hline
-	Pool1    & $max(2\times2)$ \\
-	\hline
-	Conv2 & $50\times3\times3$\\
-	\hline
-	ReLU2 & max(x,0)  \\
-	\hline
-	LRN2 & $\alpha$=0.0001, $\beta$=0.75\\
-	\hline
-	Pool2    & $max(2\times2)$ \\
-	\hline
-	IP1 & 64 outputs \\
-	\hline
-	ReLU3 & max(x,0)  \\
-	\hline
-	IP2 & 1 outputs \\
-	\hline
-	\end{tabular}
-		\caption{The deep CNN with 2 convolution layers to count the number of even digits.}
-		\label{fig:digitnet}
+\begin{table}[!htb]
+    \begin{minipage}{.5\linewidth}
+		\begin{table}[H]
+			\centering
+			\begin{tabular}{ |p{3.8cm}|p{1.7cm}| }
+			\hline 
+			\multicolumn{2}{|c|}{\textbf{Network hyper-parameters}} \\
+			\hline
+			\hline
+			\textbf{Hyper-parameters} & \textbf{setting }\\
+			\hline
+			Learning rate & 0.0001\\
+			\hline
+			Learning policy    & \textit{Multi\_step} \\
+			\hline
+			step size   & 40000 \\
+			\hline
+			Momentum & $\mu = 0.9$\\
+			\hline
+			Weight decay & 0.0005 \\
+			\hline
+			Batch size & 256 \\
+			\hline
+			Iterations & 1600000 \\
+			\hline
+			\end{tabular}
+				\caption{Proposed settings for network's hyper-parameters.}
+				\label{hypar3}
+		\end{table}
+    \end{minipage}%
+    \begin{minipage}{.5\linewidth}
+		\begin{table}[H]
+			\centering
+			\begin{tabular}{ |p{2cm}|p{2cm}| }
+			\hline 
+			\multicolumn{2}{|c|}{\textbf{Network parameters}} \\
+			\hline
+			\hline
+			\textbf{Layers} & \textbf{setting }\\
+			\hline
+			Conv1 & $20\times15\times15$\\
+			\hline
+			ReLU1 & max(x,0)  \\
+			\hline
+			LRN1 & $\alpha$=0.0001, $\beta$=0.75\\
+			\hline
+			Pool1    & $max(2\times2)$ \\
+			\hline
+			Conv2 & $50\times3\times3$\\
+			\hline
+			ReLU2 & max(x,0)  \\
+			\hline
+			LRN2 & $\alpha$=0.0001, $\beta$=0.75\\
+			\hline
+			Pool2    & $max(2\times2)$ \\
+			\hline
+			IP1 & 64 outputs \\
+			\hline
+			ReLU3 & max(x,0)  \\
+			\hline
+			IP2 & 1 outputs \\
+			\hline
+			\end{tabular}
+				\caption{Proposed architecture's settings.}
+				\label{fig:digitnet}
+		\end{table}
+		 
+    \end{minipage} 
+        %\caption{Global caption}
 \end{table}
 
+%However, a well-designed network cannot solely guarantee an optimal performance for the model. The responsibilities of learning are divided between the network for yielding loss and gradients, and the optimization methods (solver) and parameters for overseeing the optimization and generating parameter updates. 
+
+%Among Caffe solvers, As described in section~\ref{subsec:sgd}, we use Stochastic Gradient Descent optimization method. Apart from solver method, the solver parameters need to be set attentively in order to optimize the model performance. Table~\ref{tab:digitsolver} summarizes the initial settings for the solver parameters while the upcoming items justify our selections.
+
+%\begin{table}[H]
+%	\centering
+%	\begin{tabular}{ |p{2cm}|p{2cm}| }
+%	\hline 
+%	\multicolumn{2}{|c|}{\textbf{Optimization parameters}} \\
+%	\hline
+%	\hline
+%	\textbf{Parameter} & \textbf{value}\\
+%	\hline
+%	base\_lr & 0.0001\\
+%	\hline
+%	batch size & 256\\
+%	\hline
+%	momentum & 0.9  \\
+%	\hline
+%	weight decay & 0.0005\\
+%	\hline
+%	step size   & 40000 \\
+%	\hline
+%	gamma($\gamma$) & 0.1\\
+%	\hline
+%	iterations & 1,600,000\\
+%	\hline
+%	\end{tabular}
+%		\caption{The solver parameters settings for even digit counting problem.}
+%		\label{tab:digitsolver}
+%\end{table}
 
 
-
-However, a well-designed network cannot solely guarantee an optimal performance for the model. The responsibilities of learning are divided between the Net for yielding loss and gradients, and the optimization methods (solver) and parameters for overseeing the optimization and generating parameter updates. 
-
-Among Caffe solvers, As described in section~\ref{subsec:sgd}, we use Stochastic Gradient Descent optimization method. Apart from solver method, the solver parameters need to be set attentively in order to optimize the model performance. Table~\ref{tab:digitsolver} summarizes the initial settings for the solver parameters while the upcoming items justify our selections.
-
-\begin{table}[H]
-	\centering
-	\begin{tabular}{ |p{2cm}|p{2cm}| }
-	\hline 
-	\multicolumn{2}{|c|}{\textbf{Optimization parameters}} \\
-	\hline
-	\hline
-	\textbf{Parameter} & \textbf{value}\\
-	\hline
-	base\_lr & 0.0001\\
-	\hline
-	batch size & 256\\
-	\hline
-	momentum & 0.9  \\
-	\hline
-	weight decay & 0.0005\\
-	\hline
-	step size   & 40000 \\
-	\hline
-	gamma($\gamma$) & 0.1\\
-	\hline
-	iterations & 1,600,000\\
-	\hline
-	\end{tabular}
-		\caption{The solver parameters settings for even digit counting problem.}
-		\label{tab:digitsolver}
-\end{table}
-
-
-\begin{itemize}
-\label{solv:param}
-\item \textbf{Learning rate:} After trying different initial values in range of $(10^{-6}, 1)$, we set the basic learning rate to $\alpha = 0.0001$. However, for our experiment we chose \textit{multi-step} learning policy in which, after each \textit{stepsize}=40000 iterations, the learning rate drops by the rate of Gamma $\gamma = 0.1$. This initialization is based on rules of thumb used in \cite{krizhevsky2012imagenet}.
-\item \textbf{Batch size:} Due to the non-complex and low-resolution dataset we are training on, we were able to use batches of size 256 for our training and testing phases.
-\item \textbf{Momentum:} We use momentum $\mu = 0.9$. Because, momentum setting $\mu$ effectively multiplies the size of our updates by a factor of $\frac{1}{1-\mu}$. Hence, changes in momentum and learning rate ought to be accompanied with an inverse correlation. When momentum $\mu = 0.9$, we have an effective update size of 10 since we also drop the learning rate by the factor of $\gamma= 0.1$.
-\item \textbf{Weight decay:} Weight decay as a penalty term to the error function, has a constant value of 0.0005. This decay constant is multiplied to the sum of squared weights.
-\item \textbf{Iterations:} Given the time and hardware we had, we managed to let the system train for 1,600,000 iterations.
-\end{itemize}
+%\begin{itemize}
+%\label{solv:param}
+%\item \textbf{Learning rate:} After trying different initial values in range of $(10^{-6}, 1)$, we set the basic learning rate to $\alpha = 0.0001$. However, for our experiment we chose \textit{multi-step} learning policy in which, after each \textit{stepsize}=40000 iterations, the learning rate drops by the rate of Gamma $\gamma = 0.1$. This initialization is based on rules of thumb used in \cite{krizhevsky2012imagenet}.
+%\item \textbf{Batch size:} Due to the non-complex and low-resolution dataset we are training on, we were able to use batches of size 256 for our training and testing phases.
+%\item \textbf{Momentum:} We use momentum $\mu = 0.9$. Because, momentum setting $\mu$ effectively multiplies the size of our updates by a factor of $\frac{1}{1-\mu}$. Hence, changes in momentum and learning rate ought to be accompanied with an inverse correlation. When momentum $\mu = 0.9$, we have an effective update size of 10 since we also drop the learning rate by the factor of $\gamma= 0.1$.
+%\item \textbf{Weight decay:} Weight decay as a penalty term to the error function, has a constant value of 0.0005. This decay constant is multiplied to the sum of squared weights.
+%\item \textbf{Iterations:} Given the time and hardware we had, we managed to let the system train for 1,600,000 iterations.
+%\end{itemize}
 
 \noindent The algorithm trained on a GPU NVIDIA \cite{kirk2007nvidia} Tesla K40 \cite{lindholm2008nvidia}. It took almost 4 days to train 800,000 samples and test over 200,000 images. The learning curves of this process are shown in the figure~\ref{fig:curve}.
 
@@ -177,7 +209,7 @@ Accordingly, figure below demonstrates the filters and their corresponding outpu
 
 \subsection{Experimental results}
 
-In addition to the Euclidean loss function we implemented in our architecture, we use two other error measurements to evaluate and compare the performance of our model. These measurements are briefly described and justified in below:
+In addition to the Euclidean loss function that we implemented in our architecture, we use two other error measurements to evaluate and compare the performance of our model. These measurements are briefly described and justified in below:
 \begin{enumerate}
 \item \textbf{Mean squared error(MSE)}: Mean squared error is arguably the most important criterion used to evaluate the performance of a predictor or an estimator. The mean squared error is also useful to relay the concepts of bias, precision, and accuracy in statistical estimation. The MSE is the second moment (about the origin) of the error, and thus incorporates both the variance of the estimator and its bias \cite{lehmann1998theory}. The MSE can be estimated by
 $$MSE = {\frac{1} {N}{\sum\limits_{i = 1}^N {(\hat{x_{pred}} - x_{obs} } })^{2} } $$
@@ -186,7 +218,7 @@ where:\\
 \textit{ $\hat{x_{pred}}$}: a vector of N predictions\\
 \textit{$x_{obs}$}: a vector of observed value (ground truth) for input x\\
 
-The mathematical benefits of mean squared error are particularly evident in its use at analyzing the performance of linear regression, as it allows one to partition the variation in a dataset into variation explained by the model and variation explained by randomness.
+The mathematical benefits of mean squared error are particularly evident in its use for analyzing the performance of linear regression, as it allows one to partition the variation in a dataset into variation explained by the model and variation explained by randomness.
 \item \textbf{Mean absolute error(MAE)}: MAE measures the average magnitude of the errors in a set of predictions, without considering their direction. In other words, it measures how close predictions are to the eventual outcomes \cite{willmott2005advantages}. MAE can simply be computed by:
 $$MAE = {\frac{1} {N}{\sum\limits_{i = 1}^N {|x_{pred} - x_{obs} } }| } $$
 where:\\
@@ -195,12 +227,10 @@ where:\\
 \textit{$x_{obs}$}: observed value (ground truth) for instance x
 \end{enumerate}
 
-\noindent Having chosen error measurements explained, for the task of counting even digits, using 800,000 training samples and 200,000 test images, and after 1,600,000 iterations, our model obtained the results shown in table~\ref{tab:res}:
+\noindent Having chosen error measurements explained, for the task of counting even digits, using 800,000 training samples and 200,000 test images, and after 1,600,000 iterations, our model obtained the results shown in table~\ref{tab:res}.
 
 
 \begin{table}[H]
-\caption{Table caption font is different from the normal text font in order to get a better differentiation -- I like it that way.}
-\label{tab:res}
 \centering
 \small\sffamily
 \begin{tabular}{llr}
@@ -215,6 +245,8 @@ Mean squared error       & 0.20  \\
 Mean absolute error      & 0.20  \\
 \bottomrule
 \end{tabular}
+\caption{}
+\label{tab:res}
 \end{table} 
 
 Accordingly, the spread-error plot corresponding to the model is provided.
@@ -244,12 +276,12 @@ of the frames are correctly labeled. Moreover, most of the errors correspond to 
 \textbf{Experiments}  & \textbf{Chance} & \textbf{Accuracy} \\
 \bottomrule
 %\midrule
-Euclidean loss           & 0.20 & 0.30 \\
-Mean squared error       & 0.20 & 0.30 \\
+Our results           & 0.20 & 0.30 \\
+Results obtained by \citeauthor*{segui2015learning}       & 0.20 & 0.30 \\
 
 \bottomrule
 \end{tabular}
-\caption{Table caption font is different from the normal text font in order to get a better differentiation -- I like it that way.}
+\caption{.}
 \label{tab:comp}
 \end{table} 
 
@@ -275,7 +307,7 @@ As fully discussed in chapter~\ref{subsec:synped}, for the particular case study
 \item Out of 1 million images, 800,000 are considered for training and 200,000 for testing sets.
 \end{itemize} 
 
-\noindent In addition, in order to examine the performance of our model in a real problem, we used UCSD crowd counting dataset \cite{chan2008privacy} with the underneath properties:
+\noindent In addition, in order to examine the performance of our model in a real-world scenario, we used UCSD crowd counting dataset \cite{chan2008privacy} with the underneath properties:
 
 \begin{itemize}
 \item The dataset consists of 3375 video frames shot by a stationary camera. Each image has up to 29 pedestrians present in the image.
@@ -289,74 +321,109 @@ Once again, to improve the training time, we converted the synthetic data into L
 
 \subsection{The learning process}
 
-As fully described in chapter~\ref{subsec:ucsdarch}, we implemented a deep convolutional neural network in Caffe to learn the number of pedestrians in the walkway. As a reminder, the designed network has the components mentioned in table~\ref{tab:ucsdnet}.  
+As fully described in chapter~\ref{subsec:ucsdarch}, we implemented a deep convolutional neural network in Caffe to learn the number of pedestrians in the walkway. As a reminder, the designed network has the components mentioned in table~\ref{myucsd3}. The network trains with stochastic gradient descent and our justification for the setting the solver parameters (hyper-parameters) remains the same as previous experiment (explained in section~\ref{subsec:ucsdarch}). However, once again table~\ref{hypar4} provides a review of the settings for network's hyper-parameters.
 
-\begin{table}[H]
-	\centering
-			\caption{The deep CNN with 2 convolution layers to count the number of even digits.}
-	\begin{tabular}{ |p{2cm}|p{2cm}| }
-	\hline 
-	\multicolumn{2}{|c|}{\textbf{Network parameters}} \\
-	\hline
-	\hline
-	\textbf{Layers} & \textbf{setting }\\
-	\hline
-	Conv1 & $20\times15\times15$\\
-	\hline
-	ReLU1 & max(x,0)  \\
-	\hline
-	LRN1 & $\alpha$=0.0001, $\beta$=0.75\\
-	\hline
-	Pool1    & $max(2\times2)$ \\
-	\hline
-	Conv2 & $50\times3\times3$\\
-	\hline
-	ReLU2 & max(x,0)  \\
-	\hline
-	LRN2 & $\alpha$=0.0001, $\beta$=0.75\\
-	\hline
-	Pool2    & $max(2\times2)$ \\
-	\hline
-	IP1 & 64 outputs \\
-	\hline
-	ReLU3 & max(x,0)  \\
-	\hline
-	IP2 & 1 outputs \\
-	\hline
-	\end{tabular}
-		\label{tab:ucsdnet}
+\begin{table}[!htb]
+    \begin{minipage}{.5\linewidth}
+		\begin{table}[H]
+			\centering
+			\begin{tabular}{ |p{2cm}|p{2cm}| }
+			\hline 
+			\multicolumn{2}{|c|}{\textbf{Network parameters}} \\
+			\hline
+			\hline
+			\textbf{Layers} & \textbf{setting }\\
+			\hline
+			Conv1 & $20\times15\times15$\\
+			\hline
+			ReLU1 & max(x,0)  \\
+			\hline
+			LRN1 & $\alpha$=0.0001, $\beta$=0.75\\
+			\hline
+			Pool1    & $max(2\times2)$ \\
+			\hline
+			Conv2 & $50\times3\times3$\\
+			\hline
+			ReLU2 & max(x,0)  \\
+			\hline
+			LRN2 & $\alpha$=0.0001, $\beta$=0.75\\
+			\hline
+			Pool2    & $max(2\times2)$ \\
+			\hline
+			IP1 & 64 outputs \\
+			\hline
+			ReLU3 & max(x,0)  \\
+			\hline
+			IP2 & 1 outputs \\
+			\hline
+			\end{tabular}
+				\caption{Proposed architecture's settings.}
+				\label{hypar4}
+		\end{table}
+    \end{minipage}%
+    \begin{minipage}{.5\linewidth}
+		\begin{table}[H]
+			\centering
+			\begin{tabular}{ |p{3.8cm}|p{1.7cm}| }
+			\hline 
+			\multicolumn{2}{|c|}{\textbf{Network hyper-parameters}} \\
+			\hline
+			\hline
+			\textbf{Hyper-parameters} & \textbf{setting }\\
+			\hline
+			Learning rate & 0.0001\\
+			\hline
+			Learning policy    & \textit{Multi\_step} \\
+			\hline
+			step size   & 40000 \\
+			\hline
+			Momentum & $\mu = 0.9$\\
+			\hline
+			Weight decay & 0.0005 \\
+			\hline
+			Batch size & 256 \\
+			\hline
+			Iterations & 1600000 \\
+			\hline
+			\end{tabular}
+				\caption{Proposed settings for network's hyper-parameters.}
+				\label{myucsd3}
+		\end{table}
+    \end{minipage} 
+        %\caption{Global caption}
 \end{table}
 
-The model's optimization method and parameters (solver parameters) are set similar to the learning to count problem. The network trains with stochastic gradient descent and our justification for the setting the solver parameters remains the same previous experiment (explained in section~\ref{solv:param}). Therefore, the repetitive explanations are skipped and only the final settings are described in table~\ref{tab:solvparam}.
 
-\begin{table}[H]
-	\centering
-			\caption{The solver parameters settings for even digit counting problem.}
-	\begin{tabular}{ |p{2cm}|p{2cm}| }
-	\hline 
-	\multicolumn{2}{|c|}{\textbf{Optimization parameters}} \\
-	\hline
-	\hline
-	\textbf{Parameter} & \textbf{value}\\
-	\hline
-	base\_lr & 0.0001\\
-	\hline
-	batch size & 256\\
-	\hline
-	momentum & 0.9  \\
-	\hline
-	weight decay & 0.0005\\
-	\hline
-	step size   & 40000 \\
-	\hline
-	gamma($\gamma$) & 0.1\\
-	\hline
-	iterations & 1,600,000\\
-	\hline
-	\end{tabular}
+%The model's optimization method and parameters (solver parameters) are set similar to the learning to count problem. The network trains with stochastic gradient descent and our justification for the setting the solver parameters remains the same previous experiment (explained in section~\ref{solv:param}). Therefore, the repetitive explanations are skipped and only the final settings are described in table~\ref{tab:solvparam}.
 
-		\label{tab:solvparam}
-\end{table}
+%\begin{table}[H]
+%	\centering
+%			\caption{The solver parameters settings for even digit counting problem.}
+%	\begin{tabular}{ |p{2cm}|p{2cm}| }
+%	\hline 
+%	\multicolumn{2}{|c|}{\textbf{Optimization parameters}} \\
+%	\hline
+%	\hline
+%	\textbf{Parameter} & \textbf{value}\\
+%	\hline
+%	base\_lr & 0.0001\\
+%	\hline
+%	batch size & 256\\
+%	\hline
+%	momentum & 0.9  \\
+%	\hline
+%	weight decay & 0.0005\\
+%	\hline
+%	step size   & 40000 \\
+%	\hline
+%	gamma($\gamma$) & 0.1\\
+%	\hline
+%	iterations & 1,600,000\\
+%	\hline
+%	\end{tabular}
+%
+%		\label{tab:solvparam}
+%\end{table}
 
 \noindent Similarly, we used GPU NVIDIA TESLA K40 to train our network. After 5 days of training, we obtained the following learning curves :
 
