@@ -7,7 +7,7 @@ Learning to count is a central concept which constitutes the most fundamental id
 
 Artificial intelligence and computer vision share topics such as pattern recognition and machine learning techniques \cite{michalski2013machine, mitchell1997machine}. Consequently, computer vision is sometimes seen as a part of the artificial intelligence field or the computer science field in general. Recent machine learning methods applied for computer vision tasks, require large number of data for the learning process. In order to learn to count the object of interest in an image or video, various object features need to be designed, extracted or detected during the learning phase. The complexity of feature detection process in vision tasks, restricts their usage in large-scale computer vision applications thus demanding more efficient solutions to alleviate, expedite and improve this process. 
 
-\indent One of the recent and commonly used methods to facilitate feature detection process is application of deep Convolutional Neural Networks(CNN) \cite{szegedy2015going, krizhevsky2012imagenet, lecun1995convolutional, sermanet2013overfeat, ji20133d, taylor2010convolutional}. One of the promises of deep CNN is replacing handcrafted features with efficient algorithms for unsupervised or semi-supervised feature learning and hierarchical feature extraction \cite{song2013hierarchical}. CNNs have been claimed and practically proven to achieve the most assuring performance in different vision benchmark problems concerning feature detection and classification \cite{ciresan2011flexible, szegedy2015going, ciresan2012multi}. 
+\indent One of the recent and commonly used methods to facilitate feature detection process is application of deep convolutional neural networks \cite{szegedy2015going, krizhevsky2012imagenet, lecun1995convolutional, sermanet2013overfeat, ji20133d, taylor2010convolutional}. One of the promises of DCNN is replacing handcrafted features with efficient algorithms for unsupervised or semi-supervised feature learning and hierarchical feature extraction \cite{song2013hierarchical}. CNNs have been claimed and practically proven to achieve the most assuring performance in different vision benchmark problems concerning feature detection and classification \cite{ciresan2011flexible, szegedy2015going, ciresan2012multi}. 
 
 Although access to fast computers and vast amounts of data has enabled the advances of deep learning algorithms such as CNN in solving many problems that were not solvable using classic AI\footnote{Computer programs designed to solve problems that human brains performed easily, such as understanding text or recognizing objects in an image. Due to their poor performance, they introduced \textit{Expert Systems} (computer programs combined with rules provided by domain experts) which were highly tuned for a specific problem. }, they have limitations. For instance, they don't perform well when there is limited data \cite{griffin2007caltech}. This constrain restricts the application of DL methods in various areas including computer vision where they have shown promising performances.  
 
@@ -64,14 +64,14 @@ Following the course of achieving aforementioned objectives, we created and desi
 
 \section{Organization}
 
-This report takes off with a review of Deep Learning(DL) (chapter~\ref{sec:dl}) as a branch of Artificial Intelligence (AI) which deep convolutional neural networks belong to, and moves on to introduce a deep CNN's basic architecture and components in details (chapter~\ref{sec:deepcnn}). 
+This report takes off with a review of deep learning (chapter~\ref{sec:dl}) as a branch of artificial intelligence which deep convolutional neural networks belong to, and moves on to introduce a deep CNN's basic architecture and components in details (chapter~\ref{sec:deepcnn}). 
 
 
-Chapter ~\ref{sec:stateoftheart} reviews state-of-the-art of feature detection and learning to count problems. 
+Chapter ~\ref{sec:stateoftheart} reviews state-of-the-art of synthetic data generation in CV along with feature detection and learning to count problems. 
 
-In Chapter~\ref{sec:proposal}, we describe our proposal for constructing a deep neural network to tackle feature detection issue learning to count problems. 
+In Chapter~\ref{sec:proposal}, we introduce our created synthetic datasets to be applied in our proposal for constructing a deep neural network to tackle feature detection issue learning to count problems. 
 
-Chapter ~\ref{sec:implementation} introduces the applied platform to implement our methodology  along with the peculiarities of proposed data creation process and network modeling. 
+Chapter ~\ref{sec:implementation} introduces the applied platform to implement our methodology along with the peculiarities of proposed data creation process and network modeling. 
 
 Chapter ~\ref{sec:experiments} deals with the empirical experiments and analysis. Obtained results and comparisons with state-of-the-art solutions are expressed in this section.
 
