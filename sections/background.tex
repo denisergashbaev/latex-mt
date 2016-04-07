@@ -164,13 +164,13 @@ Deep Neural Networks have been investigated for decades, but training deep netwo
 
 It was discovered, however, that better results could be achieved by pre-training each layer with an unsupervised learning algorithm \cite{hinton2006fast}. In 2006, \citeauthor{hinton2006fast} obtained good results using Restricted Boltzmann Machines (RBM) (a generative model) to perform unsupervised training of the layers \cite{hinton2006fast}. The goal of this training was to obtain a model that could capture patterns in the data, similarly to a feature descriptor, not using the dataset labels. The weights learned by this unsupervised training were then used to initialize neural networks. 
 
-\indent Similar results were reported using auto-encoders for training each layer in \cite{bengio2007greedy}. These experiments identified that layers could be pre-trained one at a time, in a greedy layer-wise format. After the layers are pre-trained, the learned weights are used to initialize the neural network, and then the standard back-propagation algorithm (explained in Section~\ref{subsec:bp}) is used for fine-tuning the network. The advantage of unsupervised pre-training was demonstrated in several statistical comparisons \cite{bengio2007greedy,larochelle2007empirical,erhan2009difficulty}, until recently when deep neural networks trained in a full supervised manner started to register similar results in some tasks like object recognition. \citealt{ciresan2012multi} demonstrated that properly trained deep neural networks (with only supervised learning) are able to achieve top results in many tasks, although not denying that pre-training might help, especially in cases were little data is available for training, or when there are massive amounts of unlabeled data. On the task of image classification, the best published results use a particular type of architecture called Convolutional Neural Network, which is described ~\ref{sec:cnn}.
+\indent Similar results were reported using auto-encoders for training each layer in \cite{bengio2007greedy}. These experiments identified that layers could be pre-trained one at a time, in a greedy layer-wise format. After the layers are pre-trained, the learned weights are used to initialize the neural network, and then the standard back-propagation algorithm (explained in Section~\ref{subsec:bp}) is used for fine-tuning the network. The advantage of unsupervised pre-training was demonstrated in several statistical comparisons \cite{bengio2007greedy,larochelle2007empirical,erhan2009difficulty}, until recently when deep neural networks trained in a full supervised manner (using labeled data) started to register similar results in some tasks like object recognition. \citealt{ciresan2012multi} demonstrated that properly trained deep neural networks (under full supervision) are able to achieve top results in many tasks, although not denying that pre-training might help, especially in cases were little data is available for training, or when there are massive amounts of unlabeled data. On the task of image classification, the best published results use a particular type of architecture called Convolutional Neural Network (CNN), which is described in below.
 
 
 
 \section{Convolutional Neural Networks}
 \label{sec:cnn}
-Convolutional Neural Networks are a specialized kind of neural network for processing data that has a known grid-like topology such as image data which can be thought of as a 2D grid of pixels. CNN are simply neural networks that use convolution in place of general matrix multiplication in at least one of their layers \cite{Goodfellow-et-al-2016-Book}. This type of network was used to obtain state-of-the-art results in the CIFAR-10 object recognition task \cite{ciresan2012multi} and, more recently, to obtain state-of-the-art results in more challenging tasks such as the ImageNet Large Scale Visual Recognition Challenge \cite{russakovsky2015imagenet}. For both tasks, the training process benefited from the significant speed-ups on processing using modern GPUs (Graphical Processing Units), which are well suited for the implementation of convolutional networks.
+Convolutional Neural Networks are a specialized kind of neural network for processing data that has a known grid-like topology such as image data which can be thought of as a 2D grid of pixels. CNNs are simply neural networks that use convolution in place of general matrix multiplication in at least one of their layers \cite{Goodfellow-et-al-2016-Book}. This type of network was used to obtain state-of-the-art results in the CIFAR-10 object recognition task \cite{ciresan2012multi}, and more recently in more challenging tasks such as the ImageNet Large Scale Visual Recognition Challenge \cite{russakovsky2015imagenet}. For both tasks, the training process benefited from the significant speed-ups on processing using modern GPUs (Graphical Processing Units), which are well suited for the implementation of convolutional networks.
 
 
 Essentially, CNNs combine three architectural ideas to ensure some degree of shift and distortion invariance of local receptive fields, shared weights (or weight replication), and, sometimes, spatial or temporal sub-sampling \cite{lecun2010convolutional}. We are going to explain these basic ideas of CNN while introducing the main components that compose the main body of any CNN architecture.
@@ -193,10 +193,10 @@ A sequential implementation of this process, for each feature map, would be to s
 application of a discrete convolution of the inputs $y^{l-1}$ with a filter $w^{l}$ , adding a bias $b^{l}$, followed by the application of a non-linear function $\sigma$:
 
 \begin{equation}
-y_{rc}^{l} =  \sigma \sum_{i=1}^{F_r}\sum_{j=1}^{F_c}  y_{(r+i-1)(c+j-1)}^{l-1} w_{ij}^{l} + b^{l})
+y_{rc}^{l} =  \sigma \sum_{i=1}^{F_r}\sum_{j=1}^{F_c}  y_{(r+i-1)(c+j-1)}^{l-1} (w_{ij}^{l} + b^{l})
 \label{eq:convf}
 \end{equation}
-l
+
 In this equation, $y_{rc}^{l}$ is the output unit at \{r, c\}, $F_r$ and $F_c$ are the number of rows and columns in the 2D filter, $w_{ij}^{l}$ is the value of the filter at position \{i, j\},  $y_{(r+i-1)(c+j-1)}^{l-1}$ is the value of input to this layer, at position \{r + i - 1, c + j - 1\}, and $b^{l}$ is the bias term.
 
 The equation above is defined for all possible applications of the filter, that is, for $r~\in \{1, ..., X_r - F_r + 1\}$ and $c \in \{1, ..., X_c - F_c + 1\}$, where $X_r$ and $X_c$ are the number of rows and columns in the input to this layer. The convolutional layer can either apply the filters for all possible inputs, or use a different strategy. Mainly to reduce computation time, instead of applying the filter for all possible \{r, c\} pairs, only the pairs with distances are used, which is called the \textit{stride}. A stride, s = 1, is equivalent to apply the convolution for all possible pairs, as defined above. 
@@ -205,13 +205,13 @@ The equation above is defined for all possible applications of the filter, that 
 
 \subsubsection{Weight Sharing}
 
-Weight sharing refers to having several connections controlled by a single parameter (weight). Weight sharing can be interpreted as imposing equality constraints among the connection strengths. An interesting feature of weight sharing is that it can be implemented with very little computational overhead\cite{lecun1989generalization}. The weight sharing technique has an interesting side effect of reducing the number of free parameters, thereby the capacity of the machine and improving its generalization ability\cite{lecun2010convolutional}.
+Weight sharing refers to having several connections controlled by a single parameter (weight). Weight sharing can be interpreted as imposing equality constraints among the connection strengths. An interesting feature of weight sharing is that it can be implemented with very little computational overhead \cite{lecun1989generalization}. The weight sharing technique has an interesting side effect of reducing the number of free parameters, thereby the capacity of the machine and improving its generalization ability \cite{lecun2010convolutional}.
 
 
 
 \subsection{Pooling/Sub-sampling Layer}
 \label{poolinglayer}
-Once a feature is detected, its' exact position becomes less important as long as its' approximate position relative to other features is preserved. Furthermore, as the dimensionality of applying a filter is equal to the input dimensionality, we would not be gaining any translation invariance with these additional filters, we would be stuck doing pixel-wise analysis on increasingly abstract features. In order to solve this problem, a \textit{sub-sampling} layer is introduced.
+Once a feature is detected, its' exact position becomes less important as long as its' approximate position relative to other features is preserved. Furthermore, as the dimensionality of applying a filter is equal to the input dimensionality, we would not be gaining any translation invariance with these additional filters. We would be stuck doing pixel-wise analysis on increasingly abstract features. In order to solve this problem, a \textit{sub-sampling} layer is introduced.
 
  Sub-sampling, or down-sampling, refers to reducing the overall size of a signal. In many cases, such as audio compression for music files, sub-sampling is done simply for size reduction \cite{sub}. But in the domain of 2D filter outputs, sub-sampling  can also be thought of as reducing the sensitivity of the output to shifts and distortions.
 
@@ -225,7 +225,7 @@ In this equation, $y_{rc}^{l}$ is the output for index \textit{{r, c}}, \textit{
 
 
  
-This involves splitting up the matrix of filter outputs into small non-overlapping grids (the larger the grid, the greater the signal reduction), and taking the maximum value in each grid as the value in the reduced matrix. A schematic of max-pooling is depicted in figure~\ref{fig:pooling}.Similarly for the convolutional layer described above, instead of generating all possible pairs of \{i, j\}, a \textit{stride, s,} can be used. In particular, a stride s = 1 is equivalent to using all possible pooling windows, and a stride s = m is equivalent of using all non-overlapping pooling windows.
+This involves splitting up the matrix of filter outputs into small non-overlapping grids (the larger the grid, the greater the signal reduction), and taking the maximum value in each grid as the value in the reduced matrix. A schematic of max-pooling is depicted in figure~\ref{fig:pooling}. Similarly for the convolutional layer described above, instead of generating all possible pairs of \{i, j\}, a \textit{stride, s,} can be used. In particular, a stride s = 1 is equivalent to using all possible pooling windows, and a stride s = m is equivalent of using all non-overlapping pooling windows.
 \begin{figure}[H]
 	\centering
 	{\includegraphics[width=0.5\textwidth]{images/pooling}}
@@ -238,7 +238,7 @@ This involves splitting up the matrix of filter outputs into small non-overlappi
 
 \subsection{Local Response Normalization}
 \label{lrnlayer}
-ReLU have the desirable property that they do not require input normalization to prevent them from saturating. If at least some training examples produce a positive input to a ReLU, learning will happen in that neuron. However, we still find that \textit{local response normalization}(LRN) scheme aids generalization. This sort of response normalization implements a form of lateral inhibition ( the capacity of an excited neuron to reduce the activity of its neighbors) inspired by the type found in real neurons, creating competition for big activities amongst neuron outputs computed using different kernels\cite{krizhevsky2012imagenet}. Figure~\ref{fig:lrns} illustrates local response normalization in a CNN. 
+ReLU have the desirable property that they do not require input normalization to prevent them from saturating. If at least some training examples produce a positive input to a ReLU, learning will happen in that neuron. However, we still find that \textit{local response normalization}(LRN) scheme aids generalization. This sort of response normalization implements a form of lateral inhibition ( the capacity of an excited neuron to reduce the activity of its neighbors) inspired by the type found in real neurons, creating competition for big activities amongst neuron outputs computed using different kernels \cite{krizhevsky2012imagenet}. Figure~\ref{fig:lrns} illustrates local response normalization in a CNN. 
 \begin{figure}[H]
 	\centering
 	{\includegraphics[width=0.6\textwidth]{images/lrn}}
@@ -251,7 +251,7 @@ More formally, the activity $a_{x,y}^{i}$ of a neuron in bank \textit{i} at posi
 \centering
 \Bigg( 1+ \alpha \sum_{j=i-N/2}^{i+N/2} (a_{x,y}^{j})^{2} \Bigg)
 \end{equation}
-where the sum runs over \textit{N} " adjacent " banks of neurons at the \textit{same position in the topographic organization}. The ordering of the bank is arbitrary and determined before training begins. The constants \textit{N}, $\alpha$ and $\beta$ are hyper-parameters whose values are determined using a validation set.
+where the sum runs over \textit{N} " adjacent " banks of neurons at the same position in the topographic organization. The ordering of the bank is arbitrary and determined before training begins. The constants \textit{N}, $\alpha$ and $\beta$ are hyper-parameters whose values are determined using a validation set.
 
 In other words, we can think of it as helping sharpening the response. Instead of carrying multiple ambiguous representation of a patch, it pushes the network to commit more towards a specific representation, freeing resources to analyze it better.
 
@@ -259,7 +259,7 @@ In other words, we can think of it as helping sharpening the response. Instead o
 
 \subsection{Fully connected/Inner product layer}
 
-Finally, after several convolutional and max pooling layers, the high-level reasoning in the neural network is done via \textit{fully connected layers}(IP). A fully connected layer takes all neurons in the previous layer (be it fully connected, pooling, or convolutional) and connects it to every single neuron it has. Fully connected layers are not spatially located anymore (you can visualize them as one-dimensional), so there can be no convolutional layers after a fully connected layer. 
+Finally, after several convolutional and max pooling layers, the high-level reasoning in the neural network is done via \textit{fully connected layers} (FC/IP). A fully connected layer takes all neurons in the previous layer (be it fully connected, pooling, or convolutional) and connects it to every single neuron it has. Fully connected layers are not spatially located anymore (you can visualize them as one-dimensional), so there can be no convolutional layers after a fully connected layer. 
 
 
 

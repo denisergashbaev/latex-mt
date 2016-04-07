@@ -17,7 +17,8 @@ This master thesis presents an analysis on the synthetic data generation procedu
 \end{itemize} 
 In addition, the state-of-the-art \cite{segui2015learning} technology lacks applicability for real-world counting problems due to being tested only on synthetic dataset.
 
-The novelty of our approach compared to the state-of-the-art is that we hypothesize that features learned by training a  deep CNN with synthetic dataset, are representative enough to count the number of object of interest in a real dataset. We tackle this task as a regression problem. 
+
+The novelty of our approach compared to the state-of-the-art is that we present highly-realistic synthetic data generation algorithms for training DCNN. Consequently, by the use of these realistic datasets, we hypothesize that features learned by DCNN with synthetic dataset, are representative enough to count the number of object of interest in a real dataset. We tackle this task as a regression problem. 
 To the best of our knowledge, the proposed work would be the first one in which a counting system trained with synthetic images is able to be incorporated in real-world similar counting problems.
 
 Henceforth, in the rest of this chapter, we justify both our synthetic data generation process and our proposed methodology along with a comparison to state-of-the-art from different aspects including method selection and architecture.   
@@ -34,15 +35,15 @@ In spite of remarkable  performance of DCNN in some simple recognition benchmark
 
 However, there are still many areas such as crowd counting in which large training set is either missing or not publicly available due to privacy-preserving policies. In these types of problems, synthetic data generation can be a well-suited surrogate for the missing actual data.  Access to unsupervised images and also the existence of powerful image processing tools enable us to create highly realistic images. Hence, in this work we propose two synthetically created datasets related to proposed learning to count problems for the application of deep convolutional neural networks. First learning to count even-digits dataset and then a set of images for counting the number of pedestrians present in the images.   
 
-The proposed synthetic datasets enable us to apply deep convolutional neural networks for problems concerning learning to count the number of object of interest. Moreover, in the case of counting the number of pedestrians, it preserves the individuals' privacy since the data is synthetic and not real. Consequently, the application of DCNNs lead to easier feature detection process and improvement of the system's performance. 
+The proposed synthetic datasets facilitate the application of deep convolutional neural networks for problems concerning learning to count the number of object of interest. Moreover, in the case of counting the number of pedestrians, it preserves the individuals' privacy since the data is synthetic and not real (as explained in chapter~\ref{fda}, previous crowd counting approaches were somehow infringing individuals' privacy by using object tracking algorithms.). Consequently, the application of DCNNs lead to easier feature detection process and improvement of the system's performance. 
 
 \subsection{Learning to Count Even-digits Dataset}
 
-In this study, we introduce a synthetic dataset using MNIST dataset. The MNIST database of handwritten digits, has a training set of 60,000 examples, and a test set of 10,000 examples. The digits have been size-normalized and centered in a fixed-size image \cite{lecun1999mnist}. In the MNIST dataset, each image contains one hand-written digit of dimension $28\times28$. Figure~\ref{fig:mnistimages} shows a selection of MNIST dataset images.
+In this study, we introduce a synthetic dataset using MNIST dataset. The MNIST database of handwritten digits, has a training set of 60,000 examples, and a test set of 10,000 examples. The digits have been size-normalized and centered in a fixed-size image \cite{lecun1999mnist}. In the MNIST dataset, each image contains one hand-written digit of dimensions $28\times28$. Figure~\ref{fig:mnistimages} shows a selection of MNIST dataset images.
 
 \begin{figure}[H]
 	\centering
-	{\includegraphics[width=0.7\textwidth]{images/1}}
+	{\includegraphics[width=0.7\textwidth]{images/mnistall}}
 	\caption{A selection of MNIST images of hand-written digits.}
 	\label{fig:mnistimages}
 \end{figure}
@@ -52,7 +53,7 @@ In this study, we introduce a synthetic dataset using MNIST dataset. The MNIST d
 
 \subsection{Synthetic crowd counting dataset}
 
-As we needed a large dataset to train all the parameters of our model for the second task,counting the number of pedestrians, we synthetically created a large dataset of pedestrians in a walkway with maximum 29 people in each image. Achieving success on crowd counting system using CNN on our synthetic dataset, we save enormous amount of time for data annotation and feature detection. 
+As we needed a large dataset to train all the parameters of our model for the second task, counting the number of pedestrians, we synthetically created a large dataset of pedestrians in a walkway with maximum 29 people in each image. Achieving success on crowd counting system using CNN on our synthetic dataset, we save enormous amount of time for data annotation and feature detection. 
 
 \subsection{UCSD crowd counting dataset}
 
@@ -63,7 +64,7 @@ However, we need our model to perform well in practice rather than in theoretica
 
 For a long time in Computer Vision, there has been a prevailing paradigm in which we have a set of feature descriptors such as SIFT \cite{lowe1999object}, HOG \cite{dalal2005histograms}, SURF \cite{bay2006surf}, and others that can be extracted from the image with possible higher level feature building (High-level feature detection algorithms are more in tune with the way we detect objects in real life), following by a classifier like Support Vector Machines (SVM) \cite{vapnik1964note, boser1992training}. In fact, for the most part, these features are not learned, but hand-crafted by some vision experts. However, they do indeed demonstrate a decent performance. For instance, in one of the most successful works in object detection \cite{felzenszwalb2010object}, the author essentially introduces a linear classifier on top of HOG features, or regarding classification approaches that work quite well, \citeauthor{yu2010object} use all manners of features (HOG, SIFT, Color SIFT, etc) extracted from the images and consequently obtain impressive results. 
 
-\indent The analysis of these works leads to the question of what we should focus on in order to improve the vision systems accuracy. Should we try to enhance classifiers, should we increase the amount of data or we should rather provide finer features? \citeauthor*{parikh2010role} in \cite{parikh2010role} analyze the role of features by taking some of the quite successful past deformable models \cite{albrecht2015deformable} (deformable models are curves or surfaces defined within an image domain whose deformations are determined by the displacement of a discrete number of control points along the curve \cite{xu2000image}), and replace some components of them with humans. They present identical learning tasks \textit{i.e.} the same feature representation and the same training data to machines and humans which allows drawing a comparison between the two. The author concludes that features are the main factor contributing to superior human performance.
+\indent The analysis of these works leads to the question of what we should focus on in order to improve the vision systems accuracy. Should we try to enhance classifiers, should we increase the amount of data or we should rather provide finer features? \citeauthor*{parikh2010role} in \cite{parikh2010role} analyze the role of features by taking some of the quite successful past deformable models\footnote{Deformable models are curves or surfaces defined within an image domain whose deformations are determined by the displacement of a discrete number of control points along the curve \cite{xu2000image}.}, and replace some components of them with humans. They present identical learning tasks \textit{i.e.} the same feature representation and the same training data to machines and humans which allows drawing a comparison between the two. The author concludes that features are the main factor contributing to superior human performance.
 
 Furthermore, in \cite{gehler2009feature}, the authors compared 39 different learning kernels with various combination of features to see which kernel outperforms the rest and how it should be weighted. Although they attained a big improvement over the existing methods, the analysis of their results shows that the gain they obtained from the learning operators is not as dramatic as the improvement they achieved from the features itself. 
 
@@ -71,9 +72,9 @@ Furthermore, in \cite{gehler2009feature}, the authors compared 39 different lear
 
 In deep learning techniques, we essentially have a hierarchy of feature extractors which attempts to model high-level abstractions in data \cite{deng2014deep, bengio2009learning, bengio2013representation, arel2010deep, schmidhuber2015deep}, where each layer of hierarchy extracts features from output of previous layer. Designing such trainable feature extractors, we would be able to build a multi-stage model which goes all the way from image pixels up to a high-level feature vector which we can be fed to a standard classifier. 
 
-Thus, from the family of DL, we select deep CNNs due to their capacity of knowledge transfer for a number of tasks and also the ability for performing different tasks simultaneously, even when it has been trained for only one task \cite{zhou2014learning}. Moreover, compare to other methods, CNN benefit from the powerful speed-ups on GPU which is fit for implementation of CNN. 
+Thus, from the family of DL, we select deep CNNs due to their capacity of knowledge transfer for a number of tasks and also the ability for performing different tasks simultaneously, even when it has been trained for only one task \cite{zhou2014learning}. Moreover, compare to other methods, DCNN benefit from the powerful speed-ups on GPU which is fit for implementation of DCNN. 
 
-Furthermore, CNN was used to achieve state-of-the-art results in CIFAR-10 object recognition task \cite{cirecsan2012multi}, in \cite{russakovsky2015imagenet}, the training process was done on GPU, and a great success in many other recent vision problems \cite{cirecsan2011convolutional, ciresan2015multi, wan2013regularization}. All these features and advantages of CNN assured us to choose convolutional neural networks as our proposed method
+Furthermore, DCNN was used to achieve state-of-the-art results in CIFAR-10 object recognition task \cite{cirecsan2012multi}, in \cite{russakovsky2015imagenet}, the training process was done on GPU, and a great success in many other recent vision problems \cite{cirecsan2011convolutional, ciresan2015multi, wan2013regularization}. All these features and advantages of CNN assured us to choose convolutional neural networks as our proposed method
 
 \section{Architecture}
 
@@ -81,8 +82,8 @@ With their long heritage, the origins of CNN trace back to \cite{hubel1962recept
 
 \begin{figure}[H]
 	\centering
-	{\includegraphics[width=0.7\textwidth]{images/1}}
-	\caption{Deep CNN proposed by \citeauthor{lecun1989backpropagation} for MNIST hand-written digits recognition problem.}
+	{\includegraphics[width=1\textwidth]{images/lenetarch}}
+	\caption{Deep CNN proposed by \citealt*{lecun1989backpropagation} for MNIST hand-written digits recognition problem.}
 	\label{fig:lecun}
 \end{figure}
 
@@ -90,20 +91,20 @@ Following the same structure of classical CNNs, in our architecture, the image p
 
 As discussed in chapter~\ref{sec:actfun}, ReLU is currently favored in the research community given the fact that it fastens the learning process by massively simplifying back propagation, and also avoids saturation issues (when the weighted sum is big, the output of the $\tanh$ or \textit{sigmoid} activation functions saturates and the gradient tends to zero. See \cite{hansen1990neural, amit1987statistical} for more details). 
 
-\indent Thereafter, a max-pooling layer takes a special region of the obtained feature maps and takes the maximum pixel value as the strongest structure of that neighborhood (described in section~\ref{poolinglayer}). We chose Max-pooling since it tends to give more discrimination of the features \cite{boureau2010theoretical}. In our model we use \textit{spatial} pooling. However, depending on the problem we are trying to solve, pooling might be done within feature maps \cite{goodfellow2013maxout}. The main advantage of pooling layers in the architecture can be that it results in invariance to small transformations. In addition to that, as we go up in CNNs, thanks to pooling, each of the units essentially has a larger receptive fields looking back the input so that at the top high-level layers, each unit looks at the entire scene.  
+\indent Thereafter, a max-pooling layer takes a special region of the obtained feature maps and takes the maximum pixel value as the strongest structure of that neighborhood (described in section~\ref{poolinglayer}). We chose Max-pooling since it tends to give more discrimination of the features \cite{boureau2010theoretical}. In our model we use \textit{spatial} pooling. However, depending on the problem we are trying to solve, pooling might be done within feature maps \cite{goodfellow2013maxout}. The main advantage of pooling layers in the architecture can be that it results in invariance to small transformations. In addition to that, as we go up in DCNNs, thanks to pooling, each of the units essentially has a larger receptive fields looking back the input so that at the top high-level layers, each unit looks at the entire scene.  
 
 To improve the model performance, after each pooling layer in the proposed model, we used local response normalization layer (LRN) to apply a contrast normalization(explained in details in chapter ~\ref{lrnlayer}). This type of normalization was introduced and used for the first time in \cite{krizhevsky2012imagenet}. Empirically, using LRN in the architecture seems to help improving the results \cite{jarrett2009best, krizhevsky2012imagenet}. 
 
 %%%In essence (explained in details in chapter ~\ref{lrnlayer}), LRN introduces a local competition between features, in a way that it picks a single location in the output and it looks at a special neighborhood around that location in the input. Then it computes the local mean in that region, weighs it by the Gaussian distribution, translates and makes it to corresponding vectors with local mean = 0 and local standard deviation = 1 (the chosen values are problem dependent; in our case, we chose $\mu = 0$ \& $std = 1 $ ). This brings out more details in the darker regions of the feature maps.
 %Moreover, LRN helps to scale activations at each layer better for learning by making energy surface more isotropic. That means that if we use a single learning rate for all the layers, then each gradient step tends to make much more progress  \cite{jarrett2009best}. 
 
-And finally on top of the model, we put fully connected layers in order to do either a classification or regression strategy. In our model, since we are casting the problem as a regression problem, a \textit{Euclidean Loss} layer is stated on top of fully connected layers to project the output as the difference between model prediction and the ground truth. Figure ~\ref{fig:proposenet} illustrates our proposed design of deep convolutional neural network with just one convolutional layer in order to portray the basic structure we are going use in this work. 
+And finally on top of the model, we put fully connected layers in order to do either a classification or regression strategy. In our model, since we are casting the problem as a regression problem, a \textit{Euclidean Loss} layer is stated on top of fully connected layers to project the output as the difference between model prediction and the ground truth. Figure ~\ref{fig:proposenet} illustrates our proposed design of convolutional neural network with just one layer of each type in order to portray the basic structure we are going use in this work. 
 
 \begin{figure}[H]
 	\centering
-	{\includegraphics[width=0.7\textwidth]{images/1}}
-	\caption{The proposed design for a CNN with just one convolution layer.}
+	{\includegraphics[width=1\textwidth]{images/dcnn}}
+	\caption{The basic design for the proposed DCNNs.}
 	\label{fig:proposenet}
 \end{figure}
 
-The above explanation describes the reasons behind the selected architecture and how it can help us to overcome the deficiencies of previous related works. However, the most important fact regarding CNNs' capability to learn features is the deepness and settings of the architecture which will be attentively addressed later on (chapter~\ref{imparch}).  
+The above explanation describes the reasons behind the selected architecture and how it can help us to overcome the deficiencies of previous related works. However, the most important fact regarding DCNNs' capability to learn features is the depth and settings of the architecture which will be attentively addressed later on (chapter~\ref{imparch}).  
