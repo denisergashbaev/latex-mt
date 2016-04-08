@@ -8,14 +8,14 @@ In this chapter, we provide a detailed implementation of our proposed methodolog
 
 
 
-\section{The datasets}
+\section{The Datasets}
 \label{dataha}
 
 Here we delve into the data processing part of this work by introducing three different datasets we created or applied for our empirical experiments. To that end, we provide a detailed explanation for each step of synthetic data generation process along with approaches and methods used to improve each dataset.
 
 %Here we delve into the data processing part of this work by introducing three different datasets we generated or chose for our empirical experiments. To that end, we provide a detailed explanation of the approaches and methods used to generate and improve each dataset.
 
-\subsection{Even-odd digits dataset}
+\subsection{Even-odd Digits Dataset}
 \label{subsubsec:digit}
 
 Our Even-odd handwritten dataset contains images of size $100\times100$. Each image is filled with from 0 up to 15 randomly selected digits from MNIST hand-written digits dataset. The process of creating images follows the steps in below:
@@ -48,7 +48,7 @@ Our Even-odd handwritten dataset contains images of size $100\times100$. Each im
 
 %\indent This dataset has in total 1 million images: 800,000 images for training set and 200,000 as the test. Also, the dataset is uniformly generated, meaning that for instance, the number of images containing 0 even digits is \todo{`the numer' is always `is'} equal to the number of images containing 15 even digits.  
 
-\subsection{Synthetic pedestrians dataset}
+\subsection{Synthetic Pedestrians Dataset}
 \label{subsec:synped}
 
 Learning features using deep architectures requires a large amount of data. More importantly, for a fully supervised learning, this data should be annotated. Lack of data or its' high annotation cost prohibit the usage of deep learning methods for many problems including crowd counting. 
@@ -66,7 +66,7 @@ Learning features using deep architectures requires a large amount of data. More
 \indent In our study, we used all 70 training and testing video samples to generate the synthetic pedestrians dataset. To thoroughly demonstrate the generation process of our dataset, we divide this section into data generation and data improvement.
 
   
-\subsubsection{Data generation}
+\subsubsection{Data Generation}
 
 In our dataset, we constrained each image by having up to 29 pedestrians in the walkway. The process of generating the data includes the following steps:
 \begin{enumerate}
@@ -167,8 +167,8 @@ Then, properties of labeled regions are measured and bound-boxed (see \cite{van2
 
 \end{enumerate}
 
-\subsubsection{Data improvement}
-
+\subsubsection{Data Improvement}
+\label{dataimp}
 Although we managed to successfully create synthetic images of people in the street, the generated images were still quite distinguishable from the real dataset. Thus, in order to make images as highly realistic as possible, we improved the dataset as explained underneath:
 \begin{itemize}
 \item \textbf{Non-pedestrian objects:} Amongst the extracted boxes of pedestrians, there were some non-pedestrian boxes with objects instead of pedestrians, and yet others with more than one person inside the box. Therefore, we manually removed these outliers. After this edition, we ended with 426 samples of people. A few examples of incorrectly collected or labeled objects are shown in below.
@@ -226,7 +226,7 @@ Humans' height almost follows a Gaussian distribution \cite{subramanian2011heigh
 
 \noindent Thusly, we created a set of 1 million images, each of size $158\times158$ pixels with up to 29 pedestrians. We assigned 800,000 images for training set and 200,000 instances as the test set. We believe the created synthetic dataset of pedestrians is realistic enough to be able to represent a real-world crowd counting scenario. However, the images can be improved in different aspects and by using diverse image editing and manipulation techniques. 
 
-\subsection{UCSD crowd counting dataset}
+\subsection{UCSD Crowd counting Dataset}
 \label{subsec:datareal2}
 To verify and validate our model, we used UCSD crowd counting dataset created by \citeauthor*{chan2008privacy} and used in \cite{chan2008privacy,chan2009bayesian,chan2012counting}. The dataset contains video of pedestrians on UCSD walkways, taken from a stationary camera. There are currently two  viewpoints available among which we used \textit{vidf} videos. All videos are 8-bit gray-scale, each video file has 200 video frames, with dimensions $238\times158$. In our experiment, the first 20 videos which are labeled with the number of pedestrians, were incorporated. The center point of each pedestrian defines its' location in the image. A selection of UCSD crowd counting images is shown in figure~\ref{fig:ucsdorg}.
 
@@ -251,12 +251,12 @@ To verify and validate our model, we used UCSD crowd counting dataset created by
 
 
 
-\section{Caffe deep learning platform}
+\section{Caffe Deep Learning Platform}
 
 Caffe is a clean and modifiable framework for state-of-the-art deep learning algorithms and a collection of reference models. The framework is a BSD-licensed C++ library with Python and MATLAB bindings for training and deployment of general-purpose convolutional neural networks and other deep models on commodity architectures \cite{jia2014caffe}. It powers on-going research projects and large-scale industrial applications in vision, speech and multimedia by CUDA \footnote{CUDA is a parallel computing platform and application programming interface (API) model created by NVIDIA \cite{cuda}, processing over 40 million images a day on a single K40 or Titan GPU \cite{jia2014caffe}.}  GPU computation.
 
 Caffe is composed of two main components, models' architecture and design, and model optimization. In the rest of this section, we present the main components and parameters of both model implementation and optimization.
-\subsection{Model implementation and design}
+\subsection{Model Implementation and Design}
 The main components of Caffe architecture are outlined below:
 \begin{enumerate}
 
@@ -305,13 +305,13 @@ Our work in general is an optimization problem since we project the results as l
 Although Caffe provides several optimization methods, in this section we briefly describe merely optimization methods and \textit{hyper-parameters}\footnote{Hyper-parameters govern the underlying system on a "higher level" than the primary parameters of interest. They are not model parameters that are learned during training phase and instead, they are set by the designer a priori.} incorporated in our proposed algorithms.
 
 
-\subsubsection{Batch size}
+\subsubsection{Batch Size}
 
 Since Caffe is trained using stochastic gradient descent, at each iteration, it computes the (stochastic) gradient of the parameters with respect to the training data and updates the parameters in the direction of the gradient. On the other hand, to compute the gradient w.r.t the input data, we need to evaluate all training samples at each iteration which is prohibitively time-consuming, specially when we are dealing with a great amount of data. 
 
 \indent In order to overcome this issue, SGD approximates the exact gradient, in a stochastic manner, by sampling only a small portion of the training data at each iteration. This small portion is the \textit{batch}. In other words, the batch size defines the amount of training data we feed to the network at each iteration. The larger the batch size, the more accurate the gradient estimate at each iteration will be. 
 
-\subsubsection{Learning rate}
+\subsubsection{Learning Rate}
 \label{learning rate}
 Learning rate is a decreasing function of time. It's a common practice to decrease the base learning rate (base\_lr) as the optimization/learning process progresses. In Caffe, different learning policies exist among which we tried the followings:
 \begin{itemize}
@@ -352,21 +352,21 @@ For example, if the objective has a form of a long shallow ravine leading to the
 
 Momentum, by taking the running average of the derivatives, by incorporating the previous update in the update for the current iteration, is one method for pushing the objective more quickly along the shallow ravine \cite{sgd}. 
 
-\subsubsection{Number of iterations}
+\subsubsection{Number of Iterations}
 
 In learning process, common convergence criteria are: a maximum number of iteration; a desired value for the cost function is reached; or training until the cost function shows no improvement in a number of iterations. In our implementation, we use the maximum number of iteration as our systems' convergence policy. 
  
 The number of iterations plays an important role in the training process. iteration number is in an inverse correlation with the number of instances and also the batch size. In any network, batch size and iteration number compensate for one another. For instance, in case of lack of memory, one option would be to decrease the batch size and increase the number of iterations accordingly.
 
 
-\section{The architecture}
+\section{The Architecture}
 \label{imparch}
 
 Having Caffe platform introduced, we propose two CNN-based deep architectures for the analysis we did regarding two learning to count problems, counting the number of even-digits and the number of pedestrians in an image.  
 In learning object features for vision tasks and by the use of DCNN, the depth of network plays a crucial role. The deeper the model, the better it learns. However, issues like overfitting\footnote{Overfitting occurs when a statistical model describes random error or noise instead of the underlying relationship, and vice versa for underfitting. } and underfitting should not be left neglected.   
 Therefore, in this section, networks' settings and architectures for even-digits and crowd counting problems will be described separately. 
 
-\subsection{Even digit counting}
+\subsection{Even-digit Counting}
 \label{subsubsec:digitarch}
 
 For learning to count even digits problem, since we used MNIST dataset to generate our images, we considered the architecture proposed by \citeauthor{lecun1995comparison} for classic MNIST hand-written digit recognition problem \cite{lecun1995comparison} (shown in figure~\ref{fig:caffe}), as the base of our design. In addition, we took into account the architecture used in state-of-the-art \cite{segui2015learning}. Figure~\ref{santil2cfull} demonstrates this architecture. From there, we modified the architecture to optimize the performance of the network. 
@@ -470,7 +470,7 @@ However, a well-designed network cannot solely guarantee an optimal performance 
 %\todo{this is a useless statement, unless you go into detail what heuristics you've used. justification needed for your choise. so beef it up here between these two sentences}
 The architecture has been designed intuitively and based on a heuristic approach where we tried different values for each hyper-parameter at a time and selected the values that provided us with an improvement in the performance of the network. Hence, one may be able to improve the performance by implementing a different architecture or with another settings for the hyper-parameters of the network. 
 
-\subsection{Crowd counting}
+\subsection{Crowd Counting}
 \label{subsec:ucsdarch}
 
 For the task of counting pedestrians, due to the more complex images than the previous task, we designed a deeper architecture. Moreover, we applied the same settings of hyper-parameters to a different architecture. However, as a reminder, table~\ref{hypar2} summarizes the network's settings for the hyper-parameters.

@@ -1,10 +1,10 @@
 \newpage
-\chapter{Experiments and results}
+\chapter{Experiments and Results}
 \label{sec:experiments}
 
 Prior to jumping to the final results obtained with our algorithm, this chapter will attempt to give insight into the experiments we designed to verify our hypothesis. We examine our proposed methodology on two different but related scenarios. In the former scenario, we tackle the learning to count even hand-written digits, and for the latter one, crowd counting problem is considered. The findings of the experiments will determine to what extent synthetic data generation could help deep convolutional networks to learn when dealing little amount of data. Hence, this chapter gives full particulars of each experiment, and presents obtained results as compared to similar works.
 
-\section{Learning to count Even-odd hand-written digits}
+\section{Learning to Count Even-odd Handwritten Digits}
 
 We intend to explore the features learned when training a deep CNN, in order to understand the underlying representations. To this end, we designed a synthetic problem of counting even digits in images. This experiment clearly illustrates the basic idea behind this work, where we hypothesize that the features learned during this task are:
 \begin{enumerate}
@@ -16,7 +16,7 @@ In this experiment, we feed images of digits into a deep convolutional neural ne
  
 
 \subsection{Dataset} 
-As it was meticulously described in section ~\ref{subsubsec:digit}, we synthetically generated Even-odd digits dataset to use for this task. the dataset holds the following properties:
+As it was meticulously described in section ~\ref{subsubsec:digit}, we synthetically generated Even-odd digits dataset to use for this task. The dataset holds the following properties:
 \begin{itemize}
 \item Images of MNIST hand-written digits where each image contains up to 15 digits. Also the images are made in gray-scale.
 \item Each image has a dimension of $100\times100$ and each digit in the image is $18\times18$ pixels.  
@@ -207,11 +207,11 @@ Accordingly, figure below demonstrates the filters and their corresponding outpu
 %\end{figure}
 \textbf{A SHORT TRANSITIVE PARAGRAPH TO GO TO RESULTS}
 
-\subsection{Experimental results}
+\subsection{Experimental Results}
 
 In addition to the Euclidean loss function that we implemented in our architecture, we use two other error measurements to evaluate and compare the performance of our model. These measurements are briefly described and justified in below:
 \begin{enumerate}
-\item \textbf{Mean squared error(MSE)}: Mean squared error is arguably the most important criterion used to evaluate the performance of a predictor or an estimator. The mean squared error is also useful to relay the concepts of bias, precision, and accuracy in statistical estimation. The MSE is the second moment (about the origin) of the error, and thus incorporates both the variance of the estimator and its bias \cite{lehmann1998theory}. The MSE can be estimated by
+\item \textbf{Mean squared error (MSE)}: Mean squared error is arguably the most important criterion used to evaluate the performance of a predictor or an estimator. The mean squared error is also useful to relay the concepts of bias, precision, and accuracy in statistical estimation. The MSE is the second moment (about the origin) of the error, and thus incorporates both the variance of the estimator and its bias \cite{lehmann1998theory}. The MSE can be estimated by
 $$MSE = {\frac{1} {N}{\sum\limits_{i = 1}^N {(\hat{x_{pred}} - x_{obs} } })^{2} } $$
 where:\\
 \textit{N}: the number of instances\\
@@ -291,15 +291,15 @@ Results obtained by \citeauthor*{segui2015learning}       & 0.20 & 0.30 \\
 
 \textbf{CONCLUSION AFTER THE EXPERIMENT} 
 
-\section{Counting pedestrians in a walkway}
+\section{Counting Pedestrians in a Walkway}
 
 The first experiment proved that features can be learned automatically using deep CNN. It also shows that these deep features can be used to detect the object of interest in different but similar tasks. However, the use of deep architectures for fully supervised learning problems requires a large amount of annotated data. At the moment, for crowd counting problems, such data does not exist for research purposes. 
 
-Hence, we propose a crowd counting problem using synthetic dataset in order to examine first, how well the model trained with synthetic images would perform. And then, whether the model is applicable for a real-world crowd counting scenario. We believe that this experiment will enlighten and address these questions. 
+Hence, we propose a crowd counting problem using synthetic dataset in order to examine first, how well the model trained with synthetic images would perform. And then, whether the model is applicable for a real-world crowd counting scenario or not. We believe that this experiment will enlighten these questions. 
 
 \subsection{Datasets} 
 
-As fully discussed in chapter~\ref{subsec:synped}, for the particular case study, we synthetically created a dataset of 1 million images. To recap, the dataset specifications are the following:
+As fully discussed in chapter~\ref{subsec:synped}, for the particular case study, we synthetically created a dataset of 1 million images. To recap, the dataset specifications are the followings:
 %\todo{no need to repeat the information, but i like the description of the dataset here better}, DONT UNDERSTAND WHAT YOU MEAN??!!!!
 \begin{itemize}
 \item Each image is in gray-scale, $158\times158$ pixels, normalized, and contains up to 29 pedestrians in a walkway. Images are labeled with the number of pedestrians present in the image.  
@@ -311,7 +311,7 @@ As fully discussed in chapter~\ref{subsec:synped}, for the particular case study
 
 \begin{itemize}
 \item The dataset consists of 3375 video frames shot by a stationary camera. Each image has up to 29 pedestrians present in the image.
-\item Images are in gray-scale, resized to $158\times158$ pixels, normalized and filtered by the same mask (region of interest) as the other dataset. Labels are the number pedestrians placed in the region of interest.
+\item Images are in gray-scale, resized to $158\times158$ pixels, normalized (0 to 255) and filtered by the same mask (region of interest) as the other dataset. Labels are the number pedestrians placed in the region of interest.
 \item Pedestrians annotation is center-based. The ones inside the mask are labeled.  
 \item Images are continuous video frames of 20 different videos. Each video contains up to 200 images.  
 \end{itemize}
@@ -319,7 +319,7 @@ As fully discussed in chapter~\ref{subsec:synped}, for the particular case study
 Once again, to improve the training time, we converted the synthetic data into LMDB format for Caffe to read it in the fastest way.
 
 
-\subsection{The learning process}
+\subsection{The Learning Process}
 
 As fully described in chapter~\ref{subsec:ucsdarch}, we implemented a deep convolutional neural network in Caffe to learn the number of pedestrians in the walkway. As a reminder, the designed network has the components mentioned in table~\ref{myucsd3}. The network trains with stochastic gradient descent and our justification for the setting the solver parameters (hyper-parameters) remains the same as previous experiment (explained in section~\ref{subsec:ucsdarch}). However, once again table~\ref{hypar4} provides a review of the settings for network's hyper-parameters.
 
@@ -456,9 +456,9 @@ And finally, the network along with the outputs of different layers is shown in 
 
 \textbf{A SHORT TRANSITIVE PARAGRAPH TO GO TO RESULTS}
 
-\subsection{Experimental results}
+\subsection{Experimental Results}
 
-Equivalently to the first analysis, we use mean squared error, mean absolute error and the default Euclidean loss function to present the results obtained in this experiment. Having that said, the following results were obtained:
+Equivalently to the first analysis, we use mean squared error, mean absolute error and the default euclidean loss function to present the results obtained in this experiment. Having that said, the following results were obtained:
 
 \begin{table}[H]
 \centering
@@ -475,7 +475,7 @@ Mean squared error       & 0.20  \\
 Mean absolute error      & 0.20  \\
 \bottomrule
 \end{tabular}
-\caption{Table caption font is different from the normal text font in order to get a better differentiation -- I like it that way.}
+\caption{.}
 \label{tab:res}
 \end{table} 
 

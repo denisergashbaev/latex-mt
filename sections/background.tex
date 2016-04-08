@@ -10,13 +10,13 @@ One of the central challenges of artificial intelligence is solving the tasks th
 
 Modern deep learning provides a very powerful framework specially for supervised learning. By adding more layers and more units within a layer, a deep network can represent functions of increasing complexity. Most tasks that consist of mapping an input vector to an output vector, and that are easy for a human-being to perform quickly, can be accomplished via deep learning, given sufficiently large models and datasets of labeled training examples. Other tasks that cannot be described as associating one vector to another, or that are difficult enough such that a person would require time to think and reflect in order to accomplish the task, remain beyond the scope of deep learning for now \cite{Goodfellow-et-al-2016-Book}.
 
-In other words,  deep learning is a new area of Machine Learning (ML) research, which has been introduced with the objective of moving ML closer to one of its original goals: Artificial Intelligence. DL is about learning multiple levels of representation and abstraction that help to make sense of data such as images, sound and text \cite{tutorial2014lisa}.  
+In other words,  deep learning is a new area of Machine Learning (ML) research, which has been introduced with the objective of moving ML closer to one of its original goals: Artificial Intelligence. DL is about learning multiple levels of representation and abstraction that help to make sense of data such as images, sound and text.  
 
 Various deep learning architectures involves Artificial Neural Networks (ANN). Networks such as \textit{deep neural networks}, \textit{deep convolutional neural networks},\textit{ deep belief networks} and \textit{recurrent neural networks} have been applied to fields like computer vision, automatic speech recognition or natural language processing where they have set the state-of-the-art in recent years, as reviewed by \citeauthor{bengio2009learning} in \cite{bengio2009learning, bengio2013deep}. 
 
 Besides improving the accuracy on different pattern recognition problems, one of the fundamental goals of DL is to move machine learning towards the automatic discovery of multiple levels of representation, reducing the need for feature extractors developed by domain experts \cite{bengio2013deep}. This is especially important, as noted by \citeauthor{bengio2009learning} in \cite{bengio2009learning}, for domains where the features are hard to formalize, such as for object recognition and detection tasks.
 
-In the task of object detection, deep architectures have been widely used to achieve state-of-the-art results as in \cite{krizhevsky2009learning,krizhevsky2012imagenet}, where the top published results use Convolutional Neural Networks \cite{ciresan2012multi}. Among all deep learning techniques, we will apply deep convolutional neural networks to tackle a specific vision problem. However, prior to delving into deep CNN, we intend to allude the basic concept of neural networks and deep NN briefly, in order to help understand the proposed method in this Master thesis.
+In the task of object detection, deep architectures have been widely used to achieve state-of-the-art results, as in \cite{krizhevsky2012imagenet}, where the top published results use Convolutional Neural Networks \cite{ciresan2012multi}. Among all deep learning techniques, we will apply deep convolutional neural networks to tackle a specific vision problem. However, prior to delving into deep CNN, we intend to allude the basic concept of neural networks and deep NN briefly, in order to help understand the proposed method in this Master thesis.
 
 \section{Artificial Neural Networks}
 
@@ -117,12 +117,12 @@ Specifically, BP computes how fast the error changes as we adjust a hidden activ
 \label{subsec:sgd}
 Training the network consists in minimizing the error function (by updating the weights and biases), often using the \textit{Stochastic Gradient Descent} (SGD) algorithm. 
 
-Stochastic gradient descent has often been proposed to minimize the \textit{empirical risk} (training set performance measure. More detailed description can be found in \cite{vapnik1998statistical}) using \textit{gradient descent}(GD) \cite{bottou2010large}. The standard gradient descent algorithm updates the parameter $\theta$ of the objective \textit{J($\theta$)} with \textit{learning rate} $\alpha$\footnote{The learning rate $\alpha$ is the weight of the negative gradient (will be described fully in section~\ref{learning rate}).} as:
+Stochastic gradient descent has often been proposed to minimize the \textit{empirical risk}\footnote{Empirical risk minimization defines a family of learning algorithms and is used to give theoretical bounds on the performance of learning algorithms.} (training set performance measure) using \textit{gradient descent} (GD). The standard gradient descent algorithm updates the parameter $\theta$ of the objective \textit{J($\theta$)} with \textit{learning rate} $\alpha$\footnote{The learning rate $\alpha$ is the weight of the negative gradient (will be described fully in section~\ref{learning rate}).} as:
 \begin{equation}
 \centering \theta = \theta - \alpha \nabla_\theta E[(J(\theta)]
 \end{equation}
 
-where the expectation in the above equation is approximated by evaluating the cost and gradient over the full training set (Empirical Risk Minimization\footnote{Empirical risk minimization defines a family of learning algorithms and is used to give theoretical bounds on the performance of learning algorithms.}~(ERM)). Stochastic Gradient Descent simply does away the expectation in the update and computes the gradient of the parameters using only a single or a few training examples. The new update is given by:
+where the expectation in the above equation is approximated by evaluating the cost and gradient over the full training set (Empirical Risk Minimization~(ERM)). Stochastic gradient descent simply does away the expectation in the update and computes the gradient of the parameters using only a single or a few training examples. The new update is given by:
 \begin{equation}
 \centering \theta = \theta - \alpha \nabla_\theta J(\theta; x^{(i)}, y^{(i)})
 \end{equation}
@@ -149,7 +149,7 @@ Generally, each parameter update in SGD is computed with respect to a few traini
 
 \section{Deep Neural Networks}
 \label{sec:deepcnn}
-As mentioned, standard neural network (NN) consists of many simple neurons, each producing a sequence of real-valued activations \cite{deepnn}. The depth of an architecture refers to the number of concatenated non-linear operations that are composed on the network. While many of the early successful applications of neural networks used shallow architectures (up to 3 levels), the mammal brain is organized in a deep architecture. The brain appears to process information through multiple stages, which is particularly clear in the primate visual system \cite{bengio2009learning}.
+As mentioned, standard neural network (NN) consists of many simple neurons, each producing a sequence of real-valued activations. The depth of an architecture refers to the number of concatenated non-linear operations that are composed on the network. While many of the early successful applications of neural networks used shallow architectures (up to 3 levels), the mammal brain is organized in a deep architecture. The brain appears to process information through multiple stages, which is particularly clear in the primate visual system \cite{bengio2009learning}.
 
 Moreover, theoretical results strongly suggest that in order to learn the kind of complicated functions that can represent high-level abstractions (e.g. in vision, language, and other AI-level tasks), one needs deep architectures. Deep Neural Networks (DNN) are composed of multiple levels of non-linear operations, such as those present in neural nets with many hidden layers \cite{bengio2009learning}. Figure~\ref{fig:deepl} demonstrates a deep neural network. 
 
@@ -164,7 +164,7 @@ Deep Neural Networks have been investigated for decades, but training deep netwo
 
 It was discovered, however, that better results could be achieved by pre-training each layer with an unsupervised learning algorithm \cite{hinton2006fast}. In 2006, \citeauthor{hinton2006fast} obtained good results using Restricted Boltzmann Machines (RBM) (a generative model) to perform unsupervised training of the layers \cite{hinton2006fast}. The goal of this training was to obtain a model that could capture patterns in the data, similarly to a feature descriptor, not using the dataset labels. The weights learned by this unsupervised training were then used to initialize neural networks. 
 
-\indent Similar results were reported using auto-encoders for training each layer in \cite{bengio2007greedy}. These experiments identified that layers could be pre-trained one at a time, in a greedy layer-wise format. After the layers are pre-trained, the learned weights are used to initialize the neural network, and then the standard back-propagation algorithm (explained in Section~\ref{subsec:bp}) is used for fine-tuning the network. The advantage of unsupervised pre-training was demonstrated in several statistical comparisons \cite{bengio2007greedy,larochelle2007empirical,erhan2009difficulty}, until recently when deep neural networks trained in a full supervised manner (using labeled data) started to register similar results in some tasks like object recognition. \citealt{ciresan2012multi} demonstrated that properly trained deep neural networks (under full supervision) are able to achieve top results in many tasks, although not denying that pre-training might help, especially in cases were little data is available for training, or when there are massive amounts of unlabeled data. On the task of image classification, the best published results use a particular type of architecture called Convolutional Neural Network (CNN), which is described in below.
+\indent Similar results were reported using auto-encoders for training each layer in \cite{bengio2007greedy}. These experiments identified that layers could be pre-trained one at a time, in a greedy layer-wise format. After the layers are pre-trained, the learned weights are used to initialize the neural network, and then the standard back-propagation algorithm (explained in Section~\ref{subsec:bp}) is used for fine-tuning the network. The advantage of unsupervised pre-training was demonstrated in statistical comparisons \cite{bengio2007greedy}, until recently when deep neural networks trained in a full supervised manner (using labeled data) started to register similar results in some tasks like object recognition. \citealt{ciresan2012multi} demonstrated that properly trained deep neural networks (under full supervision) are able to achieve top results in many tasks, although not denying that pre-training might help, especially in cases were little data is available for training, or when there are massive amounts of unlabeled data. On the task of image classification, the best published results use a particular type of architecture called Convolutional Neural Network (CNN), which is described in below.
 
 
 
@@ -213,7 +213,7 @@ Weight sharing refers to having several connections controlled by a single param
 \label{poolinglayer}
 Once a feature is detected, its' exact position becomes less important as long as its' approximate position relative to other features is preserved. Furthermore, as the dimensionality of applying a filter is equal to the input dimensionality, we would not be gaining any translation invariance with these additional filters. We would be stuck doing pixel-wise analysis on increasingly abstract features. In order to solve this problem, a \textit{sub-sampling} layer is introduced.
 
- Sub-sampling, or down-sampling, refers to reducing the overall size of a signal. In many cases, such as audio compression for music files, sub-sampling is done simply for size reduction \cite{sub}. But in the domain of 2D filter outputs, sub-sampling  can also be thought of as reducing the sensitivity of the output to shifts and distortions.
+ Sub-sampling, or down-sampling, refers to reducing the overall size of a signal. In many cases, such as audio compression for music files, sub-sampling is done simply for size reduction. But in the domain of 2D filter outputs, sub-sampling  can also be thought of as reducing the sensitivity of the output to shifts and distortions.
 
 One of the most applied sub-sampling methods used in \cite{lecun1995comparison}, is known as \textit{max-pooling}. Equation ~\ref{eq:pool} presents te formulation of a max-pooling layer. 
 
@@ -241,7 +241,7 @@ This involves splitting up the matrix of filter outputs into small non-overlappi
 ReLU have the desirable property that they do not require input normalization to prevent them from saturating. If at least some training examples produce a positive input to a ReLU, learning will happen in that neuron. However, we still find that \textit{local response normalization}(LRN) scheme aids generalization. This sort of response normalization implements a form of lateral inhibition ( the capacity of an excited neuron to reduce the activity of its neighbors) inspired by the type found in real neurons, creating competition for big activities amongst neuron outputs computed using different kernels \cite{krizhevsky2012imagenet}. Figure~\ref{fig:lrns} illustrates local response normalization in a CNN. 
 \begin{figure}[H]
 	\centering
-	{\includegraphics[width=0.6\textwidth]{images/lrn}}
+	{\includegraphics[width=0.5\textwidth]{images/lrn}}
 	\caption{Local response normalization in a CNN after the convolution layer.}
 	\label{fig:lrns}
 \end{figure}
@@ -257,7 +257,7 @@ In other words, we can think of it as helping sharpening the response. Instead o
 
 \indent This scheme bears some resemblance to the local contrast normalization scheme proposed by \citeauthor{jarrett2009best} in \cite{jarrett2009best} which has led to error rate reduction in \cite{krizhevsky2012imagenet} and \cite{hinton2012improving}. 
 
-\subsection{Fully connected/Inner product layer}
+\subsection{Fully Connected/Inner Product Layer}
 
 Finally, after several convolutional and max pooling layers, the high-level reasoning in the neural network is done via \textit{fully connected layers} (FC/IP). A fully connected layer takes all neurons in the previous layer (be it fully connected, pooling, or convolutional) and connects it to every single neuron it has. Fully connected layers are not spatially located anymore (you can visualize them as one-dimensional), so there can be no convolutional layers after a fully connected layer. 
 

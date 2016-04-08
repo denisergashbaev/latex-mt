@@ -51,16 +51,16 @@ In this study, we introduce a synthetic dataset using MNIST dataset. The MNIST d
 
 \noindent For the first empirical experience in our work, we created a large set of images each containing up to 15 MNIST digits. Images are automatically labeled with the number of even digits in each image. Using this dataset, we can examine the digits' representations learned by our deep CNN are not dependent on the specific task we are dealing with. It is done by using our model's learned features for other tasks and analyze the results. 
 
-\subsection{Synthetic crowd counting dataset}
+\subsection{Synthetic Crowd Counting Dataset}
 
 As we needed a large dataset to train all the parameters of our model for the second task, counting the number of pedestrians, we synthetically created a large dataset of pedestrians in a walkway with maximum 29 people in each image. Achieving success on crowd counting system using CNN on our synthetic dataset, we save enormous amount of time for data annotation and feature detection. 
 
-\subsection{UCSD crowd counting dataset}
+\subsection{UCSD Crowd Counting Dataset}
 
 However, we need our model to perform well in practice rather than in theoretical experiments. Therefore, we used UCSD crowd counting dataset \cite{chan2008privacy} to validate the performance of our model on it and also make a comparison with their system in \cite{chan2008privacy} to see if we can obtain better results while decreasing feature extraction and labeling efforts. In addition, if we succeed to attain reasonable results on the real UCSD dataset, we have overcome one of the main restrictions of deep learning algorithms usage, which is the necessity for the existence of large amount of data.     
 
 
-\section{Method selection}
+\section{Method Selection}
 
 For a long time in Computer Vision, there has been a prevailing paradigm in which we have a set of feature descriptors such as SIFT \cite{lowe1999object}, HOG \cite{dalal2005histograms}, SURF \cite{bay2006surf}, and others that can be extracted from the image with possible higher level feature building (High-level feature detection algorithms are more in tune with the way we detect objects in real life), following by a classifier like Support Vector Machines (SVM) \cite{vapnik1964note, boser1992training}. In fact, for the most part, these features are not learned, but hand-crafted by some vision experts. However, they do indeed demonstrate a decent performance. For instance, in one of the most successful works in object detection \cite{felzenszwalb2010object}, the author essentially introduces a linear classifier on top of HOG features, or regarding classification approaches that work quite well, \citeauthor{yu2010object} use all manners of features (HOG, SIFT, Color SIFT, etc) extracted from the images and consequently obtain impressive results. 
 
