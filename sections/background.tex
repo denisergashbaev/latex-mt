@@ -1,7 +1,7 @@
 \chapter{Background and Definitions}
 \label{sec:Background}
 % neural networks 
-In this section, we go over the preliminarily concepts that help understand the contributions of this work. We start by looking at the family of methods to which Deep Convolutional Neural Networks belong, followed by a more detailed look at DCNNs in question by describing the main components of the method.
+In this section, we go over the preliminarily concepts that help understand the contributions of this work. We start by looking at the family of methods to which deep convolutional neural networks belong, followed by a more detailed look at DCNNs in question by describing the main components of the method.
 
 \section{Deep Learning}
 \label{sec:dl}
@@ -10,13 +10,13 @@ One of the central challenges of artificial intelligence is solving the tasks th
 
 Modern deep learning provides a very powerful framework specially for supervised learning. By adding more layers and more units within a layer, a deep network can represent functions of increasing complexity. Most tasks that consist of mapping an input vector to an output vector, and that are easy for a human-being to perform quickly, can be accomplished via deep learning, given sufficiently large models and datasets of labeled training examples. Other tasks that cannot be described as associating one vector to another, or that are difficult enough such that a person would require time to think and reflect in order to accomplish the task, remain beyond the scope of deep learning for now \cite{Goodfellow-et-al-2016-Book}.
 
-In other words,  deep learning is a new area of Machine Learning (ML) research, which has been introduced with the objective of moving ML closer to one of its original goals: Artificial Intelligence. DL is about learning multiple levels of representation and abstraction that help to make sense of data such as images, sound and text.  
+In other words,  deep learning is a new area of Machine Learning (ML) research, which has been introduced with the objective of moving ML closer to one of its original goals: artificial intelligence. DL is about learning multiple levels of representation and abstraction that help to make sense of data such as images, sound and text.  
 
 Various deep learning architectures involves Artificial Neural Networks (ANN). Networks such as \textit{deep neural networks}, \textit{deep convolutional neural networks},\textit{ deep belief networks} and \textit{recurrent neural networks} have been applied to fields like computer vision, automatic speech recognition or natural language processing where they have set the state-of-the-art in recent years, as reviewed by \citeauthor{bengio2009learning} in \cite{bengio2009learning, bengio2013deep}. 
 
 Besides improving the accuracy on different pattern recognition problems, one of the fundamental goals of DL is to move machine learning towards the automatic discovery of multiple levels of representation, reducing the need for feature extractors developed by domain experts \cite{bengio2013deep}. This is especially important, as noted by \citeauthor{bengio2009learning} in \cite{bengio2009learning}, for domains where the features are hard to formalize, such as for object recognition and detection tasks.
 
-In the task of object detection, deep architectures have been widely used to achieve state-of-the-art results, as in \cite{krizhevsky2012imagenet}, where the top published results use Convolutional Neural Networks \cite{ciresan2012multi}. Among all deep learning techniques, we will apply deep convolutional neural networks to tackle a specific vision problem. However, prior to delving into deep CNN, we intend to allude the basic concept of neural networks and deep NN briefly, in order to help understand the proposed method in this Master thesis.
+In the task of object detection, deep architectures have been widely used to achieve state-of-the-art results, as in \cite{krizhevsky2012imagenet}, where the top published results use Convolutional Neural Networks (CNN) \cite{ciresan2012multi}. Among all deep learning techniques, we will apply deep convolutional neural networks to tackle a specific vision problem. However, prior to delving into deep CNN, we intend to allude the basic concept of neural networks and deep NN briefly, in order to help understand the proposed method in this Master thesis.
 
 \section{Artificial Neural Networks}
 
@@ -56,10 +56,10 @@ To go from one layer to the next in a NN, units compute a weighted sum of their 
 
 \subsection{Multi-layer Neural Network}
 
-Models based on a single neuron, also called Perceptron, have severe limitations. As noted by \citealt*{preparata2012computational}, a perceptron cannot model data that is not linearly separable, such as modeling a simple XOR operator. On the other hand, as shown by \citealt{hornik1989multilayer}, Multi-layer Neural Networks are universal approximators, that is: they can approximate any measurable function to any desired degree of accuracy.
+Models based on a single neuron, also called Perceptron, have severe limitations. As noted by \citeauthor{preparata2012computational} in \cite{preparata2012computational}, a perceptron cannot model data that is not linearly separable, such as modeling a simple XOR operator. On the other hand, as shown by \citet{hornik1989multilayer}, Multi-layer Neural Networks are universal approximators, that is: they can approximate any measurable function to any desired degree of accuracy.
 
 
-A neural network of three or above layers of neurons shapes a \textit{Multi-layer Neural network} where the first layer is composed of the inputs to the neural network, it is followed by one or more \textit{hidden} layers, up to a last layer that contains the outputs of the network. In the simplest configuration, each layer \textit{l} is fully connected with the adjacent layers $(l - 1 \& l + 1)$, and produces an output vector $y^{l}$ given the output vector of the previous layer y $^{l-1}$. The output of a layer is calculated by applying the neuron activation function for all neurons on the layer, as noted in equation ~\ref{eq:multi}, where $W^{l}$ is a matrix of weights assigned to each pair of neurons from layer \textit{l} and $l - 1$, and $b^{l}$ is a vector of bias terms for each neuron in layer \textit{l}.
+A neural network of three or above layers of neurons shapes a \textit{Multi-layer Neural network} where the first layer is composed of the inputs to the neural network, it is followed by one or more \textit{hidden} layers, up to a last layer that contains the outputs of the network. In the simplest configuration, each layer \textit{l} is fully connected with the adjacent layers $(l - 1 ,~ l + 1)$, and produces an output vector $y^{l}$ given the output vector of the previous layer y $^{l-1}$. The output of a layer is calculated by applying the neuron activation function for all neurons on the layer, as noted in equation ~\ref{eq:multi}, where $W^{l}$ is a matrix of weights assigned to each pair of neurons from layer \textit{l} and $l - 1$, and $b^{l}$ is a vector of bias terms for each neuron in layer \textit{l}.
 
 \begin{equation}
 y^{l} = \sigma(W^{l}y^{l-1}+ b^{l}) 
@@ -77,7 +77,7 @@ y^{l} = \sigma(W^{l}y^{l-1}+ b^{l})
 \subsubsection{Training Objective} 
 In order to train the model, an error function, also called \textit{loss function}, is defined. This function calculates the error of the model predictions with respect to a dataset. The objective of the training is to minimize the sum (or, equivalently, minimize the mean) of this error function applied to all examples in the dataset. 
 
-\indent Commonly used loss functions are the Squared Error function (SE), described in equation ~\ref{eq:SE}, and the Cross-Entropy error function (CE), described in equation ~\ref{eq:CE} (both equations describe the error for a single example in the dataset). As analyzed by \citealt{golik2013cross}, it can be shown that the true posterior probability is a global minimum for both functions, and therefore a Neural Network can be trained by minimizing either. 
+\indent Commonly used loss functions are the Squared Error function (SE), described in equation ~\ref{eq:SE}, and the Cross-Entropy error function (CE), described in equation ~\ref{eq:CE} (both equations describe the error for a single example in the dataset). As analyzed by \citet{golik2013cross}, it can be shown that the true posterior probability is a global minimum for both functions, and therefore a Neural Network can be trained by minimizing either. 
 
 \begin{equation}
 E = \frac{1}{2} \sum\limits_{n} ( \hat{y_n}^{l} - y_n ){^2}
@@ -132,11 +132,21 @@ The SGD algorithm, as defined in \cite{duda2012pattern}, is described below at a
 are: \textit{W} --the weights and biases of the network, (X, y) -- the dataset, batch size -- the number of training examples that are used in each iteration, and $\alpha$, the learning rate. For notation simplicity, all the model parameters are represented in \textit{W}. In practice, each
 layer usually defines a 2-dimensional weight matrix and a 1-dimensional bias vector.
 
-\begin{figure}[H]
-	\centering
-	{\includegraphics[width=1\textwidth]{images/sgd}}
-	\label{fig:sgd}
-\end{figure}
+\begin{algorithm}
+\caption{Stochastic Gradient Descent}\label{euclid}
+\begin{algorithmic}
+\Require{ $W$, $X$, $y$, $batch\_size$, $\alpha$}{}
+\State	W $\longleftarrow$ random values
+\Repeat
+\State $x\_batch$, $y\_batch$ $\longleftarrow$ next $batch\_size$ examples in $(X, y)$
+\State $network\_state$ $\longleftarrow$ \textbf{ForwardProp}($W$, $batch\_size$)
+\State $W_{grad}$ $\longleftarrow$ \textbf{BackProp}($network\_state$, $y\_batch$)
+\State $\Delta W \longleftarrow -\alpha W_{grad} $
+\State $W \longleftarrow W + \Delta W$
+\Until {\textbf{Convergence\_Criteria()}}
+\end{algorithmic}
+\end{algorithm}
+
 In summary, SGD iterates over mini-batches of the dataset, performing forward-propagation followed by a back-propagation to calculate the error derivatives with respect to the parameters. The weights are updated using these derivatives and a new mini-batch is used. This procedure is repeated until a convergence criterion is reached. Common convergence criteria are: a maximum number of epochs (number of times that the whole training set was used); a desired value for the cost function is reached; or training until the cost function shows no improvement in a number of iterations.
 
 Generally, each parameter update in SGD is computed with respect to a few training examples or a mini-batch as opposed to a single example. The reasons for this are threefold \cite{sgd}:
@@ -164,7 +174,7 @@ Deep Neural Networks have been investigated for decades, but training deep netwo
 
 It was discovered, however, that better results could be achieved by pre-training each layer with an unsupervised learning algorithm \cite{hinton2006fast}. In 2006, \citeauthor{hinton2006fast} obtained good results using Restricted Boltzmann Machines (RBM) (a generative model) to perform unsupervised training of the layers \cite{hinton2006fast}. The goal of this training was to obtain a model that could capture patterns in the data, similarly to a feature descriptor, not using the dataset labels. The weights learned by this unsupervised training were then used to initialize neural networks. 
 
-\indent Similar results were reported using auto-encoders for training each layer in \cite{bengio2007greedy}. These experiments identified that layers could be pre-trained one at a time, in a greedy layer-wise format. After the layers are pre-trained, the learned weights are used to initialize the neural network, and then the standard back-propagation algorithm (explained in Section~\ref{subsec:bp}) is used for fine-tuning the network. The advantage of unsupervised pre-training was demonstrated in statistical comparisons \cite{bengio2007greedy}, until recently when deep neural networks trained in a full supervised manner (using labeled data) started to register similar results in some tasks like object recognition. \citealt{ciresan2012multi} demonstrated that properly trained deep neural networks (under full supervision) are able to achieve top results in many tasks, although not denying that pre-training might help, especially in cases were little data is available for training, or when there are massive amounts of unlabeled data. On the task of image classification, the best published results use a particular type of architecture called Convolutional Neural Network (CNN), which is described in below.
+\indent Similar results were reported using auto-encoders for training each layer in \cite{bengio2007greedy}. These experiments identified that layers could be pre-trained one at a time, in a greedy layer-wise format. After the layers are pre-trained, the learned weights are used to initialize the neural network, and then the standard back-propagation algorithm (explained in Section~\ref{subsec:bp}) is used for fine-tuning the network. The advantage of unsupervised pre-training was demonstrated in statistical comparisons \cite{bengio2007greedy}, until recently when deep neural networks trained in a full supervised manner (using labeled data) started to register similar results in some tasks like object recognition. \citet{ciresan2012multi} demonstrated that properly trained deep neural networks (under full supervision) are able to achieve top results in many tasks, although not denying that pre-training might help, especially in cases were little data is available for training, or when there are massive amounts of unlabeled data. On the task of image classification, the best published results use a particular type of architecture called Convolutional Neural Network, which is described in below.
 
 
 
@@ -233,7 +243,7 @@ This involves splitting up the matrix of filter outputs into small non-overlappi
 	\label{fig:pooling}
 \end{figure}
  
-\citealt{scherer2010evaluation} evaluated different pooling architectures, and note that the max-pooling layers obtained the best results. Pooling layers add robustness to the model, providing a small degree of translation invariance, since the unit activates independently on where the image feature is located within the pooling window \cite{bengio2013deep}. Empirically, pooling has demonstrated to contribute to improved classification accuracy for object recognition \cite{lecun1989backpropagation}.
+\citet{scherer2010evaluation} evaluated different pooling architectures, and note that the max-pooling layers obtained the best results. Pooling layers add robustness to the model, providing a small degree of translation invariance, since the unit activates independently on where the image feature is located within the pooling window \cite{bengio2013deep}. Empirically, pooling has demonstrated to contribute to improved classification accuracy for object recognition \cite{lecun1989backpropagation}.
 
 
 \subsection{Local Response Normalization}
