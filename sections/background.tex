@@ -129,14 +129,14 @@ where the expectation in the above equation is approximated by evaluating the co
 with a pair $(x^{(i)}, y^{(i)})$ from the training set \cite{sgd}. 
 
 The SGD algorithm, as defined in \cite{duda2012pattern}, is described below at a high-level. The inputs
-are: \textit{W} --the weights and biases of the network, (X, y) -- the dataset, batch size -- the number of training examples that are used in each iteration, and $\alpha$, the learning rate. For notation simplicity, all the model parameters are represented in \textit{W}. In practice, each
+are: \textit{W} --the weights and biases of the network, $(X, y)$ -- the dataset, batch size -- the number of training examples that are used in each iteration, and $\alpha$, the learning rate. For notation simplicity, all the model parameters are represented in \textit{W}. In practice, each
 layer usually defines a 2-dimensional weight matrix and a 1-dimensional bias vector.
 
 \begin{algorithm}
 \caption{Stochastic Gradient Descent}\label{euclid}
 \begin{algorithmic}
 \Require{ $W$, $X$, $y$, $batch\_size$, $\alpha$}{}
-\State	W $\longleftarrow$ random values
+\State	$W$ $\longleftarrow$ random values
 \Repeat
 \State $x\_batch$, $y\_batch$ $\longleftarrow$ next $batch\_size$ examples in $(X, y)$
 \State $network\_state$ $\longleftarrow$ \textbf{ForwardProp}($W$, $batch\_size$)
