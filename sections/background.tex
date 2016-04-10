@@ -117,7 +117,7 @@ Specifically, BP computes how fast the error changes as we adjust a hidden activ
 \label{subsec:sgd}
 Training the network consists in minimizing the error function (by updating the weights and biases), often using the \textit{Stochastic Gradient Descent} (SGD) algorithm. 
 
-Stochastic gradient descent has often been proposed to minimize the \textit{empirical risk}\footnote{Empirical risk minimization defines a family of learning algorithms and is used to give theoretical bounds on the performance of learning algorithms.} (training set performance measure) using \textit{gradient descent} (GD). The standard gradient descent algorithm updates the parameter $\theta$ of the objective \textit{J($\theta$)} with \textit{learning rate} $\alpha$\footnote{The learning rate $\alpha$ is the weight of the negative gradient (will be described fully in section~\ref{learning rate}).} as:
+Stochastic gradient descent has often been proposed to minimize the \textit{empirical risk}\footnote{ERM as a principle in statistical learning theory sets theoretical boundaries on the learning algorithms.} (training set performance measure) using \textit{gradient descent} (GD). The standard gradient descent algorithm updates the parameter $\theta$ of the objective \textit{J($\theta$)} with \textit{learning rate} $\alpha$\footnote{The learning rate $\alpha$ is the weight of the negative gradient (will be described fully in section~\ref{learning rate}).} as:
 \begin{equation}
 \centering \theta = \theta - \alpha \nabla_\theta E[(J(\theta)]
 \end{equation}

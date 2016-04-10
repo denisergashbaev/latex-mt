@@ -127,6 +127,8 @@
 \usepackage[acronym]{glossaries}
 \makeglossaries
 \newacronym{lfs}{LFS}{Labour Force Survey}
+\newacronym{gcd}{GCD}{Greatest Common Divisor}
+\newacronym{lcm}{LCM}{Least Common Multiple}
 % ACRONYMS AND GLOSSARIES
 
 \makeatletter
@@ -248,7 +250,8 @@ To evaluate our methodology, we present an empirical experiment followed by comp
 %\noindent If any, the appendix should appear directly after the
 %references without numbering, and not on a new page. To do so please use the following command:
 %\textit{$\backslash$section*\{APPENDIX\}}
-\printglossaries %[type=\acronymtype]
-
+%\printglossaries %[type=\acronymtype]
+\clearpage
+\printglossary[type=\acronymtype]
 \vfill
 \end{document}
