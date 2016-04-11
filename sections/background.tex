@@ -12,15 +12,15 @@ Modern deep learning provides a very powerful framework specially for supervised
 
 In other words,  deep learning is a new area of Machine Learning (ML) research, which has been introduced with the objective of moving ML closer to one of its original goals: artificial intelligence. DL is about learning multiple levels of representation and abstraction that help to make sense of data such as images, sound and text.  
 
-Various deep learning architectures involves Artificial Neural Networks (ANN). Networks such as \textit{deep neural networks}, \textit{deep convolutional neural networks},\textit{ deep belief networks} and \textit{recurrent neural networks} have been applied to fields like computer vision, automatic speech recognition or natural language processing where they have set the state-of-the-art in recent years, as reviewed by \citeauthor{bengio2009learning} in \cite{bengio2009learning, bengio2013deep}. 
+Various deep learning architectures involve Artificial Neural Networks (ANN). Networks such as \textit{deep neural networks}, \textit{deep convolutional neural networks},\textit{ deep belief networks} and \textit{recurrent neural networks} have been applied to fields like computer vision, automatic speech recognition or natural language processing where they have set the state-of-the-art in recent years, as reviewed by \citeauthor{bengio2009learning} in \cite{bengio2009learning, bengio2013deep}. 
 
-Besides improving the accuracy on different pattern recognition problems, one of the fundamental goals of DL is to move machine learning towards the automatic discovery of multiple levels of representation, reducing the need for feature extractors developed by domain experts \cite{bengio2013deep}. This is especially important, as noted by \citeauthor{bengio2009learning} in \cite{bengio2009learning}, for domains where the features are hard to formalize, such as for object recognition and detection tasks.
+Besides improving the accuracy on different pattern recognition problems, one of the fundamental goals of DL is to move machine learning towards the automatic discovery of multiple levels of representation, reducing the need for feature extractors developed by domain experts~\cite{bengio2013deep}. This is especially important, as noted by \citeauthor{bengio2009learning} in \cite{bengio2009learning}, for domains where the features are hard to formalize, such as for object recognition and detection tasks.
 
-In the task of object detection, deep architectures have been widely used to achieve state-of-the-art results, as in \cite{krizhevsky2012imagenet}, where the top published results use Convolutional Neural Networks (CNN) \cite{ciresan2012multi}. Among all deep learning techniques, we will apply deep convolutional neural networks to tackle a specific vision problem. However, prior to delving into deep CNN, we intend to allude the basic concept of neural networks and deep NN briefly, in order to help understand the proposed method in this Master thesis.
+In the task of object detection, deep architectures have been widely used to achieve state-of-the-art results, as in \cite{krizhevsky2012imagenet}, where the top published results use Convolutional Neural Networks (CNN) \cite{ciresan2012multi}. Among all deep learning techniques, we will apply deep convolutional neural networks to tackle a specific vision problem. However, prior to delving into deep CNN, we intend to allude to the basic concept of neural networks and deep NN briefly, in order to help understand the proposed method in this Master thesis.
 
 \section{Artificial Neural Networks}
 
-Artificial Neural Networks (ANN) are mathematical models that use a collection of simple computational units, called Neurons, interlinked in a network. These models are used in a variety of pattern recognition tasks, such as speech recognition, object detection, identification of cancerous cells, among others \cite{hertz1991introduction}. ANN's date back to 1943, with work by McCulloch \cite{mcculloch1943logical}. The motivation for studying neural networks was the fact that the human brain was superior to a computer at many tasks, a statement that holds true even today for tasks such as recognizing objects and faces, in spite of the huge advances in the processing speed in modern computers.
+Artificial Neural Networks (ANN) are mathematical models that use a collection of simple computational units, called Neurons, interlinked in a network. These models are used in a variety of pattern recognition tasks, such as speech recognition, object detection, identification of cancerous cells, among others \cite{hertz1991introduction}. ANNs date back to 1943, with work by McCulloch \cite{mcculloch1943logical}. The motivation for studying neural networks was the fact that the human brain was superior to a computer at many tasks, a statement that holds true even today for tasks such as recognizing objects and faces, in spite of the huge advances in the processing speed in modern computers.
 
 The neuron is the basic unit on Artificial Neural Networks, and it is used to construct more powerful models. A typical set of equations to describe Neural Networks is provided in \cite{williams1986learning}, and is also listed below for completeness. A single neuron implements a mathematical function given its inputs, to provide an output, as described in equation ~\ref{eq:neuron} and illustrated in figure~\ref{fig:neuron}.
 
@@ -51,7 +51,7 @@ To go from one layer to the next in a NN, units compute a weighted sum of their 
 	\label{fig:relu}
 \end{figure}
 
-\indent The rectifier activation function allows a network to easily obtain sparse representations. For example, after uniform initialization of the weights, around 50\% of hidden units continuous output values are real zeros, and this fraction can easily increase with sparsity-including regularization. Apart from being more biologically plausible, sparsity also leads to mathematical advantages. On the other hand, one may hypothesize that the hard saturation at 0 may hurt optimization by blocking gradient back-propagation. However, experimental results done by \citeauthor{glorot2011deep} suggest that hard zeros can actually help supervised training \cite{glorot2011deep}.  
+\indent The rectifier activation function allows a network to easily obtain sparse representations. For example, after uniform initialization of the weights, around 50\% of hidden units continuous output values are real zeros, and this fraction can easily increase with sparsity-including regularization. Apart from being more biologically plausible, sparsity also leads to mathematical advantages. On the other hand, one may hypothesize that the hard saturation at 0 may hurt optimization by blocking gradient back-propagation. However, experimental results done by \citeauthor{glorot2011deep} suggest that hard zeros can actually help in  supervised training \cite{glorot2011deep}.  
 
 
 \subsection{Multi-layer Neural Network}
@@ -77,7 +77,7 @@ y^{l} = \sigma(W^{l}y^{l-1}+ b^{l})
 \subsubsection{Training Objective} 
 In order to train the model, an error function, also called \textit{loss function}, is defined. This function calculates the error of the model predictions with respect to a dataset. The objective of the training is to minimize the sum (or, equivalently, minimize the mean) of this error function applied to all examples in the dataset. 
 
-\indent Commonly used loss functions are the Squared Error function (SE), described in equation ~\ref{eq:SE}, and the Cross-Entropy error function (CE), described in equation ~\ref{eq:CE} (both equations describe the error for a single example in the dataset). As analyzed by \citet{golik2013cross}, it can be shown that the true posterior probability is a global minimum for both functions, and therefore a Neural Network can be trained by minimizing either. 
+\indent Commonly used loss functions are the Squared Error function (SE), described in equation~\ref{eq:SE}, and the Cross-Entropy error function (CE), described in equation~\ref{eq:CE} (both equations describe the error for a single example in the dataset). As analyzed by \citet{golik2013cross}, it can be shown that the true posterior probability is a global minimum for both functions, and therefore a Neural Network can be trained by minimizing either. 
 
 \begin{equation}
 E = \frac{1}{2} \sum\limits_{n} ( \hat{y_n}^{l} - y_n ){^2}
@@ -129,9 +129,10 @@ where the expectation in the above equation is approximated by evaluating the co
 with a pair $(x^{(i)}, y^{(i)})$ from the training set \cite{sgd}. 
 
 The SGD algorithm, as defined in \cite{duda2012pattern}, is described below at a high-level. The inputs
-are: \textit{W} --the weights and biases of the network, $(X, y)$ -- the dataset, batch size -- the number of training examples that are used in each iteration, and $\alpha$, the learning rate. For notation simplicity, all the model parameters are represented in \textit{W}. In practice, each
+are: \textit{W} -- the weights and biases of the network, $(X, y)$ -- the dataset, batch size -- the number of training examples that are used in each iteration, and $\alpha$, the learning rate. For notation simplicity, all the model parameters are represented in \textit{W}. In practice, each
 layer usually defines a 2-dimensional weight matrix and a 1-dimensional bias vector.
 
+\todo{reduce line spacing inside of the algorithm}
 \begin{algorithm}
 \caption{Stochastic Gradient Descent}\label{euclid}
 \begin{algorithmic}
@@ -156,7 +157,7 @@ Generally, each parameter update in SGD is computed with respect to a few traini
 	\item One final but important point regarding SGD is the order in which we present the data to the algorithm. If the data is given in some meaningful order, this can bias the gradient and lead to poor convergence. Generally, a good method to avoid this is to randomly shuffle the data prior to each epoch of training.
 \end{enumerate}
 
-
+\todo{i reviewed up to here for now}
 \section{Deep Neural Networks}
 \label{sec:deepcnn}
 As mentioned, standard neural network (NN) consists of many simple neurons, each producing a sequence of real-valued activations. The depth of an architecture refers to the number of concatenated non-linear operations that are composed on the network. While many of the early successful applications of neural networks used shallow architectures (up to 3 levels), the mammal brain is organized in a deep architecture. The brain appears to process information through multiple stages, which is particularly clear in the primate visual system \cite{bengio2009learning}.

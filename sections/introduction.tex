@@ -3,7 +3,7 @@
 \label{sec:introduction}
 \section{Motivation}
 %\cite{umbaugh1997computer}
-Learning to count is a central concept which constitutes the most fundamental idea of mathematics. In computer vision, the counting problem is the estimation of number of objects in a still image or video frame. Learning to count visual objects is a new approach towards dealing with detecting object in the images and video, which has been recently proffered in the literature \cite{rabaud2006counting, kong2005counting, chan2008privacy, segui2015learning}. It arises in many real-world applications, including cell counting in microscopic images \cite{flaccavento2011learning}, monitoring crowds in surveillance systems \cite{rahmalan2006crowd}, and performing wildlife census or counting the number of trees in an aerial image of a forest \cite{pollock1996automatic,NIPS2010_4043}. 
+Learning to count is a central concept constituting the most fundamental idea of mathematics. In computer vision, the counting problem is the estimation of number of objects in a still image or video frame. Learning to count visual objects is a new approach towards dealing with detecting object in the images and video, which has been recently proffered in the literature \cite{rabaud2006counting, kong2005counting, chan2008privacy, segui2015learning}. It arises in many real-world applications, including cell counting in microscopic images \cite{flaccavento2011learning}, monitoring crowds in surveillance systems \cite{rahmalan2006crowd}, and performing wildlife census or counting the number of trees in an aerial image of a forest \cite{pollock1996automatic,NIPS2010_4043}. 
 
 Artificial Intelligence (AI) and computer vision share topics such as pattern recognition and machine learning techniques \cite{mitchell1997machine}. Consequently, computer vision is sometimes seen as a part of the artificial intelligence field or the computer science field in general. Recent machine learning methods applied for computer vision tasks, require large number of data for the learning process. In order to learn to count the object of interest in an image or video, various object features need to be designed, extracted or detected during the learning phase. The complexity of feature detection process in vision tasks, restricts their usage in large-scale computer vision applications thus demanding more efficient solutions to alleviate, expedite and improve this process. 
 
@@ -11,14 +11,14 @@ Artificial Intelligence (AI) and computer vision share topics such as pattern re
 
 Although access to fast computers and vast amounts of data has enabled the advances of deep learning algorithms such as DCNN in solving many problems that were not solvable using classic AI\footnote{Computer programs designed to solve problems that human brains performed easily, such as understanding text or recognizing objects in an image. Due to their poor performance, they introduced \textit{Expert Systems} (computer programs combined with rules provided by domain experts) which were highly tuned for a specific problem. }, they have limitations. For instance, they don't perform well when there is limited data \cite{griffin2007caltech}. This constrain restricts the application of DL methods in various areas including computer vision where they have shown promising performances.  
 
-
+\newpage
 \section{Objectives}
 This work puts forward several objectives:
 \begin{enumerate}
 
-\item To prevail over the main limitation of deep learning regarding problems with small datasets, by introducing the benefit of synthetic data generation as a surrogate for needed large training sets in fully supervised learning to count tasks in computer vision (when using DL algorithms) where DL methods haven't been applied yet due to the lack of annotated data.
+\item To prevail over the main limitation of deep learning regarding problems with small datasets, by introducing the benefit of synthetic data generation as a surrogate for needed large training sets in fully supervised learning to count tasks in computer vision (when using DL algorithms) where DL methods haven't been applied yet due to the lack of annotated data.\todo{awefully long and complicated}
 
-\item To abate extensive highly-specialized feature detection efforts, by substituting deep CNN for learning features in problems concerning counting object of interest, where no explicit information about what we are counting is given to the system, except for the object's multiplicity in the image.
+\item To abate extensive highly-specialized feature detection efforts by substituting deep CNN for learning features in problems concerning counting object of interest, where no explicit information about what we are counting is given to the system, except for the object's multiplicity in the image.
 %\todo{this first objective just too long and not readable. abate is is too fancy and i think not appropriate in the context}
 
 %\item To prevail over exhaustive data annotation required for fully supervised learning to count tasks (when using DL algorithms), by introducing synthetically created and fully automatically annotated datasets for training deep CNNs.   
@@ -33,7 +33,7 @@ This work puts forward several objectives:
 \end{enumerate}
 \section{Contributions}
 Following the course of achieving aforementioned objectives, we created and designed different synthetic datasets and algorithms to provide an exhaustive analysis. Hence, this dissertation contains the following contributions: 
-%\todo{really? please improve it -- fore-mentioned  doesn't even exist as a word. More of a transition here needed... how you've achieved that, what you've desined...}
+\todo{please improve it: More of a transition here needed... how you've achieved that, what you've desined...}
 
 \begin{enumerate}
 	
@@ -52,7 +52,7 @@ Following the course of achieving aforementioned objectives, we created and desi
 	\item The proposed model is able to count the number of people in the real and unseen dataset using the features learned by training the network on synthetic dataset. To our knowledge, this is the first crowd counting system trained by synthetic data that successfully operates on real data. 
 
 	%\todo{you are not a robot. put more sentences in here... like we devised a new validation system since none exists blah-blah. does it even belong in here?}
-	\item Finally, we evaluate our proposal in different aspects regarding our objectives. In addition, fair comparisons between our methodology and different state-of-the-arts will demonstrate our improvements. In general, the validation of our proposal is done in the following steps:
+	\item Finally, we evaluate our proposal in different aspects regarding our objectives. In addition, a critical comparison between our methodology and different state-of-the-art methods will demonstrate our improvements. In general, the validation of our proposal is done in the following steps:
 
 	\begin{itemize}
 		\item First, we learn to count even hand-written digits in images. Then, we evaluate the learned features of the proposed model on an even-odd digits recognition task. 
@@ -64,7 +64,7 @@ Following the course of achieving aforementioned objectives, we created and desi
 
 \section{Organization}
 
-This report takes off with a review of deep learning (chapter~\ref{sec:dl}) as a branch of artificial intelligence which deep convolutional neural networks belong to, and moves on to introduce a DCNN's basic architecture and components in details (chapter~\ref{sec:deepcnn}). 
+This report takes off with a review of deep learning (chapter~\ref{sec:dl}) as a branch of artificial intelligence to which deep convolutional neural networks belong, and moves on to introduce a DCNN's basic architecture and components in details (chapter~\ref{sec:deepcnn}). 
 
 
 Chapter ~\ref{sec:stateoftheart} reviews state-of-the-art of synthetic data generation in CV along with feature detection and learning to count problems. 
