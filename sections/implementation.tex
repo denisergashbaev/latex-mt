@@ -458,12 +458,48 @@ However, a well-designed network cannot solely guarantee an optimal performance 
 \end{table}
  
 
-\noindent We should also mention that at the top layer of the network, we used Euclidean Loss layer to compute the euclidean distance between the predictions and the ground truth.  Figure~\ref{fig:l2cNet} shows a scheme of the architecture.
+\noindent We should also mention that at the top layer of the network, we used Euclidean Loss layer to compute the euclidean distance between the predictions and the ground truth.  Figure~\ref{fig:l2cNet} shows a scheme of the architecture while table~\ref{ourltc} summarizes the design. 
+		\begin{table}[H]
+			\centering
+			\begin{tabular}{ |p{2cm}|p{2cm}| }
+			\hline 
+			\multicolumn{2}{|c|}{\textbf{Network parameters}} \\
+			\hline
+			\hline
+			\textbf{Layers} & \textbf{setting }\\
+			\hline
+			Conv1 & $20\times15\times15$\\
+			\hline
+			Pool1    & $max(2\times2)$ \\
+			\hline
+			Conv2 & $50\times5\times5$\\
+			\hline
+			Pool2    & $max(2\times2)$ \\
+			\hline
+			Conv3 & $50\times3\times3$\\
+			\hline
+			IP1 & 128 outputs \\
+			\hline
+			IP1 & 64 outputs \\
+			\hline
+			IP2 & 1 outputs \\
+			\hline
+			\end{tabular}
+				\caption{Proposed architecture's settings.}
+				\label{ourltc}
+		\end{table}
+		 
+%    \end{minipage} 
+%        %\caption{Global caption}
+%\end{table}
+
+
+
 \begin{figure}[H]
   \centering
-   {\includegraphics[width=0.7\textwidth]{images/1}}
+   {\includegraphics[width=0.9\textwidth]{images/ohoh}}
   %\end{center}
-	\caption{Proposed network architecture for Even digits counting task}
+	\caption{From bottom-left to top-right, the proposed network architecture for Even digits counting task}
 	\label{fig:l2cNet}
 \end{figure}
 
@@ -501,7 +537,7 @@ For the task of counting pedestrians, due to the more complex images than the pr
 		\label{hypar2}
 \end{table} 
 
-As a baseline, we considered state-of-the-art architecture designed by \citealt*{segui2015learning} for counting the number of pedestrians in the images. As shown in figure~\ref{santiucsdnet}, in their work, they used a five layer architecture CNN with two convolutional layers followed by three fully connected layers. Convolutional layers contain their main elements (ReLU and LRN layers), and each outputs 8 filters with kernel sizes $9\times9$ and $5\times5$ respectively. 
+As a baseline, we considered state-of-the-art architecture designed by \citet{segui2015learning} for counting the number of pedestrians in the images. As shown in figure~\ref{santiucsdnet}, in their work, they used a five layer architecture CNN with two convolutional layers followed by three fully connected layers. Convolutional layers contain their main elements (ReLU and LRN layers), and each outputs 8 filters with kernel sizes $9\times9$ and $5\times5$ respectively. 
 
 \begin{figure}[H]
   \centering
@@ -541,20 +577,52 @@ Table~\ref{santiarch} describes a summary of their network.
 \end{table}
 
 
-\noindent However, since up to 29 pedestrians are present in our images with high amount of overlapping, in our design we added one convolutional layer to the base architecture. We also increased the number of parameters in the network. In our architecture, the data blobs pass through 4 convolutional layers. The first convolutional layer has 4 filters, each with $5\times5$ kernel and the other 3 layers have again 4 filters but each of size $3\times3$. Similar to the previous model, each convolutional layer is followed by ReLU non-linearity layer and LRN normalization layer. Also the stride and padding values for all the convolutional layers are respectively equal to 1 and 0. 
+\noindent However, since up to 29 pedestrians are present in our images with high amount of overlapping, in our design we added one convolutional layer to the base architecture. We also increased the number of parameters in the network. In our architecture, the data blobs pass through 4 convolutional layers. The first convolutional layer has 10 filters, each with $15\times15$ kernel. The second convolution layer contains 10 filters of dimensions $11\times11$. Respectively for the third and fourth convolution layers, kernels of sizes $9\times9$ and $5\times5$  provide 0 filters for each layer. Similar to the previous model, each convolutional layer is followed by ReLU non-linearity layer and LRN normalization layer. Also the stride and padding values for all the convolutional layers are respectively equal to 1 and 0. Table~\ref{ourpednet} shows the main structure of this architecture. 
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ |p{2cm}|p{2cm}| }
+	\hline 
+	\multicolumn{2}{|c|}{\textbf{Network parameters}} \\
+	\hline
+	\hline
+	\textbf{Layers} & \textbf{setting }\\
+	\hline
+	Conv1 & $10\times15\times15$\\
+	\hline
+	Pool1 & $max(2\times2)$ \\
+	\hline
+	Conv2 & $10\times11\times11$\\
+	\hline
+	Pool2 & $max(2\times2)$ \\
+	\hline
+	Conv3 & $20\times9\times9$\\
+	\hline
+	Conv4 & $20\times5\times5$\\
+	\hline
+	IP1   & 128 outputs \\
+	\hline
+	IP2   & 64 outputs \\
+	\hline
+	IP3   & 1 outputs \\
+	\hline
+	\end{tabular}
+		\caption{Proposed architecture's settings.}
+		\label{ourpednet}
+\end{table}
 %\todo{ok, i really want a figure showing the architecture of the network you've designed. it should show the layers, kernels, ... a zoom-in, no full-scale representation needed, just a cutout}
 
 \indent In order to not lose information, we used merely two pooling layers for the first two convolutional layers. Each pooling layer has a kernel size of $2\times2$ with $stride = 1$  and $padding = 0$. Figure~\ref{fig:ucsdnet} illustrates the proposed architecture. 
 
 \begin{figure}[H]
   \centering
-   {\includegraphics[width=0.7\textwidth]{images/1}}
+   {\includegraphics[width=0.65\textwidth]{images/uscdmine}}
   %\end{center}
 	\caption{Proposed network architecture for learning the number of pedestrians in the image.}
 	\label{fig:ucsdnet}
 \end{figure}
 
-As you may see in figure~\ref{fig:ucsdnet} above, there are three fully connected layers to regress the number of pedestrians in images. The first two fully connected layers have 16 outputs each, and are connected to ReLU non-linearity layers. The last layer however, with solely one output, passes the models' prediction of the number of pedestrians to the Euclidean loss layer to calculate the sum of squares of differences of its two inputs, the true labels and predictions. 
+As you may see in figure~\ref{fig:ucsdnet} above, there are three fully connected layers to regress the number of pedestrians in images. The first fully connected layers has 128 output units, and the second layer outputs 64 units. The last layer however, with solely one output, passes the models' prediction of the number of pedestrians to the Euclidean loss layer to calculate the sum of squares of differences of its two inputs, the true labels and predictions. 
 %In figure~\ref{fig:ucsdnet}, an illustration of this architecture has been presented.
 
 To the best of our knowledge, the designed architectures outperform other architectures we tried previously (a different range of architectures starting from 1 up to 5 convolutional layers with different settings), while also fastening the training phase . However, apart from the basic knowledge about network architectures, hyper-parameters initialization and some rules of thumb of successful experiences in similar works, the rest of design has been done intuitively. Therefore, similar to the first architecture (problem of counting even digits), there would be other ways to improve the architecture and performance of the model.
