@@ -2,11 +2,11 @@
 \chapter{Experiments and Results}
 \label{sec:experiments}
 
-Prior to jumping to the final results obtained with our algorithm, this chapter will attempt to give insight into the experiments we designed to verify our hypothesis. We examine our proposed methodology on two different but related scenarios. In the former scenario, we tackle the learning to count even hand-written digits, and for the latter one, crowd counting problem is considered. The findings of the experiments will determine to what extent synthetic data generation could help deep convolutional networks to learn when dealing little amount of data. In addition, it will prove the applicability and scalability of DCNN as a well-suited substitute for feature detection problems. Hence, this chapter gives full particulars of each experiment, and presents obtained results as compared to similar works.
+Prior to jumping to the final results obtained with our algorithm, this chapter will attempt to give insight into the experiments we designed to verify our hypothesis. We examine our proposed methodology on two different but related scenarios. In the former scenario, we tackle the learning to count even hand-written digits, and for the latter one, crowd counting problem is considered. The findings of the experiments will determine to what extent synthetic data generation could help deep convolutional networks to learn when dealing with little amount of data. In addition, it will prove the applicability and scalability of DCNN as a well-suited substitute for feature detection problems. Hence, this chapter gives full particulars of each experiment, and presents obtained results as compared to similar works.
 
 \section{Learning to Count Even-odd Handwritten Digits}
 
-For our first objective, we intend to explore the features learned when training a deep CNN, in order to understand the underlying representations. In addition, we would like to examine the performance of the model in a larger scale compare to state-of-the-art approach \cite{segui2015learning}. To this end, we designed a synthetic problem of counting even digits in images. This experiment also helps illustrating the basic idea behind this work, where we hypothesize that the features learned during this task are:
+For our first objective, we intend to explore the features learned when training a deep CNN, in order to understand the underlying representations. In addition, we would like to examine the performance of the model in a larger scale compared to state-of-the-art approach \cite{segui2015learning}. To this end, we designed a synthetic problem of counting even digits in images. This experiment also helps illustrating the basic idea behind this work, where we hypothesize that the features learned during this task are:
 \begin{enumerate}
 \item Efficient descriptors of digits to enable the model to count them.
 %\item Scaling up the task to examine if the same approach can be taken up for larger and more complex counting problems.
@@ -156,7 +156,7 @@ As discussed in chapter~\ref{subsubsec:digitarch}, for learning to count the num
 %\item \textbf{Iterations:} Given the time and hardware we had, we managed to let the system train for 1,600,000 iterations.
 %\end{itemize}
 
-\noindent The algorithm trained on a GPU NVIDIA \cite{kirk2007nvidia} Tesla K40 \cite{lindholm2008nvidia}. It took many hours to train 800,000 samples and test over 200,000 images. Figure~\ref{fig:convha} illustrates the outputs (rectified responses of the shown filters) of the different layers in the network for one input sample. This illustration clearly depicts the process of even-digit counting in the proposed DCNN.  % The learning curves of this process are shown in the figure~\ref{fig:curve} (The shown graphs are shortened to the most inconstant (changing) section of the curves).
+\noindent The algorithm trained on a GPU NVIDIA \cite{kirk2007nvidia} Tesla K40 \cite{lindholm2008nvidia}. It took almost three days to train 800,000 samples and test over 200,000 images. Figure~\ref{fig:convha} illustrates the outputs (rectified responses of the shown filters) of the different layers in the network for one input sample. This illustration clearly depicts the process of even-digit counting in the proposed DCNN.  % The learning curves of this process are shown in the figure~\ref{fig:curve} (The shown graphs are shortened to the most inconstant (changing) section of the curves).
 
 %\begin{figure*}[h!]
 %    \centering
@@ -279,8 +279,8 @@ In order to demonstrate how far each model's accuracy stands from random, we pro
 \textbf{Experiments}  &   \textbf{Accuracy} & \textbf{Chance} \\
 \bottomrule
 %\midrule
-Proposed architecture (up to 15 digits)     & 79.87\% & 0.0625\% \\
-\citet{segui2015learning} approach (up to 5)& 93.8\% & 0.1666\%  \\
+Proposed architecture (up to 15 digits)     & 79.87\% & 6.25\% \\
+\citet{segui2015learning} approach (up to 5)& 93.8\% & 16.66\%  \\
 
 \bottomrule
 \end{tabular}
@@ -288,7 +288,7 @@ Proposed architecture (up to 15 digits)     & 79.87\% & 0.0625\% \\
 \label{tab:comp}
 \end{table} 
 
-As shown in the table above, considering the number of digits present in images and lower percentages of chance in our method, we obtained impressive results. However, due to different size and amount of digits in our dataset compare to state-of-the-art approach in \cite{segui2015learning}, it would not be possible to draw a fair comparison between our work and state-of-the-art. We believe that by testing our model on a similar dataset to \citet{segui2015learning} approach, we would be able to achieve better results. However, since this experiment's focus is on analyzing scalability of DCNN application and also to introduce the basic idea behind this master thesis, we decided not to provide this comparison and be satisfied of achieving our main objectives.  
+As shown in the table above, considering the number of digits present in images and lower percentages of chance in our method, we obtained impressive results. However, due to different size and amount of digits in our dataset compared to state-of-the-art approach in \cite{segui2015learning}, it is not possible to draw a fair comparison between our work and state-of-the-art. We believe that by testing our model on a similar dataset to \citet{segui2015learning} approach, we would be able to achieve better results. However, since this experiment's focus is on analyzing scalability of DCNN application and also to introduce the basic idea behind this master thesis, we decided not to provide this comparison and be satisfied of achieving our main objectives.  
 
 \subsection{Conclusion}
 
@@ -447,7 +447,7 @@ As fully described in chapter~\ref{subsec:ucsdarch}, we implemented a deep convo
 
 \noindent Similarly, we used GPU NVIDIA TESLA K40 to train our network. After 5 days of training, we obtained the following learning curves (figure~\ref{fig:ucurve}) :
 
-\begin{figure*}[htb!]
+\begin{figure*}[h!]
     \centering
     \begin{subfigure}[H]{0.5\textwidth}
         \centering
@@ -468,7 +468,7 @@ As fully described in chapter~\ref{subsec:ucsdarch}, we implemented a deep convo
 
 
 
-As you may observe, the correspondent decreasing of training and test loss clearly proves that network has neither over-fitted nor under-fitted. We achieved \textbf{Train\_loss = 0.425065} and consequently \textbf{Test\_loss = 0.447545} on the test set.
+As you may observe, the correspondent decreasing of training and test loss clearly proves that the network has neither over-fitted nor under-fitted. We achieved \textbf{Train loss = 0.425065} and consequently \textbf{Test loss = 0.447545} on the test set.
 
 \noindent The network was able to learn sufficient features corresponding to the pedestrians. To illustrate, the outputs for one input sample, after each layer in the network, has been depicted in the following figures~\ref{fig:feats}: 
 
@@ -483,7 +483,7 @@ As you may observe, the correspondent decreasing of training and test loss clear
 
 
 
-Similar to the previous experiment, the first convolutional layer provides us with the most important and illustrative information about the pedestrians we aim to count. As you may notice, mostly the first two convolution layers have successfully detected the pedestrians contours in the image. The size of kernels in convolutional layers helps improving this detection. We intended to avoid learning too much details (noise) by choosing kernel sizes of first two convolutional layers relatively large. In this way, network ignores the details that would not help detecting pedestrians in the images. 
+Similar to the previous experiment, the first convolutional layer provides us with the most important and illustrative information about the pedestrians we aim to count. As you may notice, mostly the first two convolution layers have successfully detected the pedestrians contours in the image. The size of kernels in convolutional layers helps improving this detection. We intended to avoid learning too much details (noise) by choosing kernel sizes of first two convolutional layers relatively large. In this way, the network ignores the details that would not help detecting pedestrians in the images. 
 
 \subsection{Experimental Results}
 
@@ -519,7 +519,7 @@ Considering the random percentage (0.033) of this experiment, the network shows 
 
 As you may notice, the network's predictions closely follow the target values. Also a direct correlation between the number of pedestrians and error deviation can be inferred from the plot which is reasonable due to the more overlapping in the crowded scenes. 
 
-\noindent In state-of-the-art, \citet{segui2015learning} did a similar experiment with maximum 25 pedestrians in each image. Beside that, the difference between their work and our analysis, mainly revolves around the synthetic data generation algorithm and the designed architectures. Nonetheless, the table of comparison between these two approaches are shown in below:
+\noindent In state-of-the-art, \citet{segui2015learning} did a similar experiment with maximum 25 pedestrians in each image. In addition, the difference between their work and our analysis, mainly revolves around the synthetic data generation algorithm and the designed architectures. Nonetheless, the table of comparison between these two approaches are shown in below:
  
 \begin{table}[H]
 \centering
@@ -575,13 +575,13 @@ Mean absolute error      & 1.38  \\
 \label{tab:ucsdreal}
 \end{table} 
 
-As it can be inferred from the above table, the results are convincing and rational given the results we achieved on the synthetic test set and the inevitable differences between the synthetic and real datasets. A confusion matrix regarding this experiment is show in figure~\ref{confnew}. We believe that this difference is mainly due to the difference between train and test images that can be handled by either modifying the architecture in a way to ignore more details, or improving the train set to become closer to the real test images. 
+As it can be inferred from the above table, the results are convincing and rational given the results we achieved on the synthetic test set and the inevitable differences between the synthetic and real datasets. A confusion matrix regarding this experiment is shown in figure~\ref{confnew2}. We believe that this difference is mainly due to the difference between train and test images that can be handled by either modifying the architecture in a way to ignore more details, or improving the train set to become closer to the real test images. 
 
 \begin{figure}[H]
 	\centering
 	{\includegraphics[width=0.8\textwidth]{images/realtestfig}}
 	\caption{Confusion matrix regarding the model performance on the real test set. The starting point of the graph is 10 since the minimum amount of pedestrians in the real test set is 10.}
-	\label{confnew}
+	\label{confnew2}
 \end{figure}
 The figure above shows that the model mostly over-predicts. This means that most probably sue to the inevitable differences between real and synthetic samples, the model is detecting some unseen noises as pedestrians. As you observe in the figure~\ref{confnew}, as the number of pedestrians increases in the images, the prediction accuracy of the model decreases.  
 
@@ -617,14 +617,14 @@ As the first endeavor, we applied a gaussian filter on the real test set. To do 
 	\centering
 	{\includegraphics[width=0.8\textwidth]{images/sigmaTest}}
 	\caption{The best sigma value for the gaussian filter applied on real images.}
-	\label{sig2}
+	\label{sigsig}
 \end{figure}
 By testing our model on the test set images filtered with $ \sigma=1.4 $, we could not improve the results. Therefore we decided to make synthetic images filtered in order to minimize their euclidean distance to the real images. Therefore, we took up the same approach but this time for synthetic image. We obtained the best sigma value as $ \sigma=1.6 $ for the gaussian filter to blur the synthetic images as it is illustrated in figure~\ref{sig2}.   
 \begin{figure}[H]
 	\centering
 	{\includegraphics[width=0.8\textwidth]{images/sigmaTrain}}
 	\caption{The best sigma value for the gaussian filter applied on real images.}
-	\label{sigsig}
+	\label{sig2}
 \end{figure}
 However, despite the fact that it improved the results to some extent, the improvement was not significant. Hence, we decided not to include this process in our main experiment. 
 % adding a gaussian filter to the real images. We compared the predictions and true labels for $\sigma \in (0,2)$ to find the best sigma $\sigma$ value for filtering the real images. Figure~\ref{sigsig} depicts this process: 
