@@ -16,7 +16,8 @@ Although access to fast computers and vast amounts of data has enabled the advan
 This work puts forward several objectives:
 \begin{enumerate}
 
-\item To prevail over the main limitation of deep learning regarding problems with small datasets, by introducing the benefit of synthetic data generation as a surrogate for needed large training sets in fully supervised learning to count tasks in computer vision (when using DL algorithms) where DL methods haven't been applied yet due to the lack of annotated data.\todo{awefully long and complicated}
+%\item To prevail over the main limitation of deep learning regarding problems with small datasets, by introducing the benefit of synthetic data generation as a surrogate for needed large training sets in fully supervised learning to count tasks in computer vision (when using DL algorithms) where DL methods haven't been applied yet due to the lack of annotated data.
+\item To prevail over the main limitation of deep learning regarding problems with small datasets, by introducing the benefit of synthetic data generation as a surrogate for required large training sets  for counting tasks in computer vision, where DL methods haven't been applied yet due to the lack of annotated data.
 
 \item To abate extensive highly-specialized feature detection efforts by substituting deep CNN for learning features in problems concerning counting object of interest, where no explicit information about what we are counting is given to the system, except for the object's multiplicity in the image.
 %\todo{this first objective just too long and not readable. abate is is too fancy and i think not appropriate in the context}
@@ -40,7 +41,8 @@ Following the course of achieving aforementioned objectives, we created and desi
 	\item It provides a thorough study on the procedure of generating synthetic datasets for learning to count the number of objects in images by the means of deep convolutional neural networks. In this course, we present two synthetically created datasets. The first set of images contains hand-written digits for counting the number of even digits in the images. The second dataset consists of pedestrians in a walkway, to train a counting deep convolutional neural network which is adequate for apprehending the underlying representations.
 	
 	
-	\item It proposes the problem of object representation as an indirect learning problem casted as learning to count strategy. The devised algorithm is capable of counting the number of even hand-written digits in images. Moreover, the model is able to be applied for different but related tasks such as even-odd digit recognition, to demonstrate the capability of the learned features of the network for classifying digits with no direct supervision while training. 
+	\item It proposes the problem of object representation as an indirect learning problem casted as learning to count strategy. The devised algorithm is capable of counting the number of even hand-written digits in images in a larger scale and more complex task compare to the state-of-the-art methods. 
+	
 	
 	%\todo{who `it'? THE DISSERTATION, why provides and not proposes/devises, suggests an architecture...}
 	\item It suggests a deep convolutional neural network for counting the number of pedestrians in a walkway that does not depend on object detection or feature tracking. The model is privacy-preserving in a sense that instead of tracking people, it learns the individual's features.
@@ -52,7 +54,7 @@ Following the course of achieving aforementioned objectives, we created and desi
 	\item The proposed model is able to count the number of people in the real and unseen dataset using the features learned by training the network on synthetic dataset. To our knowledge, this is the first crowd counting system trained by synthetic data that successfully operates on real data. 
 
 	%\todo{you are not a robot. put more sentences in here... like we devised a new validation system since none exists blah-blah. does it even belong in here?}
-	\item Finally, we evaluate our proposal in different aspects regarding our objectives. In addition, a critical comparison between our methodology and different state-of-the-art methods will demonstrate our improvements. In general, the validation of our proposal is done in the following steps:
+	\item Finally, we evaluate our proposal in different aspects regarding our objectives. In addition, critical comparisons between our methodology and different state-of-the-art methods  will demonstrate our improvements. In general, the validation of our proposal is done in the following steps:
 
 	\begin{itemize}
 		\item First, we learn to count even hand-written digits in images. Then, we evaluate the learned features of the proposed model on an even-odd digits recognition task. 
@@ -64,7 +66,7 @@ Following the course of achieving aforementioned objectives, we created and desi
 
 \section{Organization}
 
-This report takes off with a review of deep learning (chapter~\ref{sec:dl}) as a branch of artificial intelligence to which deep convolutional neural networks belong, and moves on to introduce a DCNN's basic architecture and components in details (chapter~\ref{sec:deepcnn}). 
+This report takes off with a review of deep learning (chapter~\ref{sec:dl}) as a branch of artificial intelligence to which deep convolutional neural networks belong to, and moves on to introduce a DCNN's basic architecture and components in details (chapter~\ref{sec:deepcnn}). 
 
 
 Chapter ~\ref{sec:stateoftheart} reviews state-of-the-art of synthetic data generation in CV along with feature detection and learning to count problems. 
