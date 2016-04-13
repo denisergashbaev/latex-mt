@@ -244,7 +244,7 @@ Mean absolute error      & 0.394 \\
 \label{tab:res}
 \end{table} 
 
-Table above satisfactory results obtained from this learning process. Accordingly, the confusion matrix corresponding to the model is provided in figure~\ref{fig:splot} in below.
+\todo{?}Table above satisfactory results obtained from this learning process. Accordingly, the confusion matrix corresponding to the model is provided in figure~\ref{fig:splot} in below.
 
 \begin{figure}[H]
 	\centering
@@ -292,7 +292,7 @@ As shown in the table above, considering the number of digits present in images 
 
 \subsection{Conclusion}
 
-Noteworthy results obtained from the performance of designed model on the test set shows that not only DCNN are able to learn digits features, but also representativity of learned features can provide more scalability for the proposed problems. This fact assures us that the learned features are representative of digits to a high degree. This results show that DCNN are able to learn the object features incrementally and from the scratch without the need for any domain expert or feature descriptor methods. 
+Noteworthy results obtained from the performance of designed model on the test set shows that not only DCNN are able to learn digits features, but also representativity of learned features can provide higher scalability for the proposed problems. This fact assures us that the learned features are representative of digits to a high degree. This results show that DCNN are able to learn the object features incrementally and from the scratch without the need for any domain expert or feature descriptor methods. 
 
 \section{Counting Pedestrians in a Walkway}
 
@@ -302,7 +302,7 @@ Hence, we propose a crowd counting problem using synthetic dataset in order to e
 
 \subsection{Datasets} 
 
-As fully discussed in chapter~\ref{subsec:synped}, for this particular case study, we synthetically created a dataset of 1 million images. To recap, the dataset specifications are the followings:
+As fully discussed in chapter~\ref{subsec:synped}, for this particular case study, we synthetically created a dataset of 1 million images. To recap, the dataset specifications are the following:
 %\todo{no need to repeat the information, but i like the description of the dataset here better}, DONT UNDERSTAND WHAT YOU MEAN??!!!!
 \begin{itemize}
 \item Each image is in gray-scale, $158\times158$ pixels, normalized, and contains up to 29 pedestrians in a walkway. Images are labeled with the number of pedestrians present in the image.  
@@ -445,7 +445,7 @@ As chapter~\ref{subsec:ucsdarch} details it, we implemented a deep convolutional
 %		\label{tab:solvparam}
 %\end{table}
 
-\noindent Similarly, we used GPU NVIDIA TESLA K40 to train our network. After 5 days of training, we obtained the following learning curves (figure~\ref{fig:ucurve}) :
+\noindent Similarly, we used GPU NVIDIA TESLA K40 to train our network. After 5 days of training, we obtained learning curves as illustrated in figure~\ref{fig:ucurve}.
 
 \begin{figure*}[h!]
     \centering
@@ -468,9 +468,9 @@ As chapter~\ref{subsec:ucsdarch} details it, we implemented a deep convolutional
 
 
 
-As you may observe, the correspondent decreasing of training and test loss clearly proves that the network has neither over-fitted nor under-fitted. We achieved \textbf{Train loss = 0.425065} and consequently \textbf{Test loss = 0.447545} on the test set.
+As you may observe, the corresponding decrease of training and test loss clearly proves that the network has neither over-fitted nor under-fitted. We achieved \textbf{Train loss = 0.425065} and consequently \textbf{Test loss = 0.447545} on the test set.
 
-\noindent The network was able to learn sufficient features corresponding to the pedestrians. To illustrate, the outputs for one input sample, after each layer in the network, has been depicted in the following figures~\ref{fig:feats}: 
+\noindent The network was able to learn sufficient features corresponding to the pedestrians. To illustrate, the outputs for one input sample, after each layer in the network, has been depicted in the figure~\ref{fig:feats}. 
 
 
 
@@ -517,9 +517,9 @@ Considering the random percentage (0.033) of this experiment, the network shows 
 	\label{fig:splot}
 \end{figure}
 
-As you may notice, the network's predictions closely follow the target values. Also a direct correlation between the number of pedestrians and error deviation can be inferred from the plot which is reasonable due to the more overlapping in the crowded scenes. 
+As you may notice, the network's predictions closely follow the target values. Also a direct correlation between the number of pedestrians and error deviation can be inferred from the plot which is reasonable due to stronger overlapping in the crowded scenes. 
 
-\noindent In state-of-the-art, \citet{segui2015learning} did a similar experiment with maximum 25 pedestrians in each image. In addition, the difference between their work and our analysis, mainly revolves around the synthetic data generation algorithm and the designed architectures. Nonetheless, the table of comparison between these two approaches are shown in below:
+\noindent In state-of-the-art, \citet{segui2015learning} did a similar experiment with maximum 25 pedestrians in each image. In addition, the difference between their work and our analysis, mainly revolves around the synthetic data generation algorithm and the designed architectures. Nonetheless, the table of comparison between these two approaches is shown below:
  
 \begin{table}[H]
 \centering
@@ -539,7 +539,7 @@ Our approach (29 pedestrians)                  & \textbf{0.942}   &  \textbf{0.7
 \label{tab:tab}
 \end{table} 
 
-Table~\ref{tab:tab} shows that even though our synthetic dataset contains more pedestrians in images, the model predicts the multiplicity of pedestrians more accurate than state-of-the-art \cite{segui2015learning}. This improvement validates the benefit of introduced synthetic data and defined architecture for this task. 
+Table~\ref{tab:tab} shows that even though our synthetic dataset contains more pedestrians in images, the model predicts the multiplicity of pedestrians more accurately than state-of-the-art \cite{segui2015learning}. This improvement validates the benefit of introduced synthetic data and defined architecture for this task. 
 
 %\noindent As an innovative part of this Master thesis, we were interested to figure out if we have been able to overcome the exhaustive labeling in real problems such as crowd counting. For this reason, we tested our model on a real UCSD crowd counting dataset \cite{chan2008privacy}.
 \noindent Furthermore, as an innovative part of this Master thesis, we were interested in figuring out if we have been able to overcome the exhaustive labeling in real problems such as crowd counting by testing our model on real-world UCSD crowd counting dataset collected by \citet{chan2008privacy}. Having our model tested on UCSD real dataset of 3375 images, we obtained the results shown in table~\ref{tab:ucsdreal}:
@@ -580,10 +580,10 @@ As it can be inferred from the above table, the results are convincing and ratio
 \begin{figure}[H]
 	\centering
 	{\includegraphics[width=0.8\textwidth]{images/realtestfig}}
-	\caption{Confusion matrix regarding the model performance on the real test set. The starting point of the graph is 10 since the minimum amount of pedestrians in the real test set is 10.}
+	\caption{Confusion matrix regarding the model performance on the real test set. The starting point of the graph is 10 since the minimum amount of pedestrians in the real test set is~10.}
 	\label{confnew2}
 \end{figure}
-The figure above shows that the model mostly over-predicts. This means that most probably sue to the inevitable differences between real and synthetic samples, the model is detecting some unseen noises as pedestrians. As you observe in the figure~\ref{confnew}, as the number of pedestrians increases in the images, the prediction accuracy of the model decreases.  
+The figure above shows that the model mostly over-predicts. This means that most probably sue to the inevitable differences between real and synthetic samples, the model is detecting some unseen noises as pedestrians. As you observe in the figure~\ref{confnew}\todo{fig mmissing}, as the number of pedestrians increases in the images, the prediction accuracy of the model decreases.  
 
 
 \noindent Moreover, we compared our model with \citeauthor*{chan2008privacy} research study in \cite{chan2008privacy} regarding crowd counting using exhaustive labeling and hand-crafted feature detectors using UCSD dataset. One difference we need to mention is that in their work, since the feature detection process was highly specialized for that particular problem, they computed the results for pedestrians towards camera and away from camera separately. However, in our dataset, we consider all pedestrians as one group of objects. Hence, we compare the average results of people towards and away from camera with our results. This comparison has been drawn in the following table~\ref{finalres}:
@@ -606,7 +606,7 @@ Proposed method                  &  3.61 & 1.38      \\
 \label{finalres}
 \end{table} 
 
- Although our synthetic images look highly realistic, still there are some undeniable differences between synthetic and real images. We believe that this difference is the main reason that hindered our proposed model to out perform state-of-the-art approach in \cite{chan2008privacy}. However, the attained results are not far away from the cutting-edge solutions.
+ Although our synthetic images look highly realistic, there are still some undeniable differences between synthetic and real images. We believe that this difference is the main reason that hindered our proposed model to outperform state-of-the-art approach in \cite{chan2008privacy}. However, the attained results are not far away from the cutting-edge solutions.
  
 \subsubsection{Discussions}
 
@@ -641,6 +641,6 @@ However, despite the fact that it improved the results to some extent, the impro
 
 \subsection{Conclusion}
 
-This experiment justifies our hypothesis regarding first, the benefit of generation and incorporation of synthetic datasets for learning via DCNN. Beside obtaining impressive results on the synthetic test set, we could improve the state-of-the-art results on the synthetic dataset obtained by \citet{segui2015learning}, while having more pedestrians in our images. This improvement implies the relative success of our synthetic data generation algorithm and architecture design.
+This experiment justifies our hypothesis regarding first \todo{`regarding first' does not sound right}, the benefit of generation and incorporation of synthetic datasets for learning via DCNN. Besides obtaining impressive results on the synthetic test set, we could improve the state-of-the-art results on the synthetic dataset obtained by \citet{segui2015learning}, while having more pedestrians in our images. This improvement implies the relative success of our synthetic data generation algorithm and architecture design.
 
 Furthermore, although we were not able to improve the state-of-the-art solutions on the real pedestrian dataset, we were able to obtain noticeable results as well as facilitating the data annotation by using synthetic dataset for training the model. In addition, taking up DCNN approach, we alleviated feature detection efforts to a great extent. 
