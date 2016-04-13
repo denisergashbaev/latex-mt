@@ -2,34 +2,35 @@
 \chapter{Experiments and Results}
 \label{sec:experiments}
 
-Prior to jumping to the final results obtained with our algorithm, this chapter will attempt to give insight into the experiments we designed to verify our hypothesis. We examine our proposed methodology on two different but related scenarios. In the former scenario, we tackle the learning to count even hand-written digits, and for the latter one, crowd counting problem is considered. The findings of the experiments will determine to what extent synthetic data generation could help deep convolutional networks to learn when dealing little amount of data. Hence, this chapter gives full particulars of each experiment, and presents obtained results as compared to similar works.
+Prior to jumping to the final results obtained with our algorithm, this chapter will attempt to give insight into the experiments we designed to verify our hypothesis. We examine our proposed methodology on two different but related scenarios. In the former scenario, we tackle the learning to count even hand-written digits, and for the latter one, crowd counting problem is considered. The findings of the experiments will determine to what extent synthetic data generation could help deep convolutional networks to learn when dealing little amount of data. In addition, it will prove the applicability and scalability of DCNN as a well-suited substitute for feature detection problems. Hence, this chapter gives full particulars of each experiment, and presents obtained results as compared to similar works.
 
 \section{Learning to Count Even-odd Handwritten Digits}
 
-We intend to explore the features learned when training a deep CNN, in order to understand the underlying representations. To this end, we designed a synthetic problem of counting even digits in images. This experiment clearly illustrates the basic idea behind this work, where we hypothesize that the features learned during this task are:
+For our first objective, we intend to explore the features learned when training a deep CNN, in order to understand the underlying representations. In addition, we would like to examine the performance of the model in a larger scale compare to state-of-the-art approach \cite{segui2015learning}. To this end, we designed a synthetic problem of counting even digits in images. This experiment also helps illustrating the basic idea behind this work, where we hypothesize that the features learned during this task are:
 \begin{enumerate}
 \item Efficient descriptors of digits to enable the model to count them.
-\item Sufficiently representative to be applied for the digit recognition tasks. 
+%\item Scaling up the task to examine if the same approach can be taken up for larger and more complex counting problems.
+\item Sufficiently representative to be applied for the digit recognition tasks.  
 \end{enumerate}
 
 In this experiment, we feed images of digits into a deep convolutional neural network. Images are labeled with the number of even digits in each image. We took a regression analysis to tackle this problem. Therefore, the output of the network is a single number determining the model's prediction for the amount of even digits present in the images. 
  
 
 \subsection{Dataset} 
-As it was meticulously described in section ~\ref{subsubsec:digit}, we synthetically generated Even-odd digits dataset to use for this task. The dataset holds the following properties:
+As it was described in section ~\ref{subsubsec:digit}, we synthetically generated Even-odd digits dataset to use for this task. The dataset holds the following properties:
 \begin{itemize}
 \item Images of MNIST hand-written digits where each image contains up to 15 digits. Also the images are made in gray-scale.
 \item Each image has a dimension of $100\times100$ and each digit in the image is $18\times18$ pixels.  
 \item A minimum distance of 18 pixels is considered between each two digits (from center to center) in an image to prevent overlapping.
-\item The dataset is generated uniformly. It means that there are equal number of images for each amount of even digits in the image. For instance, the number of images with 5 even digits is the same as number of images containing 10 even digits.
-\item The dataset of 1,000,000 samples is divided into a training set of 800,000 and a test set of 200,000. 
+\item The dataset is generated uniformly. It means that there is an equal number of images for each amount of even digits in the image. For instance, the number of images with 5 even digits is the same as number of images containing 10 even digits.
+\item The dataset of 1,000,000 samples is divided into a training set of 800,000 and a test set of 200,000 instances. 
 \end{itemize}
 
-Since we use Caffe platform to perform our experiments, we convert the images into LMDB format. LMDB uses memory-mapped files, so it has the read performance of a pure in-memory database while still offering the persistence of standard disk-based databases, and is only limited to the size of the virtual address space (it is not limited to the size of physical RAM). Therefore, we created two LMDB files for training and testing sets to be fed to the network.  
+Since we use Caffe platform to perform our experiments, we convert the images into LMDB format. LMDB uses memory-mapped files, so it has the read performance of a pure in-memory database while still offering the persistence of standard disk-based databases, and is only limited by the size of the virtual address space (it is not limited by the size of physical RAM). Therefore, we created two LMDB files for training and testing sets to be fed to the network.  
 
 \subsection{Learning process}
 
-As discussed in chapter~\ref{subsubsec:digitarch}, for learning to count the number of even digits, we designed a DCNN. Table~\ref{fig:digitnet} shows a review of the network's specification and architecture while table~\ref{hypar3} recaps the settings for the hyper-parameters.
+As discussed in chapter~\ref{subsubsec:digitarch}, for learning to count the number of even digits, we designed a DCNN. Table~\ref{fig:digitnet} review the network's specification and architecture whereas table~\ref{hypar3} recaps the settings for the hyper-parameters.
 
 
 \begin{table}[!htb]
@@ -155,37 +156,37 @@ As discussed in chapter~\ref{subsubsec:digitarch}, for learning to count the num
 %\item \textbf{Iterations:} Given the time and hardware we had, we managed to let the system train for 1,600,000 iterations.
 %\end{itemize}
 
-\noindent The algorithm trained on a GPU NVIDIA \cite{kirk2007nvidia} Tesla K40 \cite{lindholm2008nvidia}. It took almost 4 days to train 800,000 samples and test over 200,000 images. The most inconstant cut of the learning curves of this process are shown in the figure~\ref{fig:curve}.
+\noindent The algorithm trained on a GPU NVIDIA \cite{kirk2007nvidia} Tesla K40 \cite{lindholm2008nvidia}. It took many hours to train 800,000 samples and test over 200,000 images. Figure~\ref{fig:convha} illustrates the outputs (rectified responses of the shown filters) of the different layers in the network for one input sample. This illustration clearly depicts the process of even-digit counting in the proposed DCNN.  % The learning curves of this process are shown in the figure~\ref{fig:curve} (The shown graphs are shortened to the most inconstant (changing) section of the curves).
 
-\begin{figure*}[h!]
-    \centering
-    \begin{subfigure}[t]{0.5\textwidth}
-        \centering
-        {\includegraphics[width=1\textwidth]{images/ltc_train_real}}
-        \caption{Train loss.}
-    \end{subfigure}%
-    ~ 
-    \begin{subfigure}[t]{0.5\textwidth}
-        \centering
-        {\includegraphics[width=1\textwidth]{images/ltc_test_real}}
-        \caption{Test loss.}
-    \end{subfigure}
-    \caption{Jagging cuts of learning curves of the model trained with even-digit dataset.}
-    \label{fig:curve}
-\end{figure*}
+%\begin{figure*}[h!]
+%    \centering
+%    \begin{subfigure}[t]{0.5\textwidth}
+%        \centering
+%        {\includegraphics[width=1.1\textwidth]{images/ltc_train_real}}
+%        \caption{Train loss.}
+%    \end{subfigure}%
+%    ~ 
+%    \begin{subfigure}[t]{0.5\textwidth}
+%        \centering
+%        {\includegraphics[width=1.1\textwidth]{images/ltc_test_real}}
+%        \caption{Test loss.}
+%    \end{subfigure}
+%    \caption{Jagging cuts of learning curves of the model trained with even-digit dataset.}
+%    \label{fig:curve}
+%\end{figure*}
+%
+%As expected, the network learns without overfitting or underfitting. As you may notice, there is a sharp fall after each 100k iterations existing jagging in the figures which is due to the learning policy (\textit{step}) we chose for our experiment where we drop the learning rate after each 100000 iterations. We achieved \textbf{Train\_loss = 0.196} and consequently \textbf{Test\_loss = 0.213} on the test set.
 
-As expected, the network learns without overfitting or underfitting. The existing jagging in the figures is due to the learning policy (\textit{step}) we chose for our experiment where we drop the learning rate after each 10000 iterations. We achieved \textbf{Train\_loss = 0.196} and consequently \textbf{Test\_loss = 0.213} on the test set.
-
-\noindent Moreover, figure~\ref{fig:convha} illustrates the outputs (rectified responses of the shown filters) of the different layers in the network for one input sample. This illustration clearly depicts the process of even-digit counting in the proposed DCNN. 
+%\noindent Moreover, figure~\ref{fig:convha} illustrates the outputs (rectified responses of the shown filters) of the different layers in the network for one input sample. This illustration clearly depicts the process of even-digit counting in the proposed DCNN. 
 
 \begin{figure}[H]
 	\centering
-	{\includegraphics[width=0.7\textwidth]{images/1}}
+	{\includegraphics[width=0.8\textwidth]{images/mnist_convs}}
 	\caption{Outputs of different layers an input image has been fed to. }
 	\label{fig:convha}
 \end{figure}
 
-As you may see in the figures above, the main representations of the digits such as edges and general shape are successfully learned by the first convolutional layer. The second and third  convolutional layers provide more abstract information about the objects in the image.
+As you may see in the figures above, the main representations of the digits such as edges and general shape are successfully learned by the first convolutional layer. The second and third  convolutional layers provide more abstract information about the objects in the image. Although except for the first convolutional layer, the rest are not very interpretable for now, the activations correspondent to the digits' location can be seen. 
 
 
 
@@ -202,8 +203,8 @@ As you may see in the figures above, the main representations of the digits such
 
 
 \subsection{Experimental Results}
-
-In addition to the Euclidean loss function that we implemented in our architecture, we use two other error measurements to evaluate and compare the performance of our model. These measurements are briefly described and justified in below:
+In addition to the Euclidean loss function that we implemented in our architecture, for comparison purposes, we introduce two other error measurements to evaluate and fairly compare the performance of our model with state-of-the-art solutions. These measurements are briefly described and justified in below:
+%In addition to the Euclidean loss function that we implemented in our architecture, we need to use two other error measurements to evaluate and fairly compare the performance of our model with state-of-the-art solutions. These measurements are briefly described and justified in below:
 \begin{enumerate}
 \item \textbf{Mean squared error (MSE)}: Mean squared error is arguably the most important criterion used to evaluate the performance of a predictor or an estimator. The mean squared error is also useful to relay the concepts of bias, precision, and accuracy in statistical estimation. The MSE is the second moment (about the origin) of the error, and thus incorporates both the variance of the estimator and its bias \cite{lehmann1998theory}. The MSE can be estimated by
 $$MSE = {\frac{1} {N}{\sum\limits_{i = 1}^N {(\hat{x_{pred}} - x_{obs} } })^{2} } $$
@@ -229,7 +230,7 @@ where:\\
 \small\sffamily
 \begin{tabular}{llr}
 %\toprule
-\multicolumn{2}{c}{\textbf{\textbf{Results}}} \\
+\multicolumn{2}{c}{\textbf{\textbf{Counting Even-digits Results }}} \\
 \bottomrule
 \textbf{Error measurement}        & \textbf{Error} \\
 \bottomrule
@@ -243,29 +244,29 @@ Mean absolute error      & 0.394 \\
 \label{tab:res}
 \end{table} 
 
-Accordingly, the spread-error plot corresponding to the model is provided.
+Table above satisfactory results obtained from this learning process. Accordingly, the confusion matrix corresponding to the model is provided in figure~\ref{fig:splot} in below.
 
 \begin{figure}[H]
 	\centering
-	{\includegraphics[width=0.7\textwidth]{images/1}}
-	\caption{}
-	\label{fig:splot}
-\end{figure}
-
-As you may observe in Figure~\ref{fig:splot}, most
-of the frames are correctly labeled. Moreover, most of the errors correspond to adjacent number values.
-
-\noindent A similar experiment was done by \citeauthor*{segui2015learning}. In their work, they used images with up to 5 digits with slightly different architecture. Also each digit in the images had a dimension of $28\times28$. They approached the problem as a classification task. 
-
-\indent Therefore, in order to provide a fair comparison, we calculated the accuracy in the same way as classification task (correct predictions/all test samples). Figure~\ref{conf} illustrates the confusion matrix obtained from this calculation. 
-\begin{figure}[H]
-	\centering
-	{\includegraphics[width=0.7\textwidth]{images/normCM}}
+	{\includegraphics[width=0.9\textwidth]{images/normCM}}
 	\caption{Normalized confusion matrix of the proposed model.}
 	\label{conf}
 \end{figure}
 
- Moreover, we demonstrate how far each model's accuracy stands from random. These comparison has been shown in the table~\ref{tab:comp}.
+
+As you may observe in Figure~\ref{fig:splot}, most of the frames are correctly labeled. Moreover, most of the errors correspond to adjacent values. A similar experiment was done by \citeauthor*{segui2015learning}. In their work, they used images with up to 5 digits with different architecture. Also each digit in the images had a dimension of $28\times28$. They approached the problem as a classification task. 
+
+%\indent Therefore, in order to provide a fair comparison, we calculated the accuracy in the same way as classification task (correct predictions/all test samples). Figure~\ref{conf} illustrates the confusion matrix obtained from this calculation. 
+%%\begin{figure}[H]
+%%	\centering
+%%	{\includegraphics[width=0.9\textwidth]{images/normCM}}
+%%	\caption{Normalized confusion matrix of the proposed model.}
+%%	\label{conf}
+%%\end{figure}
+
+In order to demonstrate how far each model's accuracy stands from random, we provided randomness percentages according to each model. The following table~\ref{tab:comp} contrasts accuracy with pure chance values for each experiment. It is generally correct to say, that the model improves over the random.
+
+% Moreover, we demonstrate how far each model's accuracy stands from random. These comparison has been shown in the table~\ref{tab:comp}.
 %the difference the accuracy of both experiments from random, and from there we draw a proportional comparison.  These comparison has been shown in the table~\ref{tab:comp}.
 
 \begin{table}[H]
@@ -278,8 +279,8 @@ of the frames are correctly labeled. Moreover, most of the errors correspond to 
 \textbf{Experiments}  &   \textbf{Accuracy} & \textbf{Chance} \\
 \bottomrule
 %\midrule
-Proposed architecture (up to 15 digits)     & 79.87\% & 0.0625 \\
-\citet{segui2015learning} approach (up to 5)& 93.8\% & 0.1666  \\
+Proposed architecture (up to 15 digits)     & 79.87\% & 0.0625\% \\
+\citet{segui2015learning} approach (up to 5)& 93.8\% & 0.1666\%  \\
 
 \bottomrule
 \end{tabular}
@@ -287,21 +288,21 @@ Proposed architecture (up to 15 digits)     & 79.87\% & 0.0625 \\
 \label{tab:comp}
 \end{table} 
 
-As shown in the table above, considering the number of digits present in images, the proposed model has improved the results obtained by the state-of-the-art approach \cite{segui2015learning}.
+As shown in the table above, considering the number of digits present in images and lower percentages of chance in our method, we obtained impressive results. However, due to different size and amount of digits in our dataset compare to state-of-the-art approach in \cite{segui2015learning}, it would not be possible to draw a fair comparison between our work and state-of-the-art. We believe that by testing our model on a similar dataset to \citet{segui2015learning} approach, we would be able to achieve better results. However, since this experiment's focus is on analyzing scalability of DCNN application and also to introduce the basic idea behind this master thesis, we decided not to provide this comparison and be satisfied of achieving our main objectives.  
 
 \subsection{Conclusion}
 
-Noteworthy results obtained from the performance of designed model on the test set shows that not only DCNN are able to learn digits features, but also representativity of learned features can provide more scalability for the proposed problems. This fact assures us that the learned features are representative of digits to a high degree. Another reason for substituting DCNN with previous approaches is the impressive results we obtained by training a SVM on the output of the last convolutional layer. This results show that DCNN are able to learn the object features incrementally and from the scratch without the need for any domain expert or feature descriptor methods. 
+Noteworthy results obtained from the performance of designed model on the test set shows that not only DCNN are able to learn digits features, but also representativity of learned features can provide more scalability for the proposed problems. This fact assures us that the learned features are representative of digits to a high degree. This results show that DCNN are able to learn the object features incrementally and from the scratch without the need for any domain expert or feature descriptor methods. 
 
 \section{Counting Pedestrians in a Walkway}
 
-The first experiment proved that features can be learned automatically using deep CNN. It also shows that these deep features can be used to detect the object of interest in different but similar tasks. However, the use of deep architectures for fully supervised learning problems requires a large amount of annotated data. At the moment, for crowd counting problems, such data does not exist for research purposes. 
+The first experiment proved that features can be learned from synthetically created datasets automatically using deep CNN. However, the use of deep architectures for fully supervised learning problems requires a large amount of annotated data. At the moment, for crowd counting problems, such data does not exist for research purposes. 
 
 Hence, we propose a crowd counting problem using synthetic dataset in order to examine first, how well the model trained with synthetic images would perform. And then, whether the model is applicable for a real-world crowd counting scenario or not. We believe that this experiment will enlighten these questions. 
 
 \subsection{Datasets} 
 
-As fully discussed in chapter~\ref{subsec:synped}, for the particular case study, we synthetically created a dataset of 1 million images. To recap, the dataset specifications are the followings:
+As fully discussed in chapter~\ref{subsec:synped}, for this particular case study, we synthetically created a dataset of 1 million images. To recap, the dataset specifications are the followings:
 %\todo{no need to repeat the information, but i like the description of the dataset here better}, DONT UNDERSTAND WHAT YOU MEAN??!!!!
 \begin{itemize}
 \item Each image is in gray-scale, $158\times158$ pixels, normalized, and contains up to 29 pedestrians in a walkway. Images are labeled with the number of pedestrians present in the image.  
@@ -446,15 +447,15 @@ As fully described in chapter~\ref{subsec:ucsdarch}, we implemented a deep convo
 
 \noindent Similarly, we used GPU NVIDIA TESLA K40 to train our network. After 5 days of training, we obtained the following learning curves (figure~\ref{fig:ucurve}) :
 
-\begin{figure*}[h!]
+\begin{figure*}[htb!]
     \centering
-    \begin{subfigure}[t]{0.5\textwidth}
+    \begin{subfigure}[H]{0.5\textwidth}
         \centering
         {\includegraphics[width=1\textwidth]{images/train_U}}
         \caption{Training loss. }
     \end{subfigure}%
     ~ 
-    \begin{subfigure}[t]{0.5\textwidth}
+    \begin{subfigure}[H]{0.5\textwidth}
         \centering
         {\includegraphics[width=1\textwidth]{images/test_U}}
         \caption{Test loss.}
@@ -463,7 +464,11 @@ As fully described in chapter~\ref{subsec:ucsdarch}, we implemented a deep convo
     \label{fig:ucurve}
 \end{figure*}
 
-As you may observe, the according downturn of training and test loss clearly proves that network has neither over-fitted nor under-fitted. We achieved \textbf{Train\_loss = 0.425065} and consequently \textbf{Test\_loss = 0.447545} on the test set.
+
+
+
+
+As you may observe, the correspondent decreasing of training and test loss clearly proves that network has neither over-fitted nor under-fitted. We achieved \textbf{Train\_loss = 0.425065} and consequently \textbf{Test\_loss = 0.447545} on the test set.
 
 \noindent The network was able to learn sufficient features corresponding to the pedestrians. To illustrate, the outputs for one input sample, after each layer in the network, has been depicted in the following figures~\ref{fig:feats}: 
 
@@ -471,14 +476,14 @@ As you may observe, the according downturn of training and test loss clearly pro
 
 \begin{figure}[H]
 	\centering
-	{\includegraphics[width=0.7\textwidth]{images/1}}
-	\caption{}
+	{\includegraphics[width=0.9\textwidth]{images/ped_convs}}
+	\caption{The outputs of each layer in the network for one data sample. }
 	\label{fig:feats}
 \end{figure}
 
 
 
-Similar to the previous experiment, the first convolutional layer provides us with the most important and illustrative information about the pedestrians we aim to count. Since the synthetic and real data have some inevitable differences, we intended to avoid learning too much details (noise) by choosing kernel sizes of convolutional layers relatively large. In this way. 
+Similar to the previous experiment, the first convolutional layer provides us with the most important and illustrative information about the pedestrians we aim to count. As you may notice, mostly the first two convolution layers have successfully detected the pedestrians contours in the image. The size of kernels in convolutional layers helps improving this detection. We intended to avoid learning too much details (noise) by choosing kernel sizes of first two convolutional layers relatively large. In this way, network ignores the details that would not help detecting pedestrians in the images. 
 
 \subsection{Experimental Results}
 
@@ -489,71 +494,75 @@ Equivalently to the first analysis, we use mean squared error, mean absolute err
 \small\sffamily
 \begin{tabular}{llr}
 %\toprule
-\multicolumn{2}{c}{\textbf{\textbf{Results}}} \\
+\multicolumn{2}{c}{\textbf{\textbf{Synthetic Crowd Counting Results}}} \\
 \bottomrule
 \textbf{Error measurement}        & \textbf{Error} \\
 \bottomrule
 %\midrule
 Euclidean loss           & 0.447545  \\
-Mean squared error       & 0.20  \\
-Mean absolute error      & 0.20  \\
+Mean squared error       & 0.942795  \\
+Mean absolute error      & 0.707661  \\
 \bottomrule
 \end{tabular}
 \caption{.}
 \label{tab:res}
 \end{table} 
 
-These results were attained after 1,600,000 iterations on 800,000 train and 200,000 test sets. Correspondingly, figure~\ref{fig:splot} depicts the spread-error plot of the model performance on the test set.
+Considering the random percentage (0.033) of this experiment, the network shows a remarkable performance on counting the number of pedestrians. These results were attained after 1,600,000 iterations on 800,000 train and 200,000 test sets. Correspondingly, figure~\ref{fig:splot} depicts the spread-error plot of the model performance on the test set.
 
 \begin{figure}[H]
 	\centering
-	{\includegraphics[width=0.7\textwidth]{images/1}}
-	\caption{}
+	{\includegraphics[width=0.8\textwidth]{images/syntheticGraph}}
+	\caption{Confusion matrix regarding the model trained on the synthetic dataset.}
 	\label{fig:splot}
 \end{figure}
 
-As you may notice, the network's predictions closely follow the target values. Also a direct correlation between the number of pedestrians and error deviation can be inferred from the spread-error plot which is reasonable due to the more overlapping in the crowded scenes. 
+As you may notice, the network's predictions closely follow the target values. Also a direct correlation between the number of pedestrians and error deviation can be inferred from the plot which is reasonable due to the more overlapping in the crowded scenes. 
 
-\noindent In state-of-the-art, \citeauthor*{segui2015learning} did a similar experiment with maximum 25 pedestrians in each image. Beside that, the difference between their work with this analysis, mainly revolves around the synthetic data generation algorithm and the designed architectures. Nonetheless, the table of comparison between these two approaches are shown in below:
+\noindent In state-of-the-art, \citet{segui2015learning} did a similar experiment with maximum 25 pedestrians in each image. Beside that, the difference between their work and our analysis, mainly revolves around the synthetic data generation algorithm and the designed architectures. Nonetheless, the table of comparison between these two approaches are shown in below:
  
 \begin{table}[H]
 \centering
 \small\sffamily
-\begin{tabular}{lllrrr}
+\begin{tabular}{llrr}
 %\toprule
-\multicolumn{5}{c}{\textbf{\textbf{Performance Comparison}}} \\
+\multicolumn{4}{c}{\textbf{\textbf{Performance Comparison}}} \\
 \bottomrule
-\textbf{Experiments} &\textbf{Euclidean loss}&\textbf{MSE} &\textbf{MAE}& \textbf{Chance} \\
+\textbf{Experiments} &\textbf{MSE} &\textbf{MAE}& \textbf{Chance} \\
 \bottomrule
 %\midrule
-Our approach (29 pedestrians)              & 0.4475    &      &          & 3.33 \\
-\citet{segui2015learning} (25 pedestrians) &           & 1.12 & 0.74     & 0.40 \\
+Our approach (29 pedestrians)                  & \textbf{0.942}   &  \textbf{0.707}        & 3.33\% \\
+\citet{segui2015learning} (25 pedestrians)     & 1.12       & 0.74     & 4.00\% \\
 \bottomrule
 \end{tabular}
 \caption{Comparison between our results and state-of-the-art. As you may observe, although we there are more pedestrians in our images, our model shows a more promising performance.  }
-\label{tab:}
+\label{tab:tab}
 \end{table} 
 
+Table~\ref{tab:tab} shows that even though our synthetic dataset contains more pedestrians in images, the model predicts the multiplicity of pedestrians more accurate than state-of-the-art \cite{segui2015learning}. This improvement validates the benefit of introduced synthetic data and defined architecture for this task. 
 
+%\noindent As an innovative part of this Master thesis, we were interested to figure out if we have been able to overcome the exhaustive labeling in real problems such as crowd counting. For this reason, we tested our model on a real UCSD crowd counting dataset \cite{chan2008privacy}.
+\noindent Furthermore, as an innovative part of this Master thesis, we were interested in figuring out if we have been able to overcome the exhaustive labeling in real problems such as crowd counting by testing our model on real-world UCSD crowd counting dataset collected by \citet{chan2008privacy}. Having our model tested on UCSD real dataset of 3375 images, we obtained the results shown in table~\ref{tab:ucsdreal}:
 
-\noindent As an innovative part of this Master thesis, we were interested to figure out if we have been able to overcome the exhaustive labeling in real problems such as crowd counting. For this reason, we tested our model on a real UCSD crowd counting dataset \cite{chan2008privacy}. In order to do that, we tried to minimize the difference (Euclidean) between training images and real images by adding a gaussian filter to the real images. We compared the predictions and true labels for $\sigma \exists (0,2)$ to find the best sigma $\sigma$ value for filtering the real images. Figure~\ref{sigsig} depicts this process: 
-
-
-\begin{figure}[H]
-	\centering
-	{\includegraphics[width=0.6\textwidth]{images/sigmaTest}}
-	\caption{}
-	\label{sigsig}
-\end{figure}
-
-Setting the sigma value to $\sigma = 1.4$, table~\ref{tab:ucsdreal} demonstrates the performance of our model on UCSD dataset.
+% % % % % %DISCUSSION % % % % % % %
+% In order to do that, we tried to minimize the difference (Euclidean) between training images and real images by adding a gaussian filter to the real images. We compared the predictions and true labels for $\sigma \in (0,2)$ to find the best sigma $\sigma$ value for filtering the real images. Figure~\ref{sigsig} depicts this process: 
+%
+%
+%\begin{figure}[H]
+%	\centering
+%	{\includegraphics[width=0.8\textwidth]{images/sigmaTest}}
+%	\caption{The best sigma value for the gaussian filter applied on real images.}
+%	\label{sigsig}
+%\end{figure}
+%
+%Setting the sigma value to $\sigma = 1.4$, table~\ref{tab:ucsdreal} demonstrates the performance of our model on UCSD dataset.
 
 \begin{table}[H]
 \centering
 \small\sffamily
 \begin{tabular}{llr}
 %\toprule
-\multicolumn{2}{c}{\textbf{\textbf{Results}}} \\
+\multicolumn{2}{c}{\textbf{\textbf{Real Crowd Counting Results}}} \\
 \bottomrule
 \textbf{Error measurement}        & \textbf{Error} \\
 \bottomrule
@@ -566,11 +575,18 @@ Mean absolute error      & 1.38  \\
 \label{tab:ucsdreal}
 \end{table} 
 
-As it can be inferred from the above table, the results are convincing and rational given the results we achieved on the synthetic test set and 
-the inevitable differences between the synthetic and real datasets.
+As it can be inferred from the above table, the results are convincing and rational given the results we achieved on the synthetic test set and the inevitable differences between the synthetic and real datasets. A confusion matrix regarding this experiment is show in figure~\ref{confnew}. We believe that this difference is mainly due to the difference between train and test images that can be handled by either modifying the architecture in a way to ignore more details, or improving the train set to become closer to the real test images. 
+
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=0.8\textwidth]{images/realtestfig}}
+	\caption{Confusion matrix regarding the model performance on the real test set. The starting point of the graph is 10 since the minimum amount of pedestrians in the real test set is 10.}
+	\label{confnew}
+\end{figure}
+The figure above shows that the model mostly over-predicts. This means that most probably sue to the inevitable differences between real and synthetic samples, the model is detecting some unseen noises as pedestrians. As you observe in the figure~\ref{confnew}, as the number of pedestrians increases in the images, the prediction accuracy of the model decreases.  
 
 
-\noindent Moreover, we compared our model with \citeauthor*{chan2008privacy} research study in \cite{chan2008privacy} regarding crowd counting using exhaustive labeling and hand-crafted feature detectors using UCSD dataset. One difference we need to mention is that in their work, they computed the results for pedestrians towards camera and away from camera separately. However, in our dataset, we consider all pedestrians as one. Hence, we compare the average results of people towards and away from camera with our results. This comparison has been drawn in the following table~\ref{finalres}:
+\noindent Moreover, we compared our model with \citeauthor*{chan2008privacy} research study in \cite{chan2008privacy} regarding crowd counting using exhaustive labeling and hand-crafted feature detectors using UCSD dataset. One difference we need to mention is that in their work, since the feature detection process was highly specialized for that particular problem, they computed the results for pedestrians towards camera and away from camera separately. However, in our dataset, we consider all pedestrians as one group of objects. Hence, we compare the average results of people towards and away from camera with our results. This comparison has been drawn in the following table~\ref{finalres}:
 
 \begin{table}[H]
 \centering
@@ -588,12 +604,43 @@ Proposed method                  &  3.61 & 1.38      \\
 \end{tabular}
 \caption{Comparison between our results and real-world state-of-the-art approach done by \citet{chan2008privacy}.}
 \label{finalres}
-
 \end{table} 
 
+ Although our synthetic images look highly realistic, still there are some undeniable differences between synthetic and real images. We believe that this difference is the main reason that hindered our proposed model to out perform state-of-the-art approach in \cite{chan2008privacy}. However, the attained results are not far away from the cutting-edge solutions.
+ 
+\subsubsection{Discussions}
+
+Regarding the results and analysis we did on real UCSD dataset, we attempted to minimize the difference (Euclidean distance) between synthetic and real images. In order to do that, we tried two approaches explained underneath. 
+
+As the first endeavor, we applied a gaussian filter on the real test set. To do so, we needed to find the sigma value (standard deviation) which minimizes the euclidean distance between images. Therefore, we selected a validation set of 100 images from the real dataset along with 100 synthetic images. By calculating the image-wise euclidean distance between synthetic and real images for sigma $ \sigma \in (0, 2) $, we obtained the best sigma value as $ \sigma = 1.4 $. Figure~\ref{sigsig} demonstrates this process. 
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=0.8\textwidth]{images/sigmaTest}}
+	\caption{The best sigma value for the gaussian filter applied on real images.}
+	\label{sig2}
+\end{figure}
+By testing our model on the test set images filtered with $ \sigma=1.4 $, we could not improve the results. Therefore we decided to make synthetic images filtered in order to minimize their euclidean distance to the real images. Therefore, we took up the same approach but this time for synthetic image. We obtained the best sigma value as $ \sigma=1.6 $ for the gaussian filter to blur the synthetic images as it is illustrated in figure~\ref{sig2}.   
+\begin{figure}[H]
+	\centering
+	{\includegraphics[width=0.8\textwidth]{images/sigmaTrain}}
+	\caption{The best sigma value for the gaussian filter applied on real images.}
+	\label{sigsig}
+\end{figure}
+However, despite the fact that it improved the results to some extent, the improvement was not significant. Hence, we decided not to include this process in our main experiment. 
+% adding a gaussian filter to the real images. We compared the predictions and true labels for $\sigma \in (0,2)$ to find the best sigma $\sigma$ value for filtering the real images. Figure~\ref{sigsig} depicts this process: 
+%
+%
+%\begin{figure}[H]
+%	\centering
+%	{\includegraphics[width=0.8\textwidth]{images/sigmaTest}}
+%	\caption{The best sigma value for the gaussian filter applied on real images.}
+%	\label{sigsig}
+%\end{figure}
+%
+%Setting the sigma value to $\sigma = 1.4$, table~\ref{tab:ucsdreal} demonstrates the performance of our model on UCSD dataset.
 
 \subsection{Conclusion}
 
-This experiment justifies our hypothesis regarding first, the benefit of generation and incorporation of synthetic datasets for learning via DCNN. Beside obtaining impressive results on the synthetic test set, we could improve the state-of-the-art results \cite{segui2015learning}, while having more pedestrians in our images. This improvement implies the relative success of our synthetic data generation algorithm and architecture design.
+This experiment justifies our hypothesis regarding first, the benefit of generation and incorporation of synthetic datasets for learning via DCNN. Beside obtaining impressive results on the synthetic test set, we could improve the state-of-the-art results on the synthetic dataset obtained by \citet{segui2015learning}, while having more pedestrians in our images. This improvement implies the relative success of our synthetic data generation algorithm and architecture design.
 
 Furthermore, although we were not able to improve the state-of-the-art solutions on the real pedestrian dataset, we were able to obtain noticeable results as well as facilitating the data annotation by using synthetic dataset for training the model. In addition, taking up DCNN approach, we alleviated feature detection efforts to a great extent. 
